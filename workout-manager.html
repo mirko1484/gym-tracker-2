@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#111111">
+
+<meta charset="UTF-8">
+
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+
+
+<title>
+Gestione Schede
+</title>
+
+
+
+<link rel="stylesheet"
+href="css/style.css">
+
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="container">
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- HOME -->
+<!-- ============================= -->
+
+
+<button
+
+class="secondaryButton"
+
+onclick="location.href='index.html'">
+
+← Home
+
+</button>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- HEADER -->
+<!-- ============================= -->
+
+
+<header class="header">
+
+
+
+<div class="logo">
+
+🏋️
+
+</div>
+
+
+
+
+<h1>
+
+Gestisci Schede
+
+</h1>
+
+
+
+
+<p class="subtitle">
+
+Personalizza i tuoi allenamenti
+
+</p>
+
+
+
+</header>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- GIORNATA A -->
+<!-- ============================= -->
+
+
+<section class="statsCard">
+
+
+
+<h2>
+
+🔥 Giornata A
+
+</h2>
+
+
+
+
+<div
+
+id="dayAList">
+
+
+</div>
+
+
+
+
+
+<button
+
+class="dayButton dayA"
+
+onclick="addExercise('A')">
+
+
+➕ Aggiungi esercizio
+
+
+</button>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- GIORNATA B -->
+<!-- ============================= -->
+
+
+<section class="statsCard">
+
+
+
+<h2>
+
+💪 Giornata B
+
+</h2>
+
+
+
+
+<div
+
+id="dayBList">
+
+
+</div>
+
+
+
+
+
+<button
+
+class="dayButton dayB"
+
+onclick="addExercise('B')">
+
+
+➕ Aggiungi esercizio
+
+
+</button>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- GIORNATA C -->
+<!-- ============================= -->
+
+
+<section class="statsCard">
+
+
+
+<h2>
+
+⚡ Giornata C
+
+</h2>
+
+
+
+
+<div
+
+id="dayCList">
+
+
+</div>
+
+
+
+
+
+<button
+
+class="dayButton dayC"
+
+onclick="addExercise('C')">
+
+
+➕ Aggiungi esercizio
+
+
+</button>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- SALVATAGGIO -->
+<!-- ============================= -->
+
+
+<button
+
+class="secondaryButton"
+
+onclick="saveWorkouts()">
+
+
+
+💾 Salva modifiche
+
+
+
+</button>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- SCRIPT -->
+<!-- ============================= -->
+
+
+<script src="js/config.js"></script>
+
+
+<script src="js/storage.js"></script>
+
+
+<script src="js/workout-manager.js"></script>
+
+
+
+</body>
+
+
+</html>

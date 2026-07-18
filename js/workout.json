@@ -1,0 +1,310 @@
+{
+  "A": [
+    {
+      "id": 1,
+      "title": "Squat",
+      "muscle": "Gambe",
+      "description": "Movimento controllato mantenendo schiena neutra.",
+      "sets": 4,
+      "reps": 8,
+      "rest": 120,
+      "image": "img/exercises/squat.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Panca Piana",
+      "muscle": "Petto",
+      "description": "Spinta controllata con scapole stabili.",
+      "sets": 4,
+      "reps": 8,
+      "rest": 90,
+      "image": "img/exercises/panca.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Lat Machine",
+      "muscle": "Schiena",
+      "description": "Tirare la barra verso il petto mantenendo controllo.",
+      "sets": 4,
+      "reps": 10,
+      "rest": 90,
+      "image": "img/exercises/latmachine.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Shoulder Press",
+      "muscle": "Spalle",
+      "description": "Spinta verticale controllata.",
+      "sets": 3,
+      "reps": 10,
+      "rest": 90,
+      "image": "img/exercises/shoulder.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Leg Press",
+      "muscle": "Gambe",
+      "description": "Ampiezza completa del movimento.",
+      "sets": 4,
+      "reps": 10,
+      "rest": 120,
+      "image": "img/exercises/legpress.jpg"
+    },
+    {
+      "id": 6,
+      "title": "Rematore",
+      "muscle": "Schiena",
+      "description": "Contrarre la schiena nella fase di tirata.",
+      "sets": 3,
+      "reps": 10,
+      "rest": 90,
+      "image": "img/exercises/rematore.jpg"
+    },
+    {
+      "id": 7,
+      "title": "Curl Bilanciere",
+      "muscle": "Bicipiti",
+      "description": "Evitare movimenti del busto.",
+      "sets": 3,
+      "reps": 12,
+      "rest": 60,
+      "image": "img/exercises/curl.jpg"
+    },
+    {
+      "id": 8,
+      "title": "Push Down",
+      "muscle": "Tricipiti",
+      "description": "Estensione completa del braccio.",
+      "sets": 3,
+      "reps": 12,
+      "rest": 60,
+      "image": "img/exercises/pushdown.jpg"
+    },
+    {
+      "id": 9,
+      "title": "Crunch",
+      "muscle": "Addome",
+      "description": "Contrazione lenta e controllata.",
+      "sets": 3,
+      "reps": 20,
+      "rest": 45,
+      "image": "img/exercises/crunch.jpg"
+    },
+    {
+      "id": 10,
+      "title": "Plank",
+      "muscle": "Core",
+      "description": "Mantenere una posizione stabile.",
+      "sets": 3,
+      "reps": 60,
+      "rest": 60,
+      "image": "img/exercises/plank.jpg"
+    }
+  ],
+
+  "B": [
+    {
+      "id": 1,
+      "title": "Stacco da Terra",
+      "muscle": "Corpo completo",
+      "description": "Sollevamento controllato mantenendo postura corretta.",
+      "sets": 4,
+      "reps": 6,
+      "rest": 150,
+      "image": "img/exercises/stacco.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Panca Inclinata",
+      "muscle": "Petto alto",
+      "description": "Spinta su panca inclinata.",
+      "sets": 4,
+      "reps": 10,
+      "rest": 90,
+      "image": "img/exercises/pancainclinata.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Pulley",
+      "muscle": "Schiena",
+      "description": "Trazione orizzontale controllata.",
+      "sets": 4,
+      "reps": 10,
+      "rest": 90,
+      "image": "img/exercises/pulley.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Alzate Laterali",
+      "muscle": "Spalle",
+      "description": "Sollevare i manubri lateralmente.",
+      "sets": 3,
+      "reps": 15,
+      "rest": 60,
+      "image": "img/exercises/alzate.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Affondi",
+      "muscle": "Gambe",
+      "description": "Passo controllato e stabile.",
+      "sets": 3,
+      "reps": 12,
+      "rest": 90,
+      "image": "img/exercises/affondi.jpg"
+    },
+    {
+      "id": 6,
+      "title": "Leg Curl",
+      "muscle": "Femorali",
+      "description": "Contrazione completa del muscolo.",
+      "sets": 3,
+      "reps": 12,
+      "rest": 60,
+      "image": "img/exercises/legcurl.jpg"
+    },
+    {
+      "id": 7,
+      "title": "Hammer Curl",
+      "muscle": "Bicipiti",
+      "description": "Presa neutra con manubri.",
+      "sets": 3,
+      "reps": 12,
+      "rest": 60,
+      "image": "img/exercises/hammer.jpg"
+    },
+    {
+      "id": 8,
+      "title": "French Press",
+      "muscle": "Tricipiti",
+      "description": "Estensione sopra la testa.",
+      "sets": 3,
+      "reps": 12,
+      "rest": 60,
+      "image": "img/exercises/french.jpg"
+    },
+    {
+      "id": 9,
+      "title": "Russian Twist",
+      "muscle": "Addome",
+      "description": "Rotazione controllata del busto.",
+      "sets": 3,
+      "reps": 20,
+      "rest": 45,
+      "image": "img/exercises/russian.jpg"
+    },
+    {
+      "id": 10,
+      "title": "Calf Raise",
+      "muscle": "Polpacci",
+      "description": "Massima contrazione in alto.",
+      "sets": 4,
+      "reps": 15,
+      "rest": 60,
+      "image": "img/exercises/calf.jpg"
+    }
+  ],
+
+  "C": [
+    {
+      "id": 1,
+      "title": "Front Squat",
+      "muscle": "Gambe",
+      "description": "Squat con bilanciere frontale.",
+      "sets": 4,
+      "reps": 8,
+      "rest": 120,
+      "image": "img/exercises/frontsquat.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Chest Press",
+      "muscle": "Petto",
+      "description": "Spinta guidata alla macchina.",
+      "sets": 4,
+      "reps": 10,
+      "rest": 90,
+      "image": "img/exercises/chestpress.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Trazioni",
+      "muscle": "Schiena",
+      "description": "Trazione verticale del corpo.",
+      "sets": 4,
+      "reps": 8,
+      "rest": 120,
+      "image": "img/exercises/trazioni.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Military Press",
+      "muscle": "Spalle",
+      "description": "Spinta verticale con bilanciere.",
+      "sets": 3,
+      "reps": 8,
+      "rest": 90,
+      "image": "img/exercises/military.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Hip Thrust",
+      "muscle": "Glutei",
+      "description": "Estensione dell'anca controllata.",
+      "sets": 4,
+      "reps": 10,
+      "rest": 90,
+      "image": "img/exercises/hipthrust.jpg"
+    },
+    {
+      "id": 6,
+      "title": "Leg Extension",
+      "muscle": "Quadricipiti",
+      "description": "Estensione della gamba.",
+      "sets": 3,
+      "reps": 15,
+      "rest": 60,
+      "image": "img/exercises/legextension.jpg"
+    },
+    {
+      "id": 7,
+      "title": "Pullover",
+      "muscle": "Dorso",
+      "description": "Movimento controllato sopra la testa.",
+      "sets": 3,
+      "reps": 12,
+      "rest": 60,
+      "image": "img/exercises/pullover.jpg"
+    },
+    {
+      "id": 8,
+      "title": "Dip",
+      "muscle": "Tricipiti",
+      "description": "Spinta a corpo libero.",
+      "sets": 3,
+      "reps": 10,
+      "rest": 90,
+      "image": "img/exercises/dip.jpg"
+    },
+    {
+      "id": 9,
+      "title": "Addominali",
+      "muscle": "Core",
+      "description": "Serie controllata.",
+      "sets": 3,
+      "reps": 20,
+      "rest": 45,
+      "image": "img/exercises/addome.jpg"
+    },
+    {
+      "id": 10,
+      "title": "Stretching Finale",
+      "muscle": "Mobilità",
+      "description": "Allungamento generale.",
+      "sets": 1,
+      "reps": 10,
+      "rest": 0,
+      "image": "img/exercises/stretching.jpg"
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "A": [
+
+    {
+      "title": "Panca Piana",
+      "description": "4 serie x 8 ripetizioni",
+      "muscle": "Petto",
+      "image": "img/panca_piana.jpg"
+    },
+
+    {
+      "title": "Panca Inclinata Manubri",
+      "description": "3 serie x 10",
+      "muscle": "Petto",
+      "image": "img/panca_inclinata.jpg"
+    },
+
+    {
+      "title": "Croci ai Cavi",
+      "description": "3 serie x 12",
+      "muscle": "Petto",
+      "image": "img/croci_cavi.jpg"
+    },
+
+    {
+      "title": "Chest Press",
+      "description": "3 serie x 10",
+      "muscle": "Petto",
+      "image": "img/chest_press.jpg"
+    },
+
+    {
+      "title": "Shoulder Press",
+      "description": "4 serie x 8",
+      "muscle": "Spalle",
+      "image": "img/shoulder_press.jpg"
+    },
+
+    {
+      "title": "Alzate Laterali",
+      "description": "3 serie x 15",
+      "muscle": "Spalle",
+      "image": "img/alzate_laterali.jpg"
+    },
+
+    {
+      "title": "French Press",
+      "description": "3 serie x 12",
+      "muscle": "Tricipiti",
+      "image": "img/french_press.jpg"
+    },
+
+    {
+      "title": "Push Down",
+      "description": "3 serie x 15",
+      "muscle": "Tricipiti",
+      "image": "img/pushdown.jpg"
+    },
+
+    {
+      "title": "Crunch",
+      "description": "3 serie x 20",
+      "muscle": "Addome",
+      "image": "img/crunch.jpg"
+    },
+
+    {
+      "title": "Plank",
+      "description": "3 x 60 secondi",
+      "muscle": "Addome",
+      "image": "img/plank.jpg"
+    }
+
+  ],
+
+
+
+  "B": [
+
+    {
+      "title": "Lat Machine",
+      "description": "4 serie x 10",
+      "muscle": "Dorso",
+      "image": "img/lat_machine.jpg"
+    },
+
+    {
+      "title": "Pulley",
+      "description": "3 serie x 12",
+      "muscle": "Dorso",
+      "image": "img/pulley.jpg"
+    },
+
+    {
+      "title": "Rematore",
+      "description": "4 serie x 8",
+      "muscle": "Dorso",
+      "image": "img/rematore.jpg"
+    },
+
+    {
+      "title": "Pullover",
+      "description": "3 serie x 12",
+      "muscle": "Dorso",
+      "image": "img/pullover.jpg"
+    },
+
+    {
+      "title": "Scrollate",
+      "description": "3 serie x 15",
+      "muscle": "Trapezio",
+      "image": "img/scrollate.jpg"
+    },
+
+    {
+      "title": "Curl Bilanciere",
+      "description": "4 serie x 10",
+      "muscle": "Bicipiti",
+      "image": "img/curl_bilanciere.jpg"
+    },
+
+    {
+      "title": "Curl Manubri",
+      "description": "3 serie x 12",
+      "muscle": "Bicipiti",
+      "image": "img/curl_manubri.jpg"
+    },
+
+    {
+      "title": "Hammer Curl",
+      "description": "3 serie x 12",
+      "muscle": "Bicipiti",
+      "image": "img/hammer.jpg"
+    },
+
+    {
+      "title": "Russian Twist",
+      "description": "3 serie x 20",
+      "muscle": "Addome",
+      "image": "img/russian.jpg"
+    },
+
+    {
+      "title": "Leg Raise",
+      "description": "3 serie x 15",
+      "muscle": "Addome",
+      "image": "img/legraise.jpg"
+    }
+
+  ],
+
+
+
+  "C": [
+
+    {
+      "title": "Squat",
+      "description": "4 serie x 8",
+      "muscle": "Gambe",
+      "image": "img/squat.jpg"
+    },
+
+    {
+      "title": "Leg Press",
+      "description": "4 serie x 10",
+      "muscle": "Gambe",
+      "image": "img/legpress.jpg"
+    },
+
+    {
+      "title": "Affondi",
+      "description": "3 serie x 12",
+      "muscle": "Gambe",
+      "image": "img/affondi.jpg"
+    },
+
+    {
+      "title": "Leg Extension",
+      "description": "3 serie x 15",
+      "muscle": "Quadricipiti",
+      "image": "img/legextension.jpg"
+    },
+
+    {
+      "title": "Leg Curl",
+      "description": "3 serie x 12",
+      "muscle": "Femorali",
+      "image": "img/legcurl.jpg"
+    },
+
+    {
+      "title": "Calf Raise",
+      "description": "4 serie x 15",
+      "muscle": "Polpacci",
+      "image": "img/polpacci.jpg"
+    },
+
+    {
+      "title": "Hip Thrust",
+      "description": "4 serie x 10",
+      "muscle": "Glutei",
+      "image": "img/hipthrust.jpg"
+    },
+
+    {
+      "title": "Abductor Machine",
+      "description": "3 serie x 15",
+      "muscle": "Glutei",
+      "image": "img/abductor.jpg"
+    },
+
+    {
+      "title": "Crunch",
+      "description": "3 serie x 20",
+      "muscle": "Addome",
+      "image": "img/crunch.jpg"
+    },
+
+    {
+      "title": "Plank",
+      "description": "3 x 60 secondi",
+      "muscle": "Addome",
+      "image": "img/plank.jpg"
+    }
+
+  ]
+}

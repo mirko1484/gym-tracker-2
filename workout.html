@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#111111">
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+
+<title>Allenamento</title>
+
+
+<link rel="stylesheet"
+href="css/style.css">
+
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+
+
+
+<!-- ============================= -->
+<!-- RITORNO HOME -->
+<!-- ============================= -->
+
+
+<button
+class="secondaryButton"
+onclick="location.href='index.html'">
+
+← Home
+
+</button>
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- HEADER ALLENAMENTO -->
+<!-- ============================= -->
+
+
+<header class="header workoutHeader">
+
+
+
+<h1 id="workoutTitle">
+
+Giornata A
+
+</h1>
+
+
+
+
+<p id="exerciseCounter">
+
+Esercizio 1 di 10
+
+</p>
+
+
+
+
+
+
+<div class="timerBox">
+
+
+⏱
+
+<span id="workoutTimer">
+
+00:00:00
+
+</span>
+
+
+</div>
+
+
+
+</header>
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- BARRA PROGRESSO -->
+<!-- ============================= -->
+
+
+<div class="progressBar">
+
+
+<div id="progress"></div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- SCHEDA ESERCIZIO -->
+<!-- ============================= -->
+
+
+<section class="exerciseCard">
+
+
+
+
+
+
+<img
+
+id="exerciseImage"
+
+class="exerciseImage"
+
+src=""
+
+alt="Esercizio">
+
+
+
+
+
+
+
+
+<p
+
+id="exerciseMuscle"
+
+class="exerciseMuscle">
+
+🏋 Muscolo
+
+</p>
+
+
+
+
+
+
+
+
+<h2 id="exerciseTitle">
+
+Nome esercizio
+
+</h2>
+
+
+
+
+
+
+
+
+<p
+
+id="exerciseDescription">
+
+Descrizione esercizio
+
+</p>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- SERIE -->
+<!-- ============================= -->
+
+
+<h3>
+
+Serie allenamento
+
+</h3>
+
+
+
+
+
+<table class="setsTable">
+
+
+
+<thead>
+
+
+<tr>
+
+
+<th>
+
+Serie
+
+</th>
+
+
+
+<th>
+
+Peso kg
+
+</th>
+
+
+
+<th>
+
+Ripetizioni
+
+</th>
+
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+
+
+<tbody id="setsContainer">
+
+
+</tbody>
+
+
+
+
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- COMPLETAMENTO ESERCIZIO -->
+<!-- ============================= -->
+
+
+<label class="checkBox">
+
+
+
+<input
+
+type="checkbox"
+
+id="exerciseDone">
+
+
+
+Esercizio completato
+
+
+
+</label>
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- NAVIGAZIONE -->
+<!-- ============================= -->
+
+
+<div class="navigation">
+
+
+
+<button
+
+onclick="previousExercise()">
+
+◀
+
+</button>
+
+
+
+
+
+
+<button
+
+onclick="nextExercise()">
+
+▶
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- COMPLETAMENTO SESSIONE -->
+<!-- ============================= -->
+
+
+<label class="checkBox sessionCheck">
+
+
+
+<input
+
+type="checkbox"
+
+id="sessionDone">
+
+
+
+Allenamento completato
+
+
+
+</label>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ============================= -->
+<!-- MODALE RIEPILOGO -->
+<!-- ============================= -->
+
+
+<div
+
+id="summaryModal"
+
+class="modal">
+
+
+
+
+
+
+<div
+
+class="modalContent">
+
+
+
+
+
+
+<h2>
+
+Riepilogo allenamento
+
+</h2>
+
+
+
+
+
+
+
+<p id="summaryDuration">
+
+⏱ Durata:
+
+</p>
+
+
+
+
+
+
+
+<p id="summaryExercises">
+
+💪 Esercizi completati:
+
+</p>
+
+
+
+
+
+
+
+<p id="summaryVolume">
+
+🏋 Volume totale:
+
+</p>
+
+
+
+
+
+
+
+
+
+<button
+
+class="dayButton"
+
+onclick="confirmFinish()">
+
+
+💾 Salva allenamento
+
+
+</button>
+
+
+
+
+
+
+
+
+
+<button
+
+class="secondaryButton"
+
+onclick="closeSummary()">
+
+
+Continua allenamento
+
+
+</button>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<script src="js/config.js"></script>
+
+<script src="js/storage.js"></script>
+
+<script src="js/workout.js"></script>
+
+
+</body>
+
+
+</html>

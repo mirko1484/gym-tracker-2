@@ -1,0 +1,46 @@
+GymTracker/
+
+│
+├── index.html
+├── workout.html
+├── history.html
+├── progress.html
+├── settings.html
+│
+│
+├── css/
+│   │
+│   └── style.css
+│
+│
+├── js/
+│   │
+│   ├── app.js
+│   ├── workout.js
+│   ├── history.js
+│   ├── progress.js
+│   ├── storage.js
+│   ├── config.js
+│   └── ui.js
+│
+│
+├── data/
+│   │
+│   └── workouts.json
+│
+│
+├── img/
+│   │
+│   ├── logo.png
+│   │
+│   └── exercises/
+│       │
+│       ├── panca_piana.jpg
+│       ├── panca_inclinata.jpg
+│       ├── squat.jpg
+│       └── (altre immagini esercizi)
+│
+│
+└── icons/
+    │
+    └── (eventuali icone app)

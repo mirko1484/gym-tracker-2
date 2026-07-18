@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#111111">
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Impostazioni</title>
+
+<link rel="stylesheet"
+href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<button class="secondaryButton"
+onclick="location.href='index.html'">
+
+← Home
+
+</button>
+
+
+
+<header class="header">
+
+<div class="logo">
+⚙️
+</div>
+
+
+<h1>
+Impostazioni
+</h1>
+
+
+<p class="subtitle">
+Personalizza Gym Tracker
+</p>
+
+
+</header>
+
+
+
+
+<section class="statsCard">
+
+
+<h2>
+Profilo
+</h2>
+
+
+
+<label class="formLabel">
+
+Nome
+
+</label>
+
+
+<input
+id="userName"
+class="settingsInput"
+type="text"
+placeholder="Nome atleta">
+
+
+
+
+
+<label class="formLabel">
+
+Peso (kg)
+
+</label>
+
+
+<input
+id="userWeight"
+class="settingsInput"
+type="number"
+placeholder="Peso">
+
+
+
+
+
+<label class="formLabel">
+
+Altezza (cm)
+
+</label>
+
+
+<input
+id="userHeight"
+class="settingsInput"
+type="number"
+placeholder="Altezza">
+
+
+
+
+
+<label class="formLabel">
+
+Obiettivo
+
+</label>
+
+
+<select
+id="userGoal"
+class="settingsInput">
+
+
+<option value="massa">
+Massa muscolare
+</option>
+
+
+<option value="definizione">
+Definizione
+</option>
+
+
+<option value="forza">
+Forza
+</option>
+
+
+</select>
+
+
+
+<button
+class="dayButton dayB"
+onclick="saveSettings()">
+
+💾 Salva impostazioni
+
+</button>
+
+
+
+</section>
+
+
+
+
+
+
+<section class="statsCard">
+
+
+<h2>
+Gestione dati
+</h2>
+
+
+
+<button
+class="secondaryButton"
+onclick="resetHistory()">
+
+🗑 Cancella storico allenamenti
+
+</button>
+
+
+
+</section>
+
+
+
+</div>
+
+
+
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/settings.js"></script>
+
+
+</body>
+
+</html>

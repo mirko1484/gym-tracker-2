@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#111111">
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+
+<title>Progressi</title>
+
+
+<link rel="stylesheet"
+      href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<button class="secondaryButton"
+onclick="location.href='index.html'">
+
+← Home
+
+</button>
+
+
+
+<header class="header">
+
+    <div class="logo">
+
+        📊
+
+    </div>
+
+
+    <h1>
+
+        Progressi
+
+    </h1>
+
+
+    <p class="subtitle">
+
+        La tua evoluzione in palestra
+
+    </p>
+
+
+</header>
+
+
+
+
+
+<section class="statsCard">
+
+
+<h2>
+
+Statistiche Generali
+
+</h2>
+
+
+
+<div id="generalStats">
+
+
+Caricamento...
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="statsCard">
+
+
+<h2>
+
+Record Personali
+
+</h2>
+
+
+
+<div id="records">
+
+
+Nessun dato disponibile
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="statsCard">
+
+
+<h2>
+
+Muscoli Allenati
+
+</h2>
+
+
+
+<div id="muscleStats">
+
+
+Nessun dato disponibile
+
+</div>
+
+
+</section>
+
+
+
+<section class="statsCard">
+
+<h2>
+
+Andamento Allenamenti
+
+</h2>
+
+
+<canvas id="volumeChart"></canvas>
+
+
+</section>
+
+
+</div>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="js/config.js"></script>
+
+<script src="js/storage.js"></script>
+
+<script src="js/progress.js"></script>
+
+</body>
+
+</html>
