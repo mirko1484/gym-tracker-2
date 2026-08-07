@@ -208,6 +208,8 @@ Descrizione esercizio
 <!-- ============================= -->
 
 
+<div id="setsSection">
+
 <h3>
 
 Serie allenamento
@@ -271,6 +273,53 @@ Ripetizioni
 
 
 </table>
+
+</div>
+
+
+
+<!-- ============================= -->
+<!-- CARDIO (durata) -->
+<!-- ============================= -->
+
+<div id="cardioSection" style="display:none;">
+
+<h3>
+Durata
+</h3>
+
+<div class="cardioTimerBox">
+
+    <div id="cardioTimerDisplay" class="cardioTimerDisplay">
+        00:00
+    </div>
+
+    <div class="cardioTimerTarget" id="cardioTimerTarget">
+        Obiettivo: 20 min
+    </div>
+
+    <div class="cardioTimerButtons">
+
+        <button
+        type="button"
+        class="secondaryButton"
+        id="cardioStartPauseBtn"
+        onclick="toggleCardioTimer()">
+        ▶️ Avvia
+        </button>
+
+        <button
+        type="button"
+        class="secondaryButton"
+        onclick="resetCardioTimer()">
+        ↺ Azzera
+        </button>
+
+    </div>
+
+</div>
+
+</div>
 
 
 

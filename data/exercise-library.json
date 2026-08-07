@@ -1120,89 +1120,69 @@
     "muscle": "Cardio",
     "equipment": "Corpo libero",
     "pattern": "cardio",
-    "sets": 1,
-    "reps": 1,
-    "rest": 0
+    "duration": 20
   },
   {
     "title": "Burpees",
     "muscle": "Cardio",
     "equipment": "Corpo libero",
     "pattern": "cardio",
-    "sets": 3,
-    "reps": 15,
-    "rest": 45
+    "duration": 20
   },
   {
     "title": "Jumping Jack",
     "muscle": "Cardio",
     "equipment": "Corpo libero",
     "pattern": "cardio",
-    "sets": 3,
-    "reps": 30,
-    "rest": 30
+    "duration": 20
   },
   {
     "title": "Salto con la Corda",
     "muscle": "Cardio",
     "equipment": "Corpo libero",
     "pattern": "cardio",
-    "sets": 3,
-    "reps": 1,
-    "rest": 45
+    "duration": 20
   },
   {
     "title": "High Knees",
     "muscle": "Cardio",
     "equipment": "Corpo libero",
     "pattern": "cardio",
-    "sets": 3,
-    "reps": 30,
-    "rest": 30
+    "duration": 20
   },
   {
     "title": "Cyclette",
     "muscle": "Cardio",
     "equipment": "Macchine/Cavi",
     "pattern": "cardio",
-    "sets": 1,
-    "reps": 1,
-    "rest": 0
+    "duration": 20
   },
   {
     "title": "Tapis Roulant",
     "muscle": "Cardio",
     "equipment": "Macchine/Cavi",
     "pattern": "cardio",
-    "sets": 1,
-    "reps": 1,
-    "rest": 0
+    "duration": 20
   },
   {
     "title": "Vogatore",
     "muscle": "Cardio",
     "equipment": "Macchine/Cavi",
     "pattern": "cardio",
-    "sets": 1,
-    "reps": 1,
-    "rest": 0
+    "duration": 20
   },
   {
     "title": "Ellittica",
     "muscle": "Cardio",
     "equipment": "Macchine/Cavi",
     "pattern": "cardio",
-    "sets": 1,
-    "reps": 1,
-    "rest": 0
+    "duration": 20
   },
   {
     "title": "Stairmaster",
     "muscle": "Cardio",
     "equipment": "Macchine/Cavi",
     "pattern": "cardio",
-    "sets": 1,
-    "reps": 1,
-    "rest": 0
+    "duration": 20
   }
 ]

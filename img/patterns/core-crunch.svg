@@ -1,10 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-<g fill="none" stroke="#ffb800" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-<circle cx="60" cy="45" r="7"/>
-<line x1="54" y1="50" x2="35" y2="60"/>
-<line x1="35" y1="60" x2="20" y2="55"/>
-<line x1="35" y1="60" x2="42" y2="80"/>
-<line x1="42" y1="80" x2="65" y2="85"/>
-<line x1="60" y1="52" x2="70" y2="60"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+<g fill="none" stroke="#ffb800" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="14" cy="52" r="6"/><line x1="20" y1="52" x2="46" y2="52"/><line x1="46" y1="52" x2="46" y2="72"/><line x1="46" y1="52" x2="62" y2="46"/>
+</g>
+<line x1="82" y1="50" x2="115" y2="50" stroke="#8b8d92" stroke-width="3" stroke-dasharray="2,5" stroke-linecap="round"/><path d="M108 43 L118 50 L108 57" fill="none" stroke="#8b8d92" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<g fill="none" stroke="#ffb800" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="24" cy="38" r="6"/><line x1="28" y1="42" x2="46" y2="52"/><line x1="46" y1="52" x2="44" y2="72"/><line x1="46" y1="52" x2="62" y2="46"/><line x1="24" y1="44" x2="34" y2="52"/>
 </g>
 </svg>

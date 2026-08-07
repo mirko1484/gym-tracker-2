@@ -1,14 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-<g fill="none" stroke="#ffb800" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-<line x1="20" y1="70" x2="78" y2="70"/>
-<circle cx="18" cy="70" r="6" fill="#ffb800"/>
-<circle cx="82" cy="55" r="8"/>
-<line x1="30" y1="55" x2="55" y2="55"/>
-<line x1="40" y1="55" x2="35" y2="40"/>
-<line x1="55" y1="55" x2="60" y2="40"/>
-<line x1="30" y1="55" x2="20" y2="66"/>
-<line x1="55" y1="55" x2="65" y2="66"/>
-<line x1="35" y1="55" x2="30" y2="70"/>
-<line x1="45" y1="55" x2="42" y2="70"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+<g fill="none" stroke="#ffb800" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+<line x1="8" y1="72" x2="60" y2="72"/><circle cx="64" cy="55" r="7"/><line x1="20" y1="55" x2="40" y2="55"/><line x1="28" y1="55" x2="24" y2="42"/><line x1="40" y1="55" x2="44" y2="42"/><line x1="20" y1="55" x2="12" y2="66"/><line x1="40" y1="55" x2="48" y2="66"/><line x1="24" y1="55" x2="20" y2="72"/><line x1="34" y1="55" x2="30" y2="72"/>
+</g>
+<line x1="82" y1="50" x2="115" y2="50" stroke="#8b8d92" stroke-width="3" stroke-dasharray="2,5" stroke-linecap="round"/><path d="M108 43 L118 50 L108 57" fill="none" stroke="#8b8d92" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<g fill="none" stroke="#ffb800" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+<line x1="8" y1="72" x2="60" y2="72"/><circle cx="64" cy="30" r="7"/><line x1="20" y1="55" x2="40" y2="55"/><line x1="24" y1="55" x2="18" y2="34"/><line x1="36" y1="55" x2="42" y2="34"/><line x1="20" y1="55" x2="12" y2="66"/><line x1="40" y1="55" x2="48" y2="66"/><line x1="24" y1="55" x2="20" y2="72"/><line x1="34" y1="55" x2="30" y2="72"/>
 </g>
 </svg>

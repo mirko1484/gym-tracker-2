@@ -160,23 +160,40 @@ function convertOldFormat(){
         workouts[day].forEach(exercise=>{
 
 
-            if(!exercise.sets){
+            const isCardio =
+                exercise.muscle === "Cardio";
 
-                exercise.sets = 3;
+
+            if(isCardio){
+
+                if(!exercise.duration){
+
+                    exercise.duration = 20;
+
+                }
 
             }
+            else{
+
+                if(!exercise.sets){
+
+                    exercise.sets = 3;
+
+                }
 
 
-            if(!exercise.reps){
+                if(!exercise.reps){
 
-                exercise.reps = 10;
+                    exercise.reps = 10;
 
-            }
+                }
 
 
-            if(!exercise.rest){
+                if(!exercise.rest){
 
-                exercise.rest = 60;
+                    exercise.rest = 60;
+
+                }
 
             }
 
@@ -230,15 +247,24 @@ function convertOldFormat(){
 // Costruisce dinamicamente le sezioni delle giornate attive
 // (in base al numero scelto nelle Impostazioni)
 
+// Giornata attualmente in modifica (si compila una alla volta)
+let currentEditingDay = null;
+
+
 function renderDaySections(){
 
 
-    const container =
+    const tabContainer =
         document.getElementById(
-            "daysContainer"
+            "dayTabRow"
         );
 
-    if(!container){
+    const editorContainer =
+        document.getElementById(
+            "dayEditor"
+        );
+
+    if(!tabContainer || !editorContainer){
 
         return;
 
@@ -247,57 +273,132 @@ function renderDaySections(){
     const days =
         getActiveDayLetters();
 
-    let html = "";
+
+    // Se la giornata attiva non esiste più (es. numero ridotto),
+    // torna alla prima disponibile
+
+    if(
+        !currentEditingDay ||
+        !days.includes(currentEditingDay)
+    ){
+
+        currentEditingDay =
+            days[0];
+
+    }
+
+
+    // --- TAB ---
+
+    let tabHtml = "";
 
     days.forEach((day, index)=>{
 
         const colorClass =
             getDayColorClass(index);
 
-        const icon =
-            getDayIcon(index);
+        const activeClass =
+            day === currentEditingDay ?
+                "dayTabActive " + colorClass :
+                "";
 
-        html += `
-
-        <section class="statsCard">
-
-        <h2>
-        ${icon} Giornata ${day}
-        </h2>
-
-        <div id="day${day}List"></div>
-
-        <div class="dayActionsRow">
+        tabHtml += `
 
         <button
-        class="dayButton ${colorClass}"
-        onclick="addExercise('${day}')">
-        ➕ Manuale
+        class="dayTabBtn ${activeClass}"
+        onclick="selectEditingDay('${day}')">
+        ${getDayIcon(index)} ${day}
         </button>
-
-        <button
-        class="dayButton ${colorClass}"
-        onclick="openLibrary('${day}')">
-        📚 Libreria
-        </button>
-
-        </div>
-
-        </section>
 
         `;
 
     });
 
-    container.innerHTML = html;
+    tabContainer.innerHTML = tabHtml;
 
 
-    days.forEach(day=>{
+    renderDayEditor();
 
-        renderDay(day);
 
-    });
+}
 
+
+// Mostra la scheda della sola giornata selezionata
+function renderDayEditor(){
+
+
+    const editorContainer =
+        document.getElementById(
+            "dayEditor"
+        );
+
+    if(!editorContainer){
+
+        return;
+
+    }
+
+    const days =
+        getActiveDayLetters();
+
+    const index =
+        days.indexOf(currentEditingDay);
+
+    const colorClass =
+        getDayColorClass(index);
+
+    const icon =
+        getDayIcon(index);
+
+    const exerciseCount =
+        (workouts[currentEditingDay] || []).length;
+
+    editorContainer.innerHTML = `
+
+    <section class="statsCard">
+
+    <h2>
+    ${icon} Giornata ${currentEditingDay}
+    </h2>
+
+    <p class="librarySubtitle" style="text-align:left;padding:0 0 12px;">
+    ${exerciseCount === 0 ? "Nessun esercizio ancora" : exerciseCount + " esercizi in scheda"}
+    </p>
+
+    <div id="day${currentEditingDay}List"></div>
+
+    <div class="dayActionsRow">
+
+    <button
+    class="dayButton ${colorClass}"
+    onclick="addExercise('${currentEditingDay}')">
+    ➕ Manuale
+    </button>
+
+    <button
+    class="dayButton ${colorClass}"
+    onclick="openLibrary('${currentEditingDay}')">
+    📚 Libreria
+    </button>
+
+    </div>
+
+    </section>
+
+    `;
+
+    renderDay(currentEditingDay);
+
+
+}
+
+
+// Cambia la giornata attualmente in modifica
+function selectEditingDay(day){
+
+    currentEditingDay = day;
+
+    renderDaySections();
 
 }
 
@@ -415,7 +516,8 @@ function renderDay(day){
             ${index},
             'muscle',
             this.value
-            )
+            );
+            renderDayEditor();
             ">
 
 
@@ -429,6 +531,33 @@ function renderDay(day){
 
 
 
+
+${exercise.muscle === "Cardio" ? `
+
+            <label>
+            Durata (minuti)
+            </label>
+
+            <select
+
+            class="settingsInput"
+
+            onchange="
+            updateExercise(
+            '${day}',
+            ${index},
+            'duration',
+            Number(this.value)
+            )
+            ">
+
+            ${createDurationOptions(
+                exercise.duration || 20
+            )}
+
+            </select>
+
+            ` : `
 
             <label>
             Serie
@@ -453,12 +582,11 @@ function renderDay(day){
             ${createNumberOptions(
                 1,
                 10,
-                exercise.sets
+                exercise.sets || 3
             )}
 
 
             </select>
-
 
 
 
@@ -488,12 +616,11 @@ function renderDay(day){
             ${createNumberOptions(
                 1,
                 50,
-                exercise.reps
+                exercise.reps || 10
             )}
 
 
             </select>
-
 
 
 
@@ -521,11 +648,13 @@ function renderDay(day){
 
 
             ${createRestOptions(
-                exercise.rest
+                exercise.rest || 60
             )}
 
 
             </select>
+
+            `}
 
 
 
@@ -602,6 +731,48 @@ function updateExercise(
         value;
 
 
+    // Quando il muscolo cambia da/a Cardio,
+    // pulisce i campi non più pertinenti
+
+    if(field === "muscle"){
+
+        const exercise =
+            workouts[day][index];
+
+        if(value === "Cardio"){
+
+            delete exercise.sets;
+            delete exercise.reps;
+            delete exercise.rest;
+
+            if(!exercise.duration){
+
+                exercise.duration = 20;
+
+            }
+
+        }
+        else{
+
+            delete exercise.duration;
+
+            if(!exercise.sets){
+                exercise.sets = 3;
+            }
+
+            if(!exercise.reps){
+                exercise.reps = 10;
+            }
+
+            if(!exercise.rest){
+                exercise.rest = 60;
+            }
+
+        }
+
+    }
+
+
 
 
     autoSave();
@@ -674,7 +845,7 @@ function addExercise(day){
 
 
 
-    renderDay(day);
+    renderDayEditor();
 
 
 
@@ -717,7 +888,7 @@ function removeExercise(
 
 
 
-    renderDay(day);
+    renderDayEditor();
 
 
 
@@ -960,6 +1131,44 @@ function createRestOptions(selected){
 
     });
 
+
+
+    return html;
+
+
+}
+
+
+// =======================================
+// MENU DURATA (ESERCIZI CARDIO)
+// =======================================
+
+
+function createDurationOptions(selected){
+
+
+    const durations = [
+        5, 10, 15, 20, 25, 30, 35, 40, 45, 60, 75, 90
+    ];
+
+
+    let html = "";
+
+
+    durations.forEach(minutes=>{
+
+        html += `
+
+        <option
+        value="${minutes}"
+        ${minutes == selected ? "selected" : ""}
+        >
+        ${minutes} min
+        </option>
+
+        `;
+
+    });
 
 
     return html;
@@ -1475,6 +1684,9 @@ function addFromLibrary(sourceIndex){
     }
     else{
 
+        const isCardio =
+            source.muscle === "Cardio";
+
         workouts[libraryTargetDay].push({
 
             id: Date.now(),
@@ -1483,11 +1695,13 @@ function addFromLibrary(sourceIndex){
 
             muscle: source.muscle,
 
-            sets: source.sets,
+            sets: isCardio ? undefined : (source.sets || 3),
 
-            reps: source.reps,
+            reps: isCardio ? undefined : (source.reps || 10),
 
-            rest: source.rest,
+            rest: isCardio ? undefined : (source.rest || 60),
+
+            duration: isCardio ? (source.duration || 20) : undefined,
 
             pattern: source.pattern,
 
@@ -1497,7 +1711,7 @@ function addFromLibrary(sourceIndex){
 
     }
 
-    renderDay(libraryTargetDay);
+    renderDayEditor();
 
     autoSave();
 

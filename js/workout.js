@@ -509,6 +509,10 @@ function loadExercise(){
 
 
 
+    const isCardio =
+        exercise.muscle === "Cardio";
+
+
     if(!workoutData[currentExercise]){
 
 
@@ -527,20 +531,37 @@ function loadExercise(){
                 false,
 
 
+            cardio:
+                isCardio,
+
+
+            duration:
+                exercise.duration || 20,
+
+
+            elapsedSeconds:
+                0,
+
+
             sets:
-                createEmptySets(
+                isCardio ?
+                    [] :
+                    createEmptySets(
 
-                    exercise.sets,
+                        exercise.sets,
 
-                    exercise.reps
+                        exercise.reps
 
-                )
+                    )
 
 
         };
 
 
     }
+
+
+    pauseCardioTimer();
 
 
 
@@ -588,47 +609,59 @@ function loadExercise(){
     if(description){
 
 
-        description.textContent =
+        if(isCardio){
+
+            description.textContent =
+                "Durata consigliata: " +
+                (exercise.duration || 20) +
+                " minuti";
+
+        }
+        else{
+
+            description.textContent =
 
 
-            exercise.sets
-
-            +
-
-            " serie x "
-
-            +
-
-            exercise.reps
-
-            +
-
-            " ripetizioni"
-
-            +
-
-
-            (
-
-                exercise.rest
-
-                ?
-
-                " • Recupero "
+                exercise.sets
 
                 +
 
-                exercise.rest
+                " serie x "
 
                 +
 
-                " sec"
+                exercise.reps
 
-                :
+                +
 
-                ""
+                " ripetizioni"
 
-            );
+                +
+
+
+                (
+
+                    exercise.rest
+
+                    ?
+
+                    " • Recupero "
+
+                    +
+
+                    exercise.rest
+
+                    +
+
+                    " sec"
+
+                    :
+
+                    ""
+
+                );
+
+        }
 
 
     }
@@ -846,8 +879,37 @@ function loadExercise(){
 
 
 
-    createSetsTable();
+    const setsSection =
+        document.getElementById(
+            "setsSection"
+        );
 
+    const cardioSection =
+        document.getElementById(
+            "cardioSection"
+        );
+
+    if(setsSection && cardioSection){
+
+        setsSection.style.display =
+            isCardio ? "none" : "block";
+
+        cardioSection.style.display =
+            isCardio ? "block" : "none";
+
+    }
+
+
+    if(isCardio){
+
+        renderCardioTimer();
+
+    }
+    else{
+
+        createSetsTable();
+
+    }
 
 
 }
@@ -2099,6 +2161,269 @@ function finishWorkout(){
     location.href =
         "index.html";
 
+
+
+}
+
+
+// =======================================
+// TIMER CARDIO (per esercizio)
+// =======================================
+
+
+let cardioInterval = null;
+
+
+function renderCardioTimer(){
+
+
+    const data =
+        workoutData[currentExercise];
+
+    if(!data){
+
+        return;
+
+    }
+
+
+    const target =
+        document.getElementById(
+            "cardioTimerTarget"
+        );
+
+    if(target){
+
+        target.textContent =
+            "Obiettivo: " +
+            (data.duration || 20) +
+            " min";
+
+    }
+
+
+    updateCardioDisplay();
+
+
+    const btn =
+        document.getElementById(
+            "cardioStartPauseBtn"
+        );
+
+    if(btn){
+
+        btn.innerHTML =
+            cardioInterval ?
+                "⏸️ Pausa" :
+                "▶️ Avvia";
+
+    }
+
+
+}
+
+
+function updateCardioDisplay(){
+
+
+    const data =
+        workoutData[currentExercise];
+
+    if(!data){
+
+        return;
+
+    }
+
+
+    const display =
+        document.getElementById(
+            "cardioTimerDisplay"
+        );
+
+    if(!display){
+
+        return;
+
+    }
+
+
+    const totalSeconds =
+        data.elapsedSeconds || 0;
+
+    const minutes =
+        Math.floor(totalSeconds / 60);
+
+    const seconds =
+        totalSeconds % 60;
+
+    display.textContent =
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+
+
+    // Se si raggiunge o supera l'obiettivo, segna
+    // automaticamente l'esercizio come completato
+
+    const targetSeconds =
+        (data.duration || 20) * 60;
+
+    if(
+        totalSeconds >= targetSeconds &&
+        !data.completed
+    ){
+
+        data.completed = true;
+
+        const checkbox =
+            document.getElementById(
+                "exerciseDone"
+            );
+
+        if(checkbox){
+
+            checkbox.checked = true;
+
+        }
+
+    }
+
+
+}
+
+
+function toggleCardioTimer(){
+
+
+    if(cardioInterval){
+
+        pauseCardioTimer();
+
+    }
+    else{
+
+        startCardioTimer();
+
+    }
+
+
+}
+
+
+function startCardioTimer(){
+
+
+    const data =
+        workoutData[currentExercise];
+
+    if(!data){
+
+        return;
+
+    }
+
+
+    if(cardioInterval){
+
+        return;
+
+    }
+
+
+    cardioInterval =
+        setInterval(
+            function(){
+
+                data.elapsedSeconds =
+                    (data.elapsedSeconds || 0) + 1;
+
+                updateCardioDisplay();
+
+                saveProgress();
+
+            },
+            1000
+        );
+
+
+    const btn =
+        document.getElementById(
+            "cardioStartPauseBtn"
+        );
+
+    if(btn){
+
+        btn.innerHTML =
+            "⏸️ Pausa";
+
+    }
+
+
+}
+
+
+function pauseCardioTimer(){
+
+
+    if(cardioInterval){
+
+        clearInterval(cardioInterval);
+
+        cardioInterval = null;
+
+    }
+
+
+    const btn =
+        document.getElementById(
+            "cardioStartPauseBtn"
+        );
+
+    if(btn){
+
+        btn.innerHTML =
+            "▶️ Avvia";
+
+    }
+
+
+}
+
+
+function resetCardioTimer(){
+
+
+    pauseCardioTimer();
+
+
+    const data =
+        workoutData[currentExercise];
+
+    if(data){
+
+        data.elapsedSeconds = 0;
+
+        data.completed = false;
+
+    }
+
+
+    const checkbox =
+        document.getElementById(
+            "exerciseDone"
+        );
+
+    if(checkbox){
+
+        checkbox.checked = false;
+
+    }
+
+
+    updateCardioDisplay();
+
+    saveProgress();
 
 
 }
