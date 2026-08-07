@@ -137,17 +137,29 @@ id="dayAList">
 
 
 
+<div class="dayActionsRow">
+
 <button
 
 class="dayButton dayA"
 
 onclick="addExercise('A')">
 
-
-➕ Aggiungi esercizio
-
+➕ Manuale
 
 </button>
+
+<button
+
+class="dayButton dayA"
+
+onclick="openLibrary('A')">
+
+📚 Libreria
+
+</button>
+
+</div>
 
 
 
@@ -190,17 +202,29 @@ id="dayBList">
 
 
 
+<div class="dayActionsRow">
+
 <button
 
 class="dayButton dayB"
 
 onclick="addExercise('B')">
 
-
-➕ Aggiungi esercizio
-
+➕ Manuale
 
 </button>
+
+<button
+
+class="dayButton dayB"
+
+onclick="openLibrary('B')">
+
+📚 Libreria
+
+</button>
+
+</div>
 
 
 
@@ -243,17 +267,29 @@ id="dayCList">
 
 
 
+<div class="dayActionsRow">
+
 <button
 
 class="dayButton dayC"
 
 onclick="addExercise('C')">
 
-
-➕ Aggiungi esercizio
-
+➕ Manuale
 
 </button>
+
+<button
+
+class="dayButton dayC"
+
+onclick="openLibrary('C')">
+
+📚 Libreria
+
+</button>
+
+</div>
 
 
 
@@ -300,6 +336,57 @@ onclick="saveWorkouts()">
 
 
 
+
+
+
+<!-- ============================= -->
+<!-- MODALE LIBRERIA ESERCIZI -->
+<!-- ============================= -->
+
+<div id="libraryModal" class="modal">
+
+<div class="modalContent libraryModalContent">
+
+<h2>📚 Libreria esercizi</h2>
+
+<input
+id="librarySearch"
+class="settingsInput"
+type="text"
+placeholder="Cerca esercizio..."
+oninput="renderLibraryList()">
+
+<div class="libraryFilterRow">
+
+<select
+id="libraryMuscleFilter"
+class="settingsInput"
+onchange="renderLibraryList()">
+</select>
+
+<select
+id="libraryEquipmentFilter"
+class="settingsInput"
+onchange="renderLibraryList()">
+<option value="">Tutte le attrezzature</option>
+<option value="Corpo libero">🤸 Corpo libero</option>
+<option value="Pesi liberi">🏋️ Pesi liberi</option>
+<option value="Macchine/Cavi">⚙️ Macchine/Cavi</option>
+</select>
+
+</div>
+
+<div id="libraryList" class="libraryList"></div>
+
+<button
+class="secondaryButton"
+onclick="closeLibrary()">
+Chiudi
+</button>
+
+</div>
+
+</div>
 
 
 <!-- ============================= -->

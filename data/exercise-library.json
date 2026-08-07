@@ -1,0 +1,1208 @@
+[
+  {
+    "title": "Piegamenti",
+    "muscle": "Petto",
+    "equipment": "Corpo libero",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 60
+  },
+  {
+    "title": "Piegamenti Diamante",
+    "muscle": "Petto",
+    "equipment": "Corpo libero",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Piegamenti a Presa Larga",
+    "muscle": "Petto",
+    "equipment": "Corpo libero",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 60
+  },
+  {
+    "title": "Piegamenti Declinati",
+    "muscle": "Petto",
+    "equipment": "Corpo libero",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Piegamenti Inclinati",
+    "muscle": "Petto",
+    "equipment": "Corpo libero",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Dip alle Parallele (Petto)",
+    "muscle": "Petto",
+    "equipment": "Corpo libero",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Panca Piana Bilanciere",
+    "muscle": "Petto",
+    "equipment": "Pesi liberi",
+    "pattern": "press-orizzontale",
+    "sets": 4,
+    "reps": 8,
+    "rest": 90
+  },
+  {
+    "title": "Panca Inclinata Bilanciere",
+    "muscle": "Petto",
+    "equipment": "Pesi liberi",
+    "pattern": "press-orizzontale",
+    "sets": 4,
+    "reps": 8,
+    "rest": 90
+  },
+  {
+    "title": "Panca Declinata Bilanciere",
+    "muscle": "Petto",
+    "equipment": "Pesi liberi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Panca Piana Manubri",
+    "muscle": "Petto",
+    "equipment": "Pesi liberi",
+    "pattern": "press-orizzontale",
+    "sets": 4,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Panca Inclinata Manubri",
+    "muscle": "Petto",
+    "equipment": "Pesi liberi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Panca Declinata Manubri",
+    "muscle": "Petto",
+    "equipment": "Pesi liberi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Croci Manubri Piano",
+    "muscle": "Petto",
+    "equipment": "Pesi liberi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Croci Manubri Inclinato",
+    "muscle": "Petto",
+    "equipment": "Pesi liberi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Pullover Manubrio",
+    "muscle": "Petto",
+    "equipment": "Pesi liberi",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Chest Press Macchina",
+    "muscle": "Petto",
+    "equipment": "Macchine/Cavi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Pectoral Machine (Croci)",
+    "muscle": "Petto",
+    "equipment": "Macchine/Cavi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Croci ai Cavi Alti",
+    "muscle": "Petto",
+    "equipment": "Macchine/Cavi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Croci ai Cavi Bassi",
+    "muscle": "Petto",
+    "equipment": "Macchine/Cavi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Cavi Incrociati",
+    "muscle": "Petto",
+    "equipment": "Macchine/Cavi",
+    "pattern": "press-orizzontale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Smith Machine Panca Piana",
+    "muscle": "Petto",
+    "equipment": "Macchine/Cavi",
+    "pattern": "press-orizzontale",
+    "sets": 4,
+    "reps": 8,
+    "rest": 90
+  },
+  {
+    "title": "Trazioni Presa Prona",
+    "muscle": "Dorso",
+    "equipment": "Corpo libero",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 6,
+    "rest": 120
+  },
+  {
+    "title": "Trazioni Presa Supina",
+    "muscle": "Dorso",
+    "equipment": "Corpo libero",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 8,
+    "rest": 120
+  },
+  {
+    "title": "Trazioni Presa Neutra",
+    "muscle": "Dorso",
+    "equipment": "Corpo libero",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 8,
+    "rest": 120
+  },
+  {
+    "title": "Australian Pull-up",
+    "muscle": "Dorso",
+    "equipment": "Corpo libero",
+    "pattern": "trazione-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 75
+  },
+  {
+    "title": "Superman",
+    "muscle": "Dorso",
+    "equipment": "Corpo libero",
+    "pattern": "core-plank",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Rematore Bilanciere",
+    "muscle": "Dorso",
+    "equipment": "Pesi liberi",
+    "pattern": "trazione-orizzontale",
+    "sets": 4,
+    "reps": 8,
+    "rest": 90
+  },
+  {
+    "title": "Rematore Manubrio",
+    "muscle": "Dorso",
+    "equipment": "Pesi liberi",
+    "pattern": "trazione-orizzontale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 75
+  },
+  {
+    "title": "Rematore Presa Inversa",
+    "muscle": "Dorso",
+    "equipment": "Pesi liberi",
+    "pattern": "trazione-orizzontale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Stacco da Terra",
+    "muscle": "Dorso",
+    "equipment": "Pesi liberi",
+    "pattern": "hip-hinge",
+    "sets": 4,
+    "reps": 6,
+    "rest": 120
+  },
+  {
+    "title": "Pullover Bilanciere",
+    "muscle": "Dorso",
+    "equipment": "Pesi liberi",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Shrug Bilanciere",
+    "muscle": "Trapezio",
+    "equipment": "Pesi liberi",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 60
+  },
+  {
+    "title": "Shrug Manubri",
+    "muscle": "Trapezio",
+    "equipment": "Pesi liberi",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 60
+  },
+  {
+    "title": "Lat Machine Avanti",
+    "muscle": "Dorso",
+    "equipment": "Macchine/Cavi",
+    "pattern": "trazione-verticale",
+    "sets": 4,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Lat Machine Dietro Nuca",
+    "muscle": "Dorso",
+    "equipment": "Macchine/Cavi",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Pulley Basso",
+    "muscle": "Dorso",
+    "equipment": "Macchine/Cavi",
+    "pattern": "trazione-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 90
+  },
+  {
+    "title": "Rematore ai Cavi",
+    "muscle": "Dorso",
+    "equipment": "Macchine/Cavi",
+    "pattern": "trazione-orizzontale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 75
+  },
+  {
+    "title": "Machine Row",
+    "muscle": "Dorso",
+    "equipment": "Macchine/Cavi",
+    "pattern": "trazione-orizzontale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 75
+  },
+  {
+    "title": "Pullover ai Cavi",
+    "muscle": "Dorso",
+    "equipment": "Macchine/Cavi",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Iperestensioni",
+    "muscle": "Dorso",
+    "equipment": "Macchine/Cavi",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 15,
+    "rest": 60
+  },
+  {
+    "title": "Piegamenti a Verticale (Pike)",
+    "muscle": "Spalle",
+    "equipment": "Corpo libero",
+    "pattern": "press-verticale",
+    "sets": 3,
+    "reps": 8,
+    "rest": 90
+  },
+  {
+    "title": "Handstand Push-up",
+    "muscle": "Spalle",
+    "equipment": "Corpo libero",
+    "pattern": "press-verticale",
+    "sets": 3,
+    "reps": 5,
+    "rest": 120
+  },
+  {
+    "title": "Shoulder Press Bilanciere",
+    "muscle": "Spalle",
+    "equipment": "Pesi liberi",
+    "pattern": "press-verticale",
+    "sets": 4,
+    "reps": 8,
+    "rest": 90
+  },
+  {
+    "title": "Shoulder Press Manubri",
+    "muscle": "Spalle",
+    "equipment": "Pesi liberi",
+    "pattern": "press-verticale",
+    "sets": 4,
+    "reps": 8,
+    "rest": 90
+  },
+  {
+    "title": "Military Press",
+    "muscle": "Spalle",
+    "equipment": "Pesi liberi",
+    "pattern": "press-verticale",
+    "sets": 4,
+    "reps": 6,
+    "rest": 90
+  },
+  {
+    "title": "Arnold Press",
+    "muscle": "Spalle",
+    "equipment": "Pesi liberi",
+    "pattern": "press-verticale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 75
+  },
+  {
+    "title": "Alzate Laterali Manubri",
+    "muscle": "Spalle",
+    "equipment": "Pesi liberi",
+    "pattern": "press-verticale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Alzate Frontali Manubri",
+    "muscle": "Spalle",
+    "equipment": "Pesi liberi",
+    "pattern": "press-verticale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 45
+  },
+  {
+    "title": "Alzate Posteriori Manubri",
+    "muscle": "Spalle",
+    "equipment": "Pesi liberi",
+    "pattern": "press-verticale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Upright Row Bilanciere",
+    "muscle": "Spalle",
+    "equipment": "Pesi liberi",
+    "pattern": "trazione-verticale",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Shoulder Press Machine",
+    "muscle": "Spalle",
+    "equipment": "Macchine/Cavi",
+    "pattern": "press-verticale",
+    "sets": 3,
+    "reps": 10,
+    "rest": 75
+  },
+  {
+    "title": "Alzate Laterali ai Cavi",
+    "muscle": "Spalle",
+    "equipment": "Macchine/Cavi",
+    "pattern": "press-verticale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Reverse Pec Deck",
+    "muscle": "Spalle",
+    "equipment": "Macchine/Cavi",
+    "pattern": "press-verticale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Face Pull",
+    "muscle": "Spalle",
+    "equipment": "Macchine/Cavi",
+    "pattern": "trazione-orizzontale",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Curl Bilanciere",
+    "muscle": "Bicipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "curl-braccia",
+    "sets": 4,
+    "reps": 10,
+    "rest": 60
+  },
+  {
+    "title": "Curl Manubri Alternato",
+    "muscle": "Bicipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "curl-braccia",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Hammer Curl",
+    "muscle": "Bicipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "curl-braccia",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Curl Concentrato",
+    "muscle": "Bicipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "curl-braccia",
+    "sets": 3,
+    "reps": 12,
+    "rest": 45
+  },
+  {
+    "title": "Curl alla Panca Scott",
+    "muscle": "Bicipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "curl-braccia",
+    "sets": 3,
+    "reps": 10,
+    "rest": 60
+  },
+  {
+    "title": "Curl 21",
+    "muscle": "Bicipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "curl-braccia",
+    "sets": 3,
+    "reps": 21,
+    "rest": 60
+  },
+  {
+    "title": "Curl ai Cavi",
+    "muscle": "Bicipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "curl-braccia",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Curl alla Lat Machine",
+    "muscle": "Bicipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "curl-braccia",
+    "sets": 3,
+    "reps": 12,
+    "rest": 45
+  },
+  {
+    "title": "Preacher Curl Machine",
+    "muscle": "Bicipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "curl-braccia",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Dip su Panca",
+    "muscle": "Tricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Push-up Presa Stretta",
+    "muscle": "Tricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Dip alle Parallele",
+    "muscle": "Tricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "French Press Bilanciere",
+    "muscle": "Tricipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "French Press Manubrio",
+    "muscle": "Tricipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Estensioni Sopra la Testa",
+    "muscle": "Tricipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Kickback Manubrio",
+    "muscle": "Tricipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Push Down ai Cavi",
+    "muscle": "Tricipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Push Down con Corda",
+    "muscle": "Tricipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Tricipiti Machine",
+    "muscle": "Tricipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Estensioni ai Cavi Sopra Testa",
+    "muscle": "Tricipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "estensione-tricipiti",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Squat a Corpo Libero",
+    "muscle": "Quadricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "squat",
+    "sets": 3,
+    "reps": 20,
+    "rest": 60
+  },
+  {
+    "title": "Squat Bulgaro",
+    "muscle": "Quadricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "affondo",
+    "sets": 3,
+    "reps": 12,
+    "rest": 75
+  },
+  {
+    "title": "Affondi",
+    "muscle": "Quadricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "affondo",
+    "sets": 3,
+    "reps": 12,
+    "rest": 75
+  },
+  {
+    "title": "Affondi Camminati",
+    "muscle": "Quadricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "affondo",
+    "sets": 3,
+    "reps": 20,
+    "rest": 75
+  },
+  {
+    "title": "Jump Squat",
+    "muscle": "Quadricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "squat",
+    "sets": 3,
+    "reps": 15,
+    "rest": 60
+  },
+  {
+    "title": "Wall Sit",
+    "muscle": "Quadricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "squat",
+    "sets": 3,
+    "reps": 1,
+    "rest": 60
+  },
+  {
+    "title": "Pistol Squat",
+    "muscle": "Quadricipiti",
+    "equipment": "Corpo libero",
+    "pattern": "squat",
+    "sets": 3,
+    "reps": 6,
+    "rest": 90
+  },
+  {
+    "title": "Squat Bilanciere",
+    "muscle": "Quadricipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "squat",
+    "sets": 4,
+    "reps": 8,
+    "rest": 120
+  },
+  {
+    "title": "Front Squat",
+    "muscle": "Quadricipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "squat",
+    "sets": 4,
+    "reps": 6,
+    "rest": 120
+  },
+  {
+    "title": "Goblet Squat",
+    "muscle": "Quadricipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "squat",
+    "sets": 3,
+    "reps": 12,
+    "rest": 75
+  },
+  {
+    "title": "Affondi con Manubri",
+    "muscle": "Quadricipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "affondo",
+    "sets": 3,
+    "reps": 12,
+    "rest": 75
+  },
+  {
+    "title": "Affondi Bulgari con Manubri",
+    "muscle": "Quadricipiti",
+    "equipment": "Pesi liberi",
+    "pattern": "affondo",
+    "sets": 3,
+    "reps": 10,
+    "rest": 75
+  },
+  {
+    "title": "Leg Press",
+    "muscle": "Quadricipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "squat",
+    "sets": 4,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Leg Extension",
+    "muscle": "Quadricipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "squat",
+    "sets": 3,
+    "reps": 15,
+    "rest": 60
+  },
+  {
+    "title": "Hack Squat",
+    "muscle": "Quadricipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "squat",
+    "sets": 4,
+    "reps": 8,
+    "rest": 120
+  },
+  {
+    "title": "Smith Machine Squat",
+    "muscle": "Quadricipiti",
+    "equipment": "Macchine/Cavi",
+    "pattern": "squat",
+    "sets": 4,
+    "reps": 8,
+    "rest": 120
+  },
+  {
+    "title": "Ponte Glutei",
+    "muscle": "Glutei",
+    "equipment": "Corpo libero",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Hip Thrust a Corpo Libero",
+    "muscle": "Glutei",
+    "equipment": "Corpo libero",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Nordic Curl",
+    "muscle": "Femorali",
+    "equipment": "Corpo libero",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 8,
+    "rest": 90
+  },
+  {
+    "title": "Good Morning a Corpo Libero",
+    "muscle": "Femorali",
+    "equipment": "Corpo libero",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Stacco Rumeno Bilanciere",
+    "muscle": "Femorali",
+    "equipment": "Pesi liberi",
+    "pattern": "hip-hinge",
+    "sets": 4,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Stacco Rumeno Manubri",
+    "muscle": "Femorali",
+    "equipment": "Pesi liberi",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Hip Thrust Bilanciere",
+    "muscle": "Glutei",
+    "equipment": "Pesi liberi",
+    "pattern": "hip-hinge",
+    "sets": 4,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Good Morning Bilanciere",
+    "muscle": "Femorali",
+    "equipment": "Pesi liberi",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 10,
+    "rest": 90
+  },
+  {
+    "title": "Leg Curl Sdraiato",
+    "muscle": "Femorali",
+    "equipment": "Macchine/Cavi",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Leg Curl Seduto",
+    "muscle": "Femorali",
+    "equipment": "Macchine/Cavi",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Abductor Machine",
+    "muscle": "Glutei",
+    "equipment": "Macchine/Cavi",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Adductor Machine",
+    "muscle": "Glutei",
+    "equipment": "Macchine/Cavi",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Glute Kickback ai Cavi",
+    "muscle": "Glutei",
+    "equipment": "Macchine/Cavi",
+    "pattern": "hip-hinge",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Calf Raise a Corpo Libero",
+    "muscle": "Polpacci",
+    "equipment": "Corpo libero",
+    "pattern": "polpacci",
+    "sets": 4,
+    "reps": 20,
+    "rest": 45
+  },
+  {
+    "title": "Calf Raise con Manubri",
+    "muscle": "Polpacci",
+    "equipment": "Pesi liberi",
+    "pattern": "polpacci",
+    "sets": 4,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Calf Raise Macchina",
+    "muscle": "Polpacci",
+    "equipment": "Macchine/Cavi",
+    "pattern": "polpacci",
+    "sets": 4,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Seated Calf Raise",
+    "muscle": "Polpacci",
+    "equipment": "Macchine/Cavi",
+    "pattern": "polpacci",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Calf Raise su Leg Press",
+    "muscle": "Polpacci",
+    "equipment": "Macchine/Cavi",
+    "pattern": "polpacci",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Crunch",
+    "muscle": "Addome",
+    "equipment": "Corpo libero",
+    "pattern": "core-crunch",
+    "sets": 3,
+    "reps": 20,
+    "rest": 45
+  },
+  {
+    "title": "Plank",
+    "muscle": "Addome",
+    "equipment": "Corpo libero",
+    "pattern": "core-plank",
+    "sets": 3,
+    "reps": 1,
+    "rest": 45
+  },
+  {
+    "title": "Plank Laterale",
+    "muscle": "Addome",
+    "equipment": "Corpo libero",
+    "pattern": "core-plank",
+    "sets": 3,
+    "reps": 1,
+    "rest": 45
+  },
+  {
+    "title": "Russian Twist",
+    "muscle": "Addome",
+    "equipment": "Corpo libero",
+    "pattern": "core-twist",
+    "sets": 3,
+    "reps": 20,
+    "rest": 45
+  },
+  {
+    "title": "Leg Raise",
+    "muscle": "Addome",
+    "equipment": "Corpo libero",
+    "pattern": "core-crunch",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Mountain Climber",
+    "muscle": "Core",
+    "equipment": "Corpo libero",
+    "pattern": "core-plank",
+    "sets": 3,
+    "reps": 20,
+    "rest": 45
+  },
+  {
+    "title": "Bicycle Crunch",
+    "muscle": "Addome",
+    "equipment": "Corpo libero",
+    "pattern": "core-twist",
+    "sets": 3,
+    "reps": 20,
+    "rest": 45
+  },
+  {
+    "title": "V-Up",
+    "muscle": "Addome",
+    "equipment": "Corpo libero",
+    "pattern": "core-crunch",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Hollow Body Hold",
+    "muscle": "Addome",
+    "equipment": "Corpo libero",
+    "pattern": "core-plank",
+    "sets": 3,
+    "reps": 1,
+    "rest": 45
+  },
+  {
+    "title": "Dead Bug",
+    "muscle": "Core",
+    "equipment": "Corpo libero",
+    "pattern": "core-plank",
+    "sets": 3,
+    "reps": 12,
+    "rest": 45
+  },
+  {
+    "title": "Russian Twist con Peso",
+    "muscle": "Addome",
+    "equipment": "Pesi liberi",
+    "pattern": "core-twist",
+    "sets": 3,
+    "reps": 20,
+    "rest": 45
+  },
+  {
+    "title": "Weighted Crunch",
+    "muscle": "Addome",
+    "equipment": "Pesi liberi",
+    "pattern": "core-crunch",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Woodchopper Manubrio",
+    "muscle": "Core",
+    "equipment": "Pesi liberi",
+    "pattern": "core-twist",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Crunch ai Cavi",
+    "muscle": "Addome",
+    "equipment": "Macchine/Cavi",
+    "pattern": "core-crunch",
+    "sets": 3,
+    "reps": 15,
+    "rest": 60
+  },
+  {
+    "title": "Ab Machine",
+    "muscle": "Addome",
+    "equipment": "Macchine/Cavi",
+    "pattern": "core-crunch",
+    "sets": 3,
+    "reps": 15,
+    "rest": 60
+  },
+  {
+    "title": "Cable Woodchopper",
+    "muscle": "Core",
+    "equipment": "Macchine/Cavi",
+    "pattern": "core-twist",
+    "sets": 3,
+    "reps": 12,
+    "rest": 60
+  },
+  {
+    "title": "Corsa",
+    "muscle": "Cardio",
+    "equipment": "Corpo libero",
+    "pattern": "cardio",
+    "sets": 1,
+    "reps": 1,
+    "rest": 0
+  },
+  {
+    "title": "Burpees",
+    "muscle": "Cardio",
+    "equipment": "Corpo libero",
+    "pattern": "cardio",
+    "sets": 3,
+    "reps": 15,
+    "rest": 45
+  },
+  {
+    "title": "Jumping Jack",
+    "muscle": "Cardio",
+    "equipment": "Corpo libero",
+    "pattern": "cardio",
+    "sets": 3,
+    "reps": 30,
+    "rest": 30
+  },
+  {
+    "title": "Salto con la Corda",
+    "muscle": "Cardio",
+    "equipment": "Corpo libero",
+    "pattern": "cardio",
+    "sets": 3,
+    "reps": 1,
+    "rest": 45
+  },
+  {
+    "title": "High Knees",
+    "muscle": "Cardio",
+    "equipment": "Corpo libero",
+    "pattern": "cardio",
+    "sets": 3,
+    "reps": 30,
+    "rest": 30
+  },
+  {
+    "title": "Cyclette",
+    "muscle": "Cardio",
+    "equipment": "Macchine/Cavi",
+    "pattern": "cardio",
+    "sets": 1,
+    "reps": 1,
+    "rest": 0
+  },
+  {
+    "title": "Tapis Roulant",
+    "muscle": "Cardio",
+    "equipment": "Macchine/Cavi",
+    "pattern": "cardio",
+    "sets": 1,
+    "reps": 1,
+    "rest": 0
+  },
+  {
+    "title": "Vogatore",
+    "muscle": "Cardio",
+    "equipment": "Macchine/Cavi",
+    "pattern": "cardio",
+    "sets": 1,
+    "reps": 1,
+    "rest": 0
+  },
+  {
+    "title": "Ellittica",
+    "muscle": "Cardio",
+    "equipment": "Macchine/Cavi",
+    "pattern": "cardio",
+    "sets": 1,
+    "reps": 1,
+    "rest": 0
+  },
+  {
+    "title": "Stairmaster",
+    "muscle": "Cardio",
+    "equipment": "Macchine/Cavi",
+    "pattern": "cardio",
+    "sets": 1,
+    "reps": 1,
+    "rest": 0
+  }
+]

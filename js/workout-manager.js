@@ -14,6 +14,13 @@ let workouts = {
 };
 
 
+// Catalogo esercizi caricato da data/exercise-library.json
+let exerciseLibrary = [];
+
+// Giornata attualmente aperta nel modale libreria
+let libraryTargetDay = null;
+
+
 
 
 
@@ -58,6 +65,8 @@ document.addEventListener(
     function(){
 
         loadWorkouts();
+
+        loadExerciseLibrary();
 
     }
 
@@ -171,10 +180,20 @@ function convertOldFormat(){
             }
 
 
+            if(!exercise.pattern){
+
+                exercise.pattern =
+                    "generale";
+
+            }
+
+
             if(!exercise.image){
 
                 exercise.image =
-                    "img/exercises/default.jpg";
+                    "img/patterns/" +
+                    exercise.pattern +
+                    ".svg";
 
             }
 
@@ -272,14 +291,19 @@ function renderDay(day){
 
 
 
-            <p>
+            <div class="exerciseHeaderRow">
 
-            <strong>
-            ${index + 1}.
-            </strong>
+                <img
+                class="exerciseThumb"
+                src="${exercise.image}"
+                onerror="this.style.visibility='hidden'"
+                alt="">
 
-            </p>
+                <strong>
+                ${index + 1}. ${exercise.title}
+                </strong>
 
+            </div>
 
 
             <label>
@@ -565,8 +589,12 @@ function addExercise(day){
 
 
 
+        pattern:
+            "generale",
+
+
         image:
-            "img/exercises/default.jpg"
+            "img/patterns/generale.svg"
 
 
 
@@ -865,5 +893,277 @@ function createRestOptions(selected){
 
     return html;
 
+
+}
+
+// =======================================
+// LIBRERIA ESERCIZI
+// =======================================
+
+
+async function loadExerciseLibrary(){
+
+    try{
+
+        const response =
+            await fetch(
+                "data/exercise-library.json"
+            );
+
+        exerciseLibrary =
+            await response.json();
+
+    }
+    catch(err){
+
+        exerciseLibrary = [];
+
+    }
+
+    populateLibraryMuscleFilter();
+
+}
+
+
+// Apre il modale della libreria per una specifica giornata
+function openLibrary(day){
+
+    libraryTargetDay = day;
+
+    const search =
+        document.getElementById(
+            "librarySearch"
+        );
+
+    if(search){
+        search.value = "";
+    }
+
+    const muscleFilter =
+        document.getElementById(
+            "libraryMuscleFilter"
+        );
+
+    if(muscleFilter){
+        muscleFilter.value = "";
+    }
+
+    renderLibraryList();
+
+    const modal =
+        document.getElementById(
+            "libraryModal"
+        );
+
+    if(modal){
+
+        modal.style.display =
+            "flex";
+
+    }
+
+}
+
+
+function closeLibrary(){
+
+    const modal =
+        document.getElementById(
+            "libraryModal"
+        );
+
+    if(modal){
+
+        modal.style.display =
+            "none";
+
+    }
+
+    libraryTargetDay = null;
+
+}
+
+
+// Ridisegna la lista filtrata della libreria
+function renderLibraryList(){
+
+    const container =
+        document.getElementById(
+            "libraryList"
+        );
+
+    if(!container){
+        return;
+    }
+
+    const search =
+        document.getElementById(
+            "librarySearch"
+        );
+
+    const muscleFilter =
+        document.getElementById(
+            "libraryMuscleFilter"
+        );
+
+    const equipmentFilter =
+        document.getElementById(
+            "libraryEquipmentFilter"
+        );
+
+    const query =
+        search ?
+            search.value.trim().toLowerCase() :
+            "";
+
+    const muscle =
+        muscleFilter ?
+            muscleFilter.value :
+            "";
+
+    const equipment =
+        equipmentFilter ?
+            equipmentFilter.value :
+            "";
+
+    const filtered =
+        exerciseLibrary.filter(ex=>{
+
+            const matchesQuery =
+                !query ||
+                ex.title.toLowerCase().includes(query);
+
+            const matchesMuscle =
+                !muscle ||
+                ex.muscle === muscle;
+
+            const matchesEquipment =
+                !equipment ||
+                ex.equipment === equipment;
+
+            return matchesQuery && matchesMuscle && matchesEquipment;
+
+        });
+
+    container.innerHTML = "";
+
+    if(filtered.length === 0){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Nessun esercizio trovato</p>`;
+
+        return;
+
+    }
+
+    filtered.forEach((ex, i)=>{
+
+        const originalIndex =
+            exerciseLibrary.indexOf(ex);
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "libraryCard";
+
+        card.innerHTML = `
+
+            <img
+            class="libraryCardImg"
+            src="img/patterns/${ex.pattern}.svg"
+            alt="">
+
+            <div class="libraryCardInfo">
+                <strong>${ex.title}</strong>
+                <span>${ex.muscle} · ${ex.equipment}</span>
+            </div>
+
+            <button
+            class="libraryAddBtn"
+            onclick="addFromLibrary(${originalIndex})">
+            ➕
+            </button>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+// Genera dinamicamente le opzioni del filtro muscolo nel modale
+function populateLibraryMuscleFilter(){
+
+    const muscleFilter =
+        document.getElementById(
+            "libraryMuscleFilter"
+        );
+
+    if(!muscleFilter){
+        return;
+    }
+
+    const uniqueMuscles =
+        [...new Set(
+            exerciseLibrary.map(ex=>ex.muscle)
+        )];
+
+    let html =
+        `<option value="">Tutti i muscoli</option>`;
+
+    uniqueMuscles.forEach(m=>{
+
+        html +=
+            `<option value="${m}">${m}</option>`;
+
+    });
+
+    muscleFilter.innerHTML = html;
+
+}
+
+
+// Aggiunge un esercizio scelto dalla libreria alla giornata selezionata
+function addFromLibrary(libraryIndex){
+
+    if(!libraryTargetDay){
+        return;
+    }
+
+    const source =
+        exerciseLibrary[libraryIndex];
+
+    if(!source){
+        return;
+    }
+
+    workouts[libraryTargetDay].push({
+
+        id: Date.now(),
+
+        title: source.title,
+
+        muscle: source.muscle,
+
+        sets: source.sets,
+
+        reps: source.reps,
+
+        rest: source.rest,
+
+        pattern: source.pattern,
+
+        image: `img/patterns/${source.pattern}.svg`
+
+    });
+
+    renderDay(libraryTargetDay);
+
+    autoSave();
+
+    closeLibrary();
 
 }

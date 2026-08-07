@@ -1,227 +1,218 @@
 {
   "A": [
-
     {
       "title": "Panca Piana",
       "description": "4 serie x 8 ripetizioni",
       "muscle": "Petto",
-      "image": "img/panca_piana.jpg"
+      "image": "img/patterns/press-orizzontale.svg",
+      "pattern": "press-orizzontale"
     },
-
     {
       "title": "Panca Inclinata Manubri",
       "description": "3 serie x 10",
       "muscle": "Petto",
-      "image": "img/panca_inclinata.jpg"
+      "image": "img/patterns/press-orizzontale.svg",
+      "pattern": "press-orizzontale"
     },
-
     {
       "title": "Croci ai Cavi",
       "description": "3 serie x 12",
       "muscle": "Petto",
-      "image": "img/croci_cavi.jpg"
+      "image": "img/patterns/press-orizzontale.svg",
+      "pattern": "press-orizzontale"
     },
-
     {
       "title": "Chest Press",
       "description": "3 serie x 10",
       "muscle": "Petto",
-      "image": "img/chest_press.jpg"
+      "image": "img/patterns/press-orizzontale.svg",
+      "pattern": "press-orizzontale"
     },
-
     {
       "title": "Shoulder Press",
       "description": "4 serie x 8",
       "muscle": "Spalle",
-      "image": "img/shoulder_press.jpg"
+      "image": "img/patterns/press-verticale.svg",
+      "pattern": "press-verticale"
     },
-
     {
       "title": "Alzate Laterali",
       "description": "3 serie x 15",
       "muscle": "Spalle",
-      "image": "img/alzate_laterali.jpg"
+      "image": "img/patterns/press-verticale.svg",
+      "pattern": "press-verticale"
     },
-
     {
       "title": "French Press",
       "description": "3 serie x 12",
       "muscle": "Tricipiti",
-      "image": "img/french_press.jpg"
+      "image": "img/patterns/estensione-tricipiti.svg",
+      "pattern": "estensione-tricipiti"
     },
-
     {
       "title": "Push Down",
       "description": "3 serie x 15",
       "muscle": "Tricipiti",
-      "image": "img/pushdown.jpg"
+      "image": "img/patterns/estensione-tricipiti.svg",
+      "pattern": "estensione-tricipiti"
     },
-
     {
       "title": "Crunch",
       "description": "3 serie x 20",
       "muscle": "Addome",
-      "image": "img/crunch.jpg"
+      "image": "img/patterns/core-crunch.svg",
+      "pattern": "core-crunch"
     },
-
     {
       "title": "Plank",
       "description": "3 x 60 secondi",
       "muscle": "Addome",
-      "image": "img/plank.jpg"
+      "image": "img/patterns/core-plank.svg",
+      "pattern": "core-plank"
     }
-
   ],
-
-
-
   "B": [
-
     {
       "title": "Lat Machine",
       "description": "4 serie x 10",
       "muscle": "Dorso",
-      "image": "img/lat_machine.jpg"
+      "image": "img/patterns/trazione-verticale.svg",
+      "pattern": "trazione-verticale"
     },
-
     {
       "title": "Pulley",
       "description": "3 serie x 12",
       "muscle": "Dorso",
-      "image": "img/pulley.jpg"
+      "image": "img/patterns/trazione-orizzontale.svg",
+      "pattern": "trazione-orizzontale"
     },
-
     {
       "title": "Rematore",
       "description": "4 serie x 8",
       "muscle": "Dorso",
-      "image": "img/rematore.jpg"
+      "image": "img/patterns/generale.svg",
+      "pattern": "generale"
     },
-
     {
       "title": "Pullover",
       "description": "3 serie x 12",
       "muscle": "Dorso",
-      "image": "img/pullover.jpg"
+      "image": "img/patterns/trazione-verticale.svg",
+      "pattern": "trazione-verticale"
     },
-
     {
       "title": "Scrollate",
       "description": "3 serie x 15",
       "muscle": "Trapezio",
-      "image": "img/scrollate.jpg"
+      "image": "img/patterns/trazione-verticale.svg",
+      "pattern": "trazione-verticale"
     },
-
     {
       "title": "Curl Bilanciere",
       "description": "4 serie x 10",
       "muscle": "Bicipiti",
-      "image": "img/curl_bilanciere.jpg"
+      "image": "img/patterns/curl-braccia.svg",
+      "pattern": "curl-braccia"
     },
-
     {
       "title": "Curl Manubri",
       "description": "3 serie x 12",
       "muscle": "Bicipiti",
-      "image": "img/curl_manubri.jpg"
+      "image": "img/patterns/curl-braccia.svg",
+      "pattern": "curl-braccia"
     },
-
     {
       "title": "Hammer Curl",
       "description": "3 serie x 12",
       "muscle": "Bicipiti",
-      "image": "img/hammer.jpg"
+      "image": "img/patterns/curl-braccia.svg",
+      "pattern": "curl-braccia"
     },
-
     {
       "title": "Russian Twist",
       "description": "3 serie x 20",
       "muscle": "Addome",
-      "image": "img/russian.jpg"
+      "image": "img/patterns/core-twist.svg",
+      "pattern": "core-twist"
     },
-
     {
       "title": "Leg Raise",
       "description": "3 serie x 15",
       "muscle": "Addome",
-      "image": "img/legraise.jpg"
+      "image": "img/patterns/core-crunch.svg",
+      "pattern": "core-crunch"
     }
-
   ],
-
-
-
   "C": [
-
     {
       "title": "Squat",
       "description": "4 serie x 8",
       "muscle": "Gambe",
-      "image": "img/squat.jpg"
+      "image": "img/patterns/squat.svg",
+      "pattern": "squat"
     },
-
     {
       "title": "Leg Press",
       "description": "4 serie x 10",
       "muscle": "Gambe",
-      "image": "img/legpress.jpg"
+      "image": "img/patterns/squat.svg",
+      "pattern": "squat"
     },
-
     {
       "title": "Affondi",
       "description": "3 serie x 12",
       "muscle": "Gambe",
-      "image": "img/affondi.jpg"
+      "image": "img/patterns/affondo.svg",
+      "pattern": "affondo"
     },
-
     {
       "title": "Leg Extension",
       "description": "3 serie x 15",
       "muscle": "Quadricipiti",
-      "image": "img/legextension.jpg"
+      "image": "img/patterns/squat.svg",
+      "pattern": "squat"
     },
-
     {
       "title": "Leg Curl",
       "description": "3 serie x 12",
       "muscle": "Femorali",
-      "image": "img/legcurl.jpg"
+      "image": "img/patterns/hip-hinge.svg",
+      "pattern": "hip-hinge"
     },
-
     {
       "title": "Calf Raise",
       "description": "4 serie x 15",
       "muscle": "Polpacci",
-      "image": "img/polpacci.jpg"
+      "image": "img/patterns/polpacci.svg",
+      "pattern": "polpacci"
     },
-
     {
       "title": "Hip Thrust",
       "description": "4 serie x 10",
       "muscle": "Glutei",
-      "image": "img/hipthrust.jpg"
+      "image": "img/patterns/hip-hinge.svg",
+      "pattern": "hip-hinge"
     },
-
     {
       "title": "Abductor Machine",
       "description": "3 serie x 15",
       "muscle": "Glutei",
-      "image": "img/abductor.jpg"
+      "image": "img/patterns/hip-hinge.svg",
+      "pattern": "hip-hinge"
     },
-
     {
       "title": "Crunch",
       "description": "3 serie x 20",
       "muscle": "Addome",
-      "image": "img/crunch.jpg"
+      "image": "img/patterns/core-crunch.svg",
+      "pattern": "core-crunch"
     },
-
     {
       "title": "Plank",
       "description": "3 x 60 secondi",
       "muscle": "Addome",
-      "image": "img/plank.jpg"
+      "image": "img/patterns/core-plank.svg",
+      "pattern": "core-plank"
     }
-
   ]
 }

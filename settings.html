@@ -176,6 +176,27 @@ Gestione dati
 
 
 <button
+class="dayButton dayB"
+onclick="exportBackup()">
+
+⬇️ Esporta backup
+
+</button>
+
+
+<label class="formLabel">
+Ripristina da backup
+</label>
+
+<input
+id="importFileInput"
+type="file"
+accept="application/json"
+class="settingsInput"
+onchange="importBackup(event)">
+
+
+<button
 class="secondaryButton"
 onclick="resetHistory()">
 
