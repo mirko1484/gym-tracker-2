@@ -459,3 +459,72 @@ function importBackup(event){
 
 
 }
+
+
+
+// =======================================
+// CAMBIA NUMERO DI GIORNATE SETTIMANALI
+// =======================================
+
+
+function changeDayCount(value){
+
+
+    const count =
+        parseInt(value, 10);
+
+    setDayCount(count);
+
+
+    // Garantisce che ogni giornata attiva abbia
+    // un array (anche vuoto) nei dati salvati,
+    // senza mai cancellare giornate già compilate
+
+    const saved =
+        localStorage.getItem(
+            "customWorkouts"
+        );
+
+    const workouts =
+        saved ? JSON.parse(saved) : {};
+
+    getActiveDayLetters().forEach(day=>{
+
+        if(!workouts[day]){
+
+            workouts[day] = [];
+
+        }
+
+    });
+
+    localStorage.setItem(
+        "customWorkouts",
+        JSON.stringify(workouts)
+    );
+
+
+}
+
+
+
+// Precompila il selettore con il valore salvato
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        const select =
+            document.getElementById(
+                "dayCountSelect"
+            );
+
+        if(select){
+
+            select.value =
+                getDayCount();
+
+        }
+
+    }
+);

@@ -159,14 +159,7 @@ async function initializeWorkout(){
         else{
 
 
-            const response =
-                await fetch(
-                    "data/workouts.json"
-                );
-
-
-            data =
-                await response.json();
+            data = {};
 
 
         }
@@ -228,8 +221,11 @@ async function initializeWorkout(){
 
 
         alert(
-            "Errore caricamento allenamento"
+            "Questa giornata è ancora vuota. Vai su 'Gestisci schede' per aggiungere esercizi."
         );
+
+        window.location.href =
+            "workout-manager.html";
 
 
     }

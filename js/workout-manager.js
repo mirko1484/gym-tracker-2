@@ -105,17 +105,26 @@ async function loadWorkouts(){
     else{
 
 
-        const response =
-            await fetch(
-                "data/workouts.json"
-            );
+        // Primo utilizzo: nessuna scheda precompilata,
+        // l'utente parte da schede vuote da compilare
 
-
-        workouts =
-            await response.json();
+        workouts = {};
 
 
     }
+
+
+    // Garantisce che ogni giornata attiva abbia un array
+
+    getActiveDayLetters().forEach(day=>{
+
+        if(!workouts[day]){
+
+            workouts[day] = [];
+
+        }
+
+    });
 
 
 
@@ -124,7 +133,7 @@ async function loadWorkouts(){
 
 
 
-    renderWorkouts();
+    renderDaySections();
 
 
 
@@ -145,7 +154,7 @@ function convertOldFormat(){
 
 
 
-    ["A","B","C"].forEach(day=>{
+    getActiveDayLetters().forEach(day=>{
 
 
         workouts[day].forEach(exercise=>{
@@ -218,14 +227,76 @@ function convertOldFormat(){
 // =======================================
 
 
-function renderWorkouts(){
+// Costruisce dinamicamente le sezioni delle giornate attive
+// (in base al numero scelto nelle Impostazioni)
+
+function renderDaySections(){
 
 
-    renderDay("A");
+    const container =
+        document.getElementById(
+            "daysContainer"
+        );
 
-    renderDay("B");
+    if(!container){
 
-    renderDay("C");
+        return;
+
+    }
+
+    const days =
+        getActiveDayLetters();
+
+    let html = "";
+
+    days.forEach((day, index)=>{
+
+        const colorClass =
+            getDayColorClass(index);
+
+        const icon =
+            getDayIcon(index);
+
+        html += `
+
+        <section class="statsCard">
+
+        <h2>
+        ${icon} Giornata ${day}
+        </h2>
+
+        <div id="day${day}List"></div>
+
+        <div class="dayActionsRow">
+
+        <button
+        class="dayButton ${colorClass}"
+        onclick="addExercise('${day}')">
+        ➕ Manuale
+        </button>
+
+        <button
+        class="dayButton ${colorClass}"
+        onclick="openLibrary('${day}')">
+        📚 Libreria
+        </button>
+
+        </div>
+
+        </section>
+
+        `;
+
+    });
+
+    container.innerHTML = html;
+
+
+    days.forEach(day=>{
+
+        renderDay(day);
+
+    });
 
 
 }
@@ -901,6 +972,79 @@ function createRestOptions(selected){
 // =======================================
 
 
+// "local" = icone offline (sempre disponibili)
+// "online" = foto reali da free-exercise-db (richiede internet)
+let libraryMode = "local";
+
+// Cache in memoria della libreria online (caricata una sola volta)
+let onlineLibrary = null;
+
+const ONLINE_LIBRARY_URL =
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json";
+
+const ONLINE_IMAGE_BASE =
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/";
+
+// Traduzione dei nomi muscolo inglesi -> italiano (solo per l'etichetta)
+const ONLINE_MUSCLE_LABELS = {
+
+    "abdominals": "Addominali",
+    "abductors": "Abduttori",
+    "adductors": "Adduttori",
+    "biceps": "Bicipiti",
+    "calves": "Polpacci",
+    "chest": "Petto",
+    "forearms": "Avambracci",
+    "glutes": "Glutei",
+    "hamstrings": "Femorali",
+    "lats": "Dorso (Lat)",
+    "lower back": "Lombari",
+    "middle back": "Dorso",
+    "neck": "Collo",
+    "quadriceps": "Quadricipiti",
+    "shoulders": "Spalle",
+    "traps": "Trapezio",
+    "triceps": "Tricipiti"
+
+};
+
+// Mappatura attrezzatura del dataset online -> le nostre 3 categorie
+function mapOnlineEquipment(equipment){
+
+    if(equipment === "body only"){
+
+        return "Corpo libero";
+
+    }
+
+    if(
+        equipment === "cable" ||
+        equipment === "machine"
+    ){
+
+        return "Macchine/Cavi";
+
+    }
+
+    if(
+        equipment === "dumbbell" ||
+        equipment === "barbell" ||
+        equipment === "kettlebells" ||
+        equipment === "bands" ||
+        equipment === "exercise ball" ||
+        equipment === "medicine ball" ||
+        equipment === "e-z curl bar"
+    ){
+
+        return "Pesi liberi";
+
+    }
+
+    return "";
+
+}
+
+
 async function loadExerciseLibrary(){
 
     try{
@@ -925,6 +1069,137 @@ async function loadExerciseLibrary(){
 }
 
 
+// Carica (una sola volta) la libreria online con foto reali
+async function loadOnlineLibrary(){
+
+    if(onlineLibrary){
+
+        return onlineLibrary;
+
+    }
+
+    const container =
+        document.getElementById(
+            "libraryList"
+        );
+
+    if(container){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Caricamento libreria online...</p>`;
+
+    }
+
+    try{
+
+        const response =
+            await fetch(ONLINE_LIBRARY_URL);
+
+        const data =
+            await response.json();
+
+        onlineLibrary =
+            data.map(ex=>{
+
+                return {
+
+                    id: ex.id,
+
+                    title: ex.name,
+
+                    muscle:
+                        ex.primaryMuscles &&
+                        ex.primaryMuscles[0] ?
+                            ex.primaryMuscles[0] :
+                            "",
+
+                    equipment:
+                        mapOnlineEquipment(ex.equipment),
+
+                    image:
+                        ex.images &&
+                        ex.images[0] ?
+                            ONLINE_IMAGE_BASE + ex.images[0] :
+                            ""
+
+                };
+
+            })
+            .filter(ex => ex.image);
+
+    }
+    catch(err){
+
+        onlineLibrary = [];
+
+        if(container){
+
+            container.innerHTML =
+                `<p class="librarySubtitle">Impossibile caricare la libreria online. Controlla la connessione.</p>`;
+
+        }
+
+    }
+
+    return onlineLibrary;
+
+}
+
+
+// Cambia tra libreria locale (icone) e online (foto reali)
+async function switchLibraryMode(mode){
+
+    libraryMode = mode;
+
+    const localTab =
+        document.getElementById(
+            "libraryTabLocal"
+        );
+
+    const onlineTab =
+        document.getElementById(
+            "libraryTabOnline"
+        );
+
+    if(localTab && onlineTab){
+
+        localTab.classList.toggle(
+            "libraryTabActive",
+            mode === "local"
+        );
+
+        onlineTab.classList.toggle(
+            "libraryTabActive",
+            mode === "online"
+        );
+
+    }
+
+    const equipmentFilter =
+        document.getElementById(
+            "libraryEquipmentFilter"
+        );
+
+    if(equipmentFilter){
+
+        equipmentFilter.style.display =
+            "block";
+
+    }
+
+    if(mode === "online"){
+
+        await loadOnlineLibrary();
+
+    }
+
+    populateLibraryMuscleFilter();
+
+    renderLibraryList();
+
+}
+
+
 // Apre il modale della libreria per una specifica giornata
 function openLibrary(day){
 
@@ -939,16 +1214,7 @@ function openLibrary(day){
         search.value = "";
     }
 
-    const muscleFilter =
-        document.getElementById(
-            "libraryMuscleFilter"
-        );
-
-    if(muscleFilter){
-        muscleFilter.value = "";
-    }
-
-    renderLibraryList();
+    switchLibraryMode("local");
 
     const modal =
         document.getElementById(
@@ -984,7 +1250,7 @@ function closeLibrary(){
 }
 
 
-// Ridisegna la lista filtrata della libreria
+// Ridisegna la lista filtrata della libreria (locale o online)
 function renderLibraryList(){
 
     const container =
@@ -995,6 +1261,11 @@ function renderLibraryList(){
     if(!container){
         return;
     }
+
+    const sourceList =
+        libraryMode === "online" ?
+            (onlineLibrary || []) :
+            exerciseLibrary;
 
     const search =
         document.getElementById(
@@ -1027,7 +1298,7 @@ function renderLibraryList(){
             "";
 
     const filtered =
-        exerciseLibrary.filter(ex=>{
+        sourceList.filter(ex=>{
 
             const matchesQuery =
                 !query ||
@@ -1043,9 +1314,16 @@ function renderLibraryList(){
 
             return matchesQuery && matchesMuscle && matchesEquipment;
 
-        });
+        })
+        .slice(0, 120);
 
     container.innerHTML = "";
+
+    if(libraryMode === "online" && !onlineLibrary){
+
+        return;
+
+    }
 
     if(filtered.length === 0){
 
@@ -1056,10 +1334,20 @@ function renderLibraryList(){
 
     }
 
-    filtered.forEach((ex, i)=>{
+    filtered.forEach(ex=>{
 
-        const originalIndex =
-            exerciseLibrary.indexOf(ex);
+        const sourceIndex =
+            sourceList.indexOf(ex);
+
+        const muscleLabel =
+            libraryMode === "online" ?
+                (ONLINE_MUSCLE_LABELS[ex.muscle] || ex.muscle) :
+                ex.muscle;
+
+        const imgSrc =
+            libraryMode === "online" ?
+                ex.image :
+                `img/patterns/${ex.pattern}.svg`;
 
         const card =
             document.createElement("div");
@@ -1070,18 +1358,20 @@ function renderLibraryList(){
         card.innerHTML = `
 
             <img
-            class="libraryCardImg"
-            src="img/patterns/${ex.pattern}.svg"
+            class="libraryCardImg ${libraryMode === "online" ? "libraryCardImgPhoto" : ""}"
+            src="${imgSrc}"
+            loading="lazy"
+            onerror="this.style.visibility='hidden'"
             alt="">
 
             <div class="libraryCardInfo">
                 <strong>${ex.title}</strong>
-                <span>${ex.muscle} · ${ex.equipment}</span>
+                <span>${muscleLabel}${ex.equipment ? " · " + ex.equipment : ""}</span>
             </div>
 
             <button
             class="libraryAddBtn"
-            onclick="addFromLibrary(${originalIndex})">
+            onclick="addFromLibrary(${sourceIndex})">
             ➕
             </button>
 
@@ -1106,18 +1396,29 @@ function populateLibraryMuscleFilter(){
         return;
     }
 
+    const sourceList =
+        libraryMode === "online" ?
+            (onlineLibrary || []) :
+            exerciseLibrary;
+
     const uniqueMuscles =
         [...new Set(
-            exerciseLibrary.map(ex=>ex.muscle)
-        )];
+            sourceList.map(ex=>ex.muscle)
+        )]
+        .filter(m => m);
 
     let html =
         `<option value="">Tutti i muscoli</option>`;
 
     uniqueMuscles.forEach(m=>{
 
+        const label =
+            libraryMode === "online" ?
+                (ONLINE_MUSCLE_LABELS[m] || m) :
+                m;
+
         html +=
-            `<option value="${m}">${m}</option>`;
+            `<option value="${m}">${label}</option>`;
 
     });
 
@@ -1126,39 +1427,75 @@ function populateLibraryMuscleFilter(){
 }
 
 
-// Aggiunge un esercizio scelto dalla libreria alla giornata selezionata
-function addFromLibrary(libraryIndex){
+// Aggiunge un esercizio scelto dalla libreria (locale o online)
+// alla giornata selezionata
+function addFromLibrary(sourceIndex){
 
     if(!libraryTargetDay){
         return;
     }
 
+    const sourceList =
+        libraryMode === "online" ?
+            (onlineLibrary || []) :
+            exerciseLibrary;
+
     const source =
-        exerciseLibrary[libraryIndex];
+        sourceList[sourceIndex];
 
     if(!source){
         return;
     }
 
-    workouts[libraryTargetDay].push({
+    if(libraryMode === "online"){
 
-        id: Date.now(),
+        workouts[libraryTargetDay].push({
 
-        title: source.title,
+            id: Date.now(),
 
-        muscle: source.muscle,
+            title: source.title,
 
-        sets: source.sets,
+            muscle:
+                ONLINE_MUSCLE_LABELS[source.muscle] ||
+                source.muscle ||
+                "Generale",
 
-        reps: source.reps,
+            sets: 3,
 
-        rest: source.rest,
+            reps: 12,
 
-        pattern: source.pattern,
+            rest: 60,
 
-        image: `img/patterns/${source.pattern}.svg`
+            pattern: "generale",
 
-    });
+            image: source.image
+
+        });
+
+    }
+    else{
+
+        workouts[libraryTargetDay].push({
+
+            id: Date.now(),
+
+            title: source.title,
+
+            muscle: source.muscle,
+
+            sets: source.sets,
+
+            reps: source.reps,
+
+            rest: source.rest,
+
+            pattern: source.pattern,
+
+            image: `img/patterns/${source.pattern}.svg`
+
+        });
+
+    }
 
     renderDay(libraryTargetDay);
 

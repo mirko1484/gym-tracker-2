@@ -5,7 +5,7 @@
 
 <link rel="manifest" href="manifest.json">
 
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#121316">
 
 <meta charset="UTF-8">
 
@@ -109,191 +109,13 @@ Personalizza i tuoi allenamenti
 
 
 <!-- ============================= -->
-<!-- GIORNATA A -->
+<!-- GIORNATE (generate dinamicamente) -->
 <!-- ============================= -->
 
 
-<section class="statsCard">
-
-
-
-<h2>
-
-🔥 Giornata A
-
-</h2>
-
-
-
-
-<div
-
-id="dayAList">
-
-
+<div id="daysContainer">
+    <!-- generato da renderDaySections() in workout-manager.js -->
 </div>
-
-
-
-
-
-<div class="dayActionsRow">
-
-<button
-
-class="dayButton dayA"
-
-onclick="addExercise('A')">
-
-➕ Manuale
-
-</button>
-
-<button
-
-class="dayButton dayA"
-
-onclick="openLibrary('A')">
-
-📚 Libreria
-
-</button>
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<!-- ============================= -->
-<!-- GIORNATA B -->
-<!-- ============================= -->
-
-
-<section class="statsCard">
-
-
-
-<h2>
-
-💪 Giornata B
-
-</h2>
-
-
-
-
-<div
-
-id="dayBList">
-
-
-</div>
-
-
-
-
-
-<div class="dayActionsRow">
-
-<button
-
-class="dayButton dayB"
-
-onclick="addExercise('B')">
-
-➕ Manuale
-
-</button>
-
-<button
-
-class="dayButton dayB"
-
-onclick="openLibrary('B')">
-
-📚 Libreria
-
-</button>
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<!-- ============================= -->
-<!-- GIORNATA C -->
-<!-- ============================= -->
-
-
-<section class="statsCard">
-
-
-
-<h2>
-
-⚡ Giornata C
-
-</h2>
-
-
-
-
-<div
-
-id="dayCList">
-
-
-</div>
-
-
-
-
-
-<div class="dayActionsRow">
-
-<button
-
-class="dayButton dayC"
-
-onclick="addExercise('C')">
-
-➕ Manuale
-
-</button>
-
-<button
-
-class="dayButton dayC"
-
-onclick="openLibrary('C')">
-
-📚 Libreria
-
-</button>
-
-</div>
-
-
-
-</section>
 
 
 
@@ -348,6 +170,24 @@ onclick="saveWorkouts()">
 <div class="modalContent libraryModalContent">
 
 <h2>📚 Libreria esercizi</h2>
+
+<div class="libraryTabRow">
+
+<button
+id="libraryTabLocal"
+class="libraryTabBtn libraryTabActive"
+onclick="switchLibraryMode('local')">
+🎨 Icone
+</button>
+
+<button
+id="libraryTabOnline"
+class="libraryTabBtn"
+onclick="switchLibraryMode('online')">
+📷 Foto online
+</button>
+
+</div>
 
 <input
 id="librarySearch"

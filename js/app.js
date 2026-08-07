@@ -532,47 +532,15 @@ function loadAchievements(){
 function loadWorkoutButtons(){
 
 
-    let workouts = null;
-
-
     const saved =
         localStorage.getItem(
             "customWorkouts"
         );
 
+    const workouts =
+        saved ? JSON.parse(saved) : {};
 
-
-    if(saved){
-
-
-        workouts =
-            JSON.parse(saved);
-
-
-    }
-    else{
-
-
-        fetch(
-            "data/workouts.json"
-        )
-        .then(response => response.json())
-        .then(data => {
-
-            updateWorkoutSummary(data);
-
-        });
-
-
-        return;
-
-
-    }
-
-
-
-    updateWorkoutSummary(workouts);
-
+    renderWorkoutButtons(workouts);
 
 
 }
@@ -580,77 +548,60 @@ function loadWorkoutButtons(){
 
 
 
-
-function updateWorkoutSummary(workouts){
-
+function renderWorkoutButtons(workouts){
 
 
-    ["A","B","C"].forEach(day => {
+    const container =
+        document.getElementById(
+            "workoutButtonsContainer"
+        );
 
+    if(!container){
 
+        return;
 
-        const element =
-            document.getElementById(
-                "day" + day + "Summary"
-            );
+    }
 
+    const days =
+        getActiveDayLetters();
 
+    let html = "";
 
-        if(!element){
-
-            return;
-
-        }
-
-
+    days.forEach((day, index)=>{
 
 
         const exercises =
             workouts[day] || [];
 
+        const summary =
+            exercises.length === 0 ?
+                "Nessun esercizio" :
+                [...new Set(
+                    exercises.map(ex => ex.muscle)
+                )].join(" • ");
 
 
+        html += `
 
-        if(exercises.length === 0){
+        <button
+        class="dayButton ${getDayColorClass(index)}"
+        onclick="startWorkout('${day}')">
 
+        ${getDayIcon(index)} Giornata ${day}
 
-            element.textContent =
-                "Nessun esercizio";
+        <small>
+        ${summary}
+        </small>
 
+        </button>
 
-            return;
-
-
-        }
-
-
-
-
-        const muscles =
-            [
-                ...new Set(
-
-                    exercises.map(
-                        exercise =>
-                        exercise.muscle
-                    )
-
-                )
-
-            ];
-
-
-
-
-        element.textContent =
-            muscles.join(
-                " • "
-            );
-
+        `;
 
 
     });
 
+
+    container.innerHTML = html;
 
 
 }

@@ -1,4 +1,36 @@
 /* =======================================
+   GYM TRACKER — IRON YARD THEME
+   Palette: gunmetal + hazard amber + ember
+   Display: Bebas Neue / Body: Inter / Data: JetBrains Mono
+======================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root {
+
+    --bg:#121316;
+    --surface:#1c1e22;
+    --surface-raised:#24272c;
+    --line:#33363c;
+
+    --accent:#ffb800;
+    --accent-dim:#8a6300;
+    --ember:#ff4423;
+    --success:#2fd97c;
+
+    --text:#f3f1ea;
+    --text-muted:#8b8d92;
+
+    --font-display:'Bebas Neue', Impact, sans-serif;
+    --font-body:'Inter', Arial, Helvetica, sans-serif;
+    --font-mono:'JetBrains Mono', 'Courier New', monospace;
+
+    --cut:16px;
+
+}
+
+
+/* =======================================
    RESET GENERALE
 ======================================= */
 
@@ -7,7 +39,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:var(--font-body);
 
 }
 
@@ -15,9 +47,10 @@
 
 body {
 
-    background:#101010;
+    background:
+        radial-gradient(circle at 15% 0%, #1a1c20 0%, var(--bg) 45%);
 
-    color:white;
+    color:var(--text);
 
     min-height:100vh;
 
@@ -38,7 +71,7 @@ body {
 
     margin:auto;
 
-    padding:25px 0 50px;
+    padding:25px 0 60px;
 
 }
 
@@ -51,9 +84,12 @@ body {
 
 h1 {
 
-    font-size:32px;
-
+    font-family:var(--font-display);
+    font-size:44px;
+    letter-spacing:1px;
+    text-transform:uppercase;
     text-align:center;
+    line-height:1;
 
 }
 
@@ -61,9 +97,26 @@ h1 {
 
 h2 {
 
-    font-size:22px;
+    font-family:var(--font-display);
+    font-size:24px;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    margin-bottom:18px;
 
-    margin-bottom:15px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+}
+
+h2::before {
+
+    content:"";
+    display:block;
+    width:6px;
+    height:22px;
+    background:var(--accent);
+    flex-shrink:0;
 
 }
 
@@ -71,9 +124,16 @@ h2 {
 
 h3 {
 
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--text-muted);
+
     margin-top:20px;
 
-    margin-bottom:15px;
+    margin-bottom:12px;
 
 }
 
@@ -98,7 +158,7 @@ p {
 
     text-align:center;
 
-    margin-bottom:30px;
+    margin-bottom:34px;
 
 }
 
@@ -106,7 +166,9 @@ p {
 
 .logo {
 
-    font-size:55px;
+    font-size:52px;
+
+    filter:drop-shadow(0 4px 12px rgba(255,184,0,.25));
 
 }
 
@@ -114,7 +176,11 @@ p {
 
 .subtitle {
 
-    color:#999;
+    font-family:var(--font-mono);
+    color:var(--text-muted);
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
 
     margin-top:10px;
 
@@ -135,18 +201,26 @@ p {
 .sessionCheck {
 
 
-    background:#1c1c1c;
+    background:var(--surface);
 
-    border-radius:20px;
+    border-top:3px solid var(--accent);
 
-    padding:20px;
+    clip-path:polygon(
+        0 0,
+        calc(100% - var(--cut)) 0,
+        100% var(--cut),
+        100% 100%,
+        0 100%
+    );
 
-    margin-bottom:25px;
+    padding:22px 22px 24px;
+
+    margin-bottom:22px;
 
 
     box-shadow:
 
-    0 10px 30px rgba(0,0,0,0.35);
+    0 10px 30px rgba(0,0,0,0.45);
 
 
 }
@@ -169,7 +243,11 @@ p {
 
     padding:12px 0;
 
-    border-bottom:1px solid #333;
+    border-bottom:1px solid var(--line);
+
+    font-family:var(--font-mono);
+
+    font-size:15px;
 
 
 }
@@ -181,7 +259,6 @@ p {
     border-bottom:none;
 
 }
-
 
 
 
@@ -199,11 +276,15 @@ button {
 
     cursor:pointer;
 
-    color:white;
+    color:var(--text);
 
-    font-size:17px;
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.3px;
+    text-transform:uppercase;
 
-    border-radius:15px;
+    border-radius:10px;
 
     padding:16px;
 
@@ -233,6 +314,16 @@ button:active {
 
     font-weight:bold;
 
+    clip-path:polygon(
+        0 0,
+        calc(100% - 14px) 0,
+        100% 14px,
+        100% 100%,
+        0 100%
+    );
+
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+
 
 }
 
@@ -240,7 +331,7 @@ button:active {
 
 .dayA {
 
-    background:#b52b2b;
+    background:linear-gradient(135deg,#ff4423,#c41f0f);
 
 }
 
@@ -248,7 +339,7 @@ button:active {
 
 .dayB {
 
-    background:#2055b5;
+    background:linear-gradient(135deg,#ffb800,#c98700);
 
 }
 
@@ -256,7 +347,31 @@ button:active {
 
 .dayC {
 
-    background:#218a43;
+    background:linear-gradient(135deg,#17c3b2,#0d8e81);
+
+}
+
+
+
+.dayD {
+
+    background:linear-gradient(135deg,#8b5cf6,#5b32c4);
+
+}
+
+
+
+.dayE {
+
+    background:linear-gradient(135deg,#3b82f6,#1c56c9);
+
+}
+
+
+
+.dayF {
+
+    background:linear-gradient(135deg,#ec4899,#b81e69);
 
 }
 
@@ -269,8 +384,18 @@ button:active {
 
     width:100%;
 
-    background:#333;
+    background:transparent;
 
+    color:var(--text);
+
+    border:2px solid var(--line);
+
+}
+
+.secondaryButton:hover {
+
+    border-color:var(--accent);
+    color:var(--accent);
 
 }
 
@@ -292,7 +417,6 @@ button:active {
 
 
 
-
 /* =======================================
    ALLENAMENTO
 ======================================= */
@@ -308,27 +432,31 @@ button:active {
 
 
 
-
 .timerBox {
 
 
     margin-top:15px;
 
-    background:#222;
+    background:var(--surface-raised);
 
-    padding:12px;
+    border-left:4px solid var(--accent);
 
-    border-radius:15px;
+    padding:14px 16px;
 
-    font-size:22px;
+    border-radius:10px;
 
-    color:#28a745;
+    font-family:var(--font-mono);
 
-    font-weight:bold;
+    font-size:26px;
+
+    letter-spacing:1px;
+
+    color:var(--accent);
+
+    font-weight:700;
 
 
 }
-
 
 
 
@@ -345,10 +473,10 @@ button:active {
     width:100%;
 
 
-    height:14px;
+    height:12px;
 
 
-    background:#333;
+    background:var(--surface-raised);
 
 
     border-radius:20px;
@@ -373,15 +501,13 @@ button:active {
     width:0%;
 
 
-    background:#28a745;
+    background:linear-gradient(90deg,var(--ember),var(--accent));
 
 
     transition:.3s;
 
 
 }
-
-
 
 
 
@@ -410,16 +536,13 @@ button:active {
     border-radius:15px;
 
 
-    background:#1c1c1c;
+    background:var(--surface-raised);
 
 
     margin-bottom:20px;
 
 
 }
-
-
-
 
 
 
@@ -445,20 +568,22 @@ button:active {
 
 
 
-
-
 .setsTable th {
 
 
-    background:#333;
+    background:var(--surface-raised);
+
+    color:var(--text-muted);
 
     padding:10px;
 
-    font-size:14px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1px;
 
 
 }
-
 
 
 
@@ -469,11 +594,10 @@ button:active {
 
     text-align:center;
 
-    border-bottom:1px solid #333;
+    border-bottom:1px solid var(--line);
 
 
 }
-
 
 
 
@@ -486,27 +610,27 @@ button:active {
     padding:8px;
 
 
-    border-radius:10px;
+    border-radius:8px;
 
 
     border:none;
 
 
-    background:#333;
+    background:var(--surface-raised);
 
 
-    color:white;
+    color:var(--text);
 
 
     text-align:center;
 
 
+    font-family:var(--font-mono);
+
     font-size:16px;
 
 
 }
-
-
 
 
 
@@ -547,10 +671,10 @@ button:active {
 
     height:22px;
 
+    accent-color:var(--accent);
+
 
 }
-
-
 
 
 
@@ -583,10 +707,12 @@ button:active {
     flex:1;
 
 
-    background:#333;
+    background:var(--surface-raised);
 
 
     font-size:25px;
+
+    text-transform:none;
 
 
 }
@@ -595,10 +721,8 @@ button:active {
 
 
 
-
-
 /* =======================================
-   MODALE RIEPILOGO
+   MODALE
 ======================================= */
 
 
@@ -623,7 +747,7 @@ button:active {
     height:100%;
 
 
-    background:rgba(0,0,0,.75);
+    background:rgba(0,0,0,.8);
 
 
     justify-content:center;
@@ -640,11 +764,12 @@ button:active {
 
 
 
-
 .modalContent {
 
 
-    background:#1c1c1c;
+    background:var(--surface);
+
+    border-top:3px solid var(--accent);
 
 
     width:85%;
@@ -653,10 +778,7 @@ button:active {
     max-width:400px;
 
 
-    padding:25px;
-
-
-    border-radius:20px;
+    padding:26px;
 
 
     text-align:center;
@@ -669,6 +791,20 @@ button:active {
 
 }
 
+
+
+
+.modalContent h2 {
+
+    justify-content:center;
+
+}
+
+.modalContent h2::before {
+
+    display:none;
+
+}
 
 
 
@@ -687,7 +823,6 @@ button:active {
 
 
 
-
 .modalContent button {
 
 
@@ -700,7 +835,6 @@ button:active {
 
 
 
-
 /* =======================================
    IMPOSTAZIONI
 ======================================= */
@@ -708,59 +842,30 @@ button:active {
 
 .formLabel {
 
-
     display:block;
-
-
-    margin-top:15px;
-
-
-    margin-bottom:8px;
-
-
-    color:#ccc;
-
-
-    font-size:16px;
-
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    margin:16px 0 8px;
 
 }
-
-
-
 
 
 .settingsInput {
 
-
     width:100%;
-
-
+    background:var(--surface-raised);
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:10px;
     padding:14px;
-
-
-    border-radius:12px;
-
-
-    border:none;
-
-
-    background:#333;
-
-
-    color:white;
-
-
-    font-size:16px;
-
-
-    margin-bottom:10px;
-
+    font-size:15px;
+    margin-bottom:6px;
 
 }
-
-
-
 
 
 .settingsInput:focus {
@@ -769,11 +874,10 @@ button:active {
     outline:none;
 
 
-    background:#3d3d3d;
+    border-color:var(--accent);
 
 
 }
-
 
 
 
@@ -781,15 +885,34 @@ button:active {
 .settingsInput option {
 
 
-    background:#333;
+    background:var(--surface-raised);
 
-    color:white;
+    color:var(--text);
 
 
 }
 
 
+input[type="file"].settingsInput {
 
+    padding:12px;
+    color:var(--text-muted);
+
+}
+
+input[type="file"].settingsInput::file-selector-button {
+
+    background:var(--accent);
+    color:#1a1200;
+    border:none;
+    border-radius:8px;
+    padding:8px 14px;
+    margin-right:10px;
+    font-weight:bold;
+    text-transform:uppercase;
+    font-size:12px;
+
+}
 
 
 
@@ -822,13 +945,18 @@ button:active {
 
     display:inline-block;
 
-    background:#333;
+    background:var(--surface-raised);
 
-    color:#28a745;
+    color:var(--accent);
 
     padding:8px 14px;
 
-    border-radius:20px;
+    font-family:var(--font-mono);
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+
+    clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
 
     font-weight:bold;
 
@@ -864,7 +992,9 @@ button:active {
 
     border-radius:50%;
 
-    background:#2b2b2b;
+    background:var(--surface-raised);
+
+    border:2px solid var(--accent);
 
     display:flex;
     justify-content:center;
@@ -884,14 +1014,22 @@ button:active {
 
 .profileInfo h2{
 
-    margin-bottom:8px;
-    font-size:24px;
+    margin-bottom:6px;
+    font-size:26px;
+
+}
+
+.profileInfo h2::before {
+
+    display:none;
 
 }
 
 .profileInfo p{
 
-    color:#9c9c9c;
+    color:var(--text-muted);
+    font-family:var(--font-mono);
+    font-size:13px;
 
 }
 
@@ -916,11 +1054,20 @@ button:active {
 
 .homeMenu button{
 
+    background:var(--surface);
+    border:1px solid var(--line);
+
     padding:20px 10px;
 
-    font-size:17px;
+    font-size:13px;
 
     line-height:1.5;
+
+}
+
+.homeMenu button:hover {
+
+    border-color:var(--accent);
 
 }
 
@@ -933,6 +1080,7 @@ button:active {
 
 .dayButton{
 
+
     display:flex;
 
     flex-direction:column;
@@ -943,17 +1091,18 @@ button:active {
 
     gap:8px;
 
-    min-height:80px;
+    min-height:84px;
 
 }
 
 .dayButton small{
 
-    color:#ffffffcc;
-
-    font-size:13px;
-
+    font-family:var(--font-mono);
+    color:#ffffffdd;
+    font-size:12px;
     font-weight:normal;
+    text-transform:none;
+    letter-spacing:0;
 
 }
 
@@ -970,9 +1119,12 @@ button:active {
 
     margin-top:35px;
 
-    color:#777;
+    color:var(--text-muted);
 
-    font-size:14px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
 
 }
 
@@ -1030,19 +1182,21 @@ button:hover{
 
     display:inline-block;
 
-    background:#333;
+    background:var(--surface-raised);
 
-    color:#28a745;
+    color:var(--accent);
 
     padding:8px 14px;
 
-    border-radius:20px;
+    clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
 
     margin:10px 0;
 
+    font-family:var(--font-mono);
     font-weight:bold;
-
-    font-size:15px;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
 
 }
 
@@ -1063,10 +1217,11 @@ button:hover{
 
     width:44px;
     height:44px;
-    background:#111;
-    border-radius:12px;
+    background:var(--bg);
+    border-radius:10px;
     padding:6px;
     flex-shrink:0;
+    border:1px solid var(--line);
 
 }
 
@@ -1081,7 +1236,7 @@ button:hover{
 .dayActionsRow .dayButton {
 
     margin-bottom:0;
-    font-size:15px;
+    font-size:13px;
 
 }
 
@@ -1103,6 +1258,7 @@ button:hover{
 .libraryModalContent h2 {
 
     text-align:center;
+    justify-content:center;
 
 }
 
@@ -1126,8 +1282,8 @@ button:hover{
     display:flex;
     align-items:center;
     gap:12px;
-    background:#252525;
-    border-radius:14px;
+    background:var(--surface-raised);
+    border-radius:12px;
     padding:10px 12px;
     margin-bottom:10px;
 
@@ -1137,8 +1293,8 @@ button:hover{
 
     width:38px;
     height:38px;
-    background:#111;
-    border-radius:10px;
+    background:var(--bg);
+    border-radius:8px;
     padding:5px;
     flex-shrink:0;
 
@@ -1152,17 +1308,26 @@ button:hover{
 
 }
 
+.libraryCardInfo strong {
+
+    font-size:14px;
+
+}
+
 .libraryCardInfo span {
 
-    color:#999;
-    font-size:13px;
+    color:var(--text-muted);
+    font-family:var(--font-mono);
+    font-size:11px;
+    text-transform:uppercase;
 
 }
 
 .libraryAddBtn {
 
-    background:#28a745;
-    border-radius:10px;
+    background:var(--accent);
+    color:#1a1200;
+    border-radius:8px;
     padding:8px 12px;
     font-size:16px;
     flex-shrink:0;
@@ -1171,7 +1336,7 @@ button:hover{
 
 .librarySubtitle {
 
-    color:#999;
+    color:var(--text-muted);
     text-align:center;
     padding:20px 0;
 
@@ -1191,21 +1356,39 @@ button:hover{
 
 }
 
-input[type="file"].settingsInput {
+.libraryTabRow {
 
-    padding:12px;
-    color:#ccc;
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
 
 }
 
-input[type="file"].settingsInput::file-selector-button {
+.libraryTabBtn {
 
-    background:#333;
-    color:#fff;
-    border:none;
+    flex:1;
+    background:var(--surface-raised);
+    color:var(--text-muted);
+    border:1px solid var(--line);
     border-radius:8px;
-    padding:8px 14px;
-    margin-right:10px;
+    padding:10px;
     font-weight:bold;
+    font-size:12px;
+
+}
+
+.libraryTabActive {
+
+    background:var(--accent);
+    color:#1a1200;
+    border-color:var(--accent);
+
+}
+
+.libraryCardImgPhoto {
+
+    object-fit:cover;
+    padding:0;
+    background:var(--line);
 
 }
