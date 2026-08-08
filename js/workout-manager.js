@@ -21,6 +21,21 @@ let exerciseLibrary = [];
 let libraryTargetDay = null;
 
 
+// A chi appartiene la scheda che stiamo modificando
+// (il cliente stesso, oppure un cliente scelto dal trainer)
+let targetCustomerId = null;
+let targetCustomerName = null;
+
+// Ruolo e id di chi sta usando la pagina in questo momento
+// (diverso da targetCustomerId quando è un trainer a modificare)
+let currentUserRole = null;
+let currentUserId = null;
+
+// Numero di giornate della scheda di QUESTO cliente
+// (viene da Supabase, non più dal dispositivo locale)
+let activeDayCount = 3;
+
+
 
 
 
@@ -62,15 +77,113 @@ document.addEventListener(
 
     "DOMContentLoaded",
 
-    function(){
+    async function(){
 
-        loadWorkouts();
+
+        // Chiunque loggato può aprire questa pagina: un cliente
+        // per la propria scheda, un trainer/admin per quella
+        // di un cliente scelto dalla lista
+
+        const profile =
+            await requireAuth();
+
+        if(!profile){
+
+            return;
+
+        }
+
+        currentUserRole =
+            profile.role;
+
+        currentUserId =
+            profile.id;
+
+
+        const params =
+            new URLSearchParams(window.location.search);
+
+        const customerParam =
+            params.get("customer");
+
+
+        if(profile.role === "customer"){
+
+            // Un cliente modifica sempre e solo la propria scheda
+
+            targetCustomerId = profile.id;
+
+            targetCustomerName = profile.full_name;
+
+        }
+        else{
+
+            // Trainer/admin: deve arrivare con un cliente scelto
+
+            if(!customerParam){
+
+                window.location.href =
+                    "trainer.html";
+
+                return;
+
+            }
+
+            targetCustomerId = customerParam;
+
+            targetCustomerName =
+                params.get("name") || "cliente";
+
+        }
+
+
+        showClientBanner();
+
+        await loadWorkouts();
 
         loadExerciseLibrary();
 
     }
 
 );
+
+
+
+
+// Mostra chi è il cliente quando è il trainer a modificare
+// la scheda di qualcun altro
+
+function showClientBanner(){
+
+    if(currentUserRole === "customer"){
+
+        return;
+
+    }
+
+    const banner =
+        document.getElementById("clientBanner");
+
+    if(!banner){
+
+        return;
+
+    }
+
+    banner.style.display = "block";
+    banner.style.background = "rgba(255,184,0,.15)";
+    banner.style.color = "#ffb800";
+    banner.style.padding = "12px 14px";
+    banner.style.borderRadius = "10px";
+    banner.style.marginBottom = "20px";
+    banner.style.fontSize = "14px";
+    banner.style.textAlign = "center";
+
+    banner.textContent =
+        "👤 Stai modificando la scheda di: " +
+        targetCustomerName;
+
+}
 
 
 
@@ -86,50 +199,62 @@ document.addEventListener(
 async function loadWorkouts(){
 
 
-    const saved =
-        localStorage.getItem(
-            "customWorkouts"
-        );
+    // 1. Numero di giornate di QUESTO cliente (da Supabase)
+
+    const { data: settingsRow } =
+        await supabaseClient
+            .from("customer_settings")
+            .select("day_count")
+            .eq("customer_id", targetCustomerId)
+            .maybeSingle();
+
+    activeDayCount =
+        (settingsRow && settingsRow.day_count) ?
+            settingsRow.day_count :
+            3;
 
 
-
-    if(saved){
-
-
-        workouts =
-            JSON.parse(saved);
+    const days =
+        DAY_LETTERS_POOL.slice(0, activeDayCount);
 
 
-    }
+    // 2. Schede già salvate per questo cliente
 
-    else{
-
-
-        // Primo utilizzo: nessuna scheda precompilata,
-        // l'utente parte da schede vuote da compilare
-
-        workouts = {};
+    const { data: scheduleRows, error } =
+        await supabaseClient
+            .from("schedules")
+            .select("day_letter, exercises")
+            .eq("customer_id", targetCustomerId);
 
 
-    }
+    workouts = {};
 
 
-    // Garantisce che ogni giornata attiva abbia un array
+    days.forEach(day=>{
 
-    getActiveDayLetters().forEach(day=>{
+        const row =
+            (scheduleRows || []).find(r => r.day_letter === day);
 
-        if(!workouts[day]){
-
-            workouts[day] = [];
-
-        }
+        workouts[day] =
+            (row && row.exercises) ?
+                row.exercises :
+                [];
 
     });
 
 
+    if(error){
+
+        alert(
+            "Errore nel caricamento della scheda. Riprova."
+        );
+
+    }
 
 
-    convertOldFormat();
+
+
+    convertOldFormatForDays(days);
 
 
 
@@ -150,11 +275,11 @@ async function loadWorkouts(){
 // =======================================
 
 
-function convertOldFormat(){
+function convertOldFormatForDays(days){
 
 
 
-    getActiveDayLetters().forEach(day=>{
+    days.forEach(day=>{
 
 
         workouts[day].forEach(exercise=>{
@@ -271,11 +396,7 @@ function renderDaySections(){
     }
 
     const days =
-        getActiveDayLetters();
-
-
-    // Se la giornata attiva non esiste più (es. numero ridotto),
-    // torna alla prima disponibile
+        DAY_LETTERS_POOL.slice(0, activeDayCount);
 
     if(
         !currentEditingDay ||
@@ -339,7 +460,7 @@ function renderDayEditor(){
     }
 
     const days =
-        getActiveDayLetters();
+        DAY_LETTERS_POOL.slice(0, activeDayCount);
 
     const index =
         days.indexOf(currentEditingDay);
@@ -911,19 +1032,41 @@ function removeExercise(
 // =======================================
 
 
-function autoSave(){
+async function autoSave(){
 
 
+    const days =
+        DAY_LETTERS_POOL.slice(0, activeDayCount);
 
-    localStorage.setItem(
 
-        "customWorkouts",
+    const rows =
+        days.map(day => ({
 
-        JSON.stringify(
-            workouts
-        )
+            customer_id: targetCustomerId,
 
-    );
+            day_letter: day,
+
+            exercises: workouts[day] || [],
+
+            updated_by: currentUserId
+
+        }));
+
+
+    const { error } =
+        await supabaseClient
+            .from("schedules")
+            .upsert(rows, { onConflict: "customer_id,day_letter" });
+
+
+    if(error){
+
+        console.error(
+            "Errore salvataggio:",
+            error
+        );
+
+    }
 
 
 }
@@ -934,11 +1077,11 @@ function autoSave(){
 
 
 
-function saveWorkouts(){
+async function saveWorkouts(){
 
 
 
-    autoSave();
+    await autoSave();
 
 
 
@@ -947,9 +1090,11 @@ function saveWorkouts(){
         "Schede salvate ✅"
 
     );
-	
-	window.location.href =
-        "index.html";
+
+    window.location.href =
+        currentUserRole === "customer" ?
+            "index.html" :
+            "trainer.html";
 
 
 }

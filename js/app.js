@@ -3,9 +3,25 @@
 // HOME DASHBOARD
 // =======================================
 
+let loggedInCustomerId = null;
+
+
 document.addEventListener(
     "DOMContentLoaded",
-    function () {
+    async function () {
+
+
+        const profile =
+            await requireAuth(["customer"]);
+
+        if(!profile){
+
+            return;
+
+        }
+
+        loggedInCustomerId =
+            profile.id;
 
 
         if(typeof getHistory === "function"){
@@ -529,18 +545,48 @@ function loadAchievements(){
 // =======================================
 
 
-function loadWorkoutButtons(){
+async function loadWorkoutButtons(){
 
 
-    const saved =
-        localStorage.getItem(
-            "customWorkouts"
-        );
+    const { data: settingsRow } =
+        await supabaseClient
+            .from("customer_settings")
+            .select("day_count")
+            .eq("customer_id", loggedInCustomerId)
+            .maybeSingle();
 
-    const workouts =
-        saved ? JSON.parse(saved) : {};
+    const dayCount =
+        (settingsRow && settingsRow.day_count) ?
+            settingsRow.day_count :
+            3;
 
-    renderWorkoutButtons(workouts);
+    const days =
+        DAY_LETTERS_POOL.slice(0, dayCount);
+
+
+    const { data: scheduleRows } =
+        await supabaseClient
+            .from("schedules")
+            .select("day_letter, exercises")
+            .eq("customer_id", loggedInCustomerId);
+
+
+    const workouts = {};
+
+    days.forEach(day=>{
+
+        const row =
+            (scheduleRows || []).find(r => r.day_letter === day);
+
+        workouts[day] =
+            (row && row.exercises) ?
+                row.exercises :
+                [];
+
+    });
+
+
+    renderWorkoutButtons(workouts, days);
 
 
 }
@@ -548,7 +594,7 @@ function loadWorkoutButtons(){
 
 
 
-function renderWorkoutButtons(workouts){
+function renderWorkoutButtons(workouts, days){
 
 
     const container =
@@ -561,9 +607,6 @@ function renderWorkoutButtons(workouts){
         return;
 
     }
-
-    const days =
-        getActiveDayLetters();
 
     let html = "";
 

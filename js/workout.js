@@ -29,9 +29,25 @@ let workoutVersion = null;
 // =======================================
 
 
+let loggedInCustomerId = null;
+
+
 document.addEventListener(
     "DOMContentLoaded",
-    function(){
+    async function(){
+
+
+        const profile =
+            await requireAuth(["customer"]);
+
+        if(!profile){
+
+            return;
+
+        }
+
+        loggedInCustomerId =
+            profile.id;
 
 
         initializeWorkout();
@@ -136,41 +152,26 @@ async function initializeWorkout(){
     try{
 
 
-        let data;
+        const { data: scheduleRow, error: scheduleError } =
+            await supabaseClient
+                .from("schedules")
+                .select("exercises")
+                .eq("customer_id", loggedInCustomerId)
+                .eq("day_letter", currentWorkout)
+                .maybeSingle();
 
 
+        if(scheduleError){
 
-        const custom =
-            localStorage.getItem(
-                "customWorkouts"
-            );
-
-
-
-        if(custom){
-
-
-            data =
-                JSON.parse(custom);
-
+            throw scheduleError;
 
         }
-
-        else{
-
-
-            data = {};
-
-
-        }
-
-
-
-
 
 
         exercises =
-            data[currentWorkout];
+            (scheduleRow && scheduleRow.exercises) ?
+                scheduleRow.exercises :
+                [];
 
 
 
