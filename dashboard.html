@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#121316">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard — Gym Tracker</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="header">
+
+        <div class="logo">
+            🏋️
+        </div>
+
+        <h1 id="dashboardTitle">
+        Gym Tracker
+        </h1>
+
+        <p class="subtitle" id="dashboardRole">
+        Caricamento...
+        </p>
+
+    </header>
+
+
+    <div id="dashboardContent">
+    </div>
+
+
+    <button
+    class="secondaryButton"
+    style="margin-top:20px;"
+    onclick="logoutUser()">
+
+    Esci
+
+    </button>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded", async function(){
+
+
+    const profile =
+        await requireAuth();
+
+    if(!profile){
+
+        return;
+
+    }
+
+
+    const roleLabels = {
+
+        admin: "Amministratore",
+        trainer: "Trainer",
+        customer: "Cliente"
+
+    };
+
+
+    document.getElementById("dashboardRole").textContent =
+        "Ciao " +
+        profile.full_name +
+        " — " +
+        (roleLabels[profile.role] || profile.role);
+
+
+    const content =
+        document.getElementById("dashboardContent");
+
+
+    if(profile.role === "admin"){
+
+        content.innerHTML = `
+
+        <section class="statsCard">
+
+        <h2>👑 Amministrazione</h2>
+
+        <p class="librarySubtitle" style="text-align:left;padding:0 0 15px;">
+        Pannello di gestione trainer e clienti — in arrivo nel prossimo passaggio.
+        </p>
+
+        </section>
+
+        `;
+
+    }
+    else if(profile.role === "trainer"){
+
+        content.innerHTML = `
+
+        <section class="statsCard">
+
+        <h2>💪 Area Trainer</h2>
+
+        <p class="librarySubtitle" style="text-align:left;padding:0 0 15px;">
+        La lista clienti e l'editor delle schede arrivano nel prossimo passaggio.
+        </p>
+
+        </section>
+
+        `;
+
+    }
+    else{
+
+        content.innerHTML = `
+
+        <section class="statsCard">
+
+        <h2>🏋️ La tua area</h2>
+
+        <p class="librarySubtitle" style="text-align:left;padding:0 0 15px;">
+        Stiamo collegando le tue schede e il tuo storico al nuovo sistema — arrivano nel prossimo passaggio.
+        </p>
+
+        </section>
+
+        `;
+
+    }
+
+
+});
+
+
+</script>
+
+</body>
+
+</html>

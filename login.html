@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#121316">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Accedi — Gym Tracker</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="header">
+
+        <div class="logo">
+            🏋️
+        </div>
+
+        <h1>Gym Tracker</h1>
+
+        <p class="subtitle">
+            Accedi al tuo account
+        </p>
+
+    </header>
+
+
+
+    <section class="statsCard">
+
+        <div id="loginMessage" style="display:none;"></div>
+
+        <label class="formLabel">
+        Email
+        </label>
+
+        <input
+        id="loginEmail"
+        class="settingsInput"
+        type="email"
+        autocomplete="email"
+        placeholder="nome@esempio.it">
+
+
+        <label class="formLabel">
+        Password
+        </label>
+
+        <input
+        id="loginPassword"
+        class="settingsInput"
+        type="password"
+        autocomplete="current-password"
+        placeholder="••••••••">
+
+
+        <button
+        class="dayButton dayA"
+        style="margin-top:15px;"
+        onclick="handleLogin()">
+
+        Accedi
+
+        </button>
+
+    </section>
+
+
+
+    <p class="librarySubtitle">
+    Non hai un account? Chiedi un invito al tuo amministratore o trainer.
+    </p>
+
+
+    <footer class="footer">
+        Gym Tracker v2.0
+    </footer>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded", async function(){
+
+
+    // Se un'approvazione era in sospeso, avvisa l'utente
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    if(params.get("pending") === "1"){
+
+        showLoginMessage(
+            "Il tuo account è in attesa di approvazione da parte di un amministratore.",
+            "warning"
+        );
+
+    }
+
+
+    // Se è già loggato, salta direttamente alla dashboard
+
+    const { data: { session } } =
+        await supabaseClient.auth.getSession();
+
+    if(session){
+
+        window.location.href = "dashboard.html";
+
+    }
+
+
+});
+
+
+
+function showLoginMessage(text, type){
+
+    const box =
+        document.getElementById("loginMessage");
+
+    if(!box){
+        return;
+    }
+
+    box.textContent = text;
+
+    box.style.display = "block";
+
+    box.style.padding = "12px 14px";
+
+    box.style.borderRadius = "10px";
+
+    box.style.marginBottom = "16px";
+
+    box.style.fontSize = "14px";
+
+    if(type === "error"){
+
+        box.style.background = "rgba(255,68,35,.15)";
+        box.style.color = "#ff4423";
+
+    }
+    else{
+
+        box.style.background = "rgba(255,184,0,.15)";
+        box.style.color = "#ffb800";
+
+    }
+
+}
+
+
+
+async function handleLogin(){
+
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+
+    if(!email || !password){
+
+        showLoginMessage(
+            "Inserisci email e password",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const result =
+        await loginUser(email, password);
+
+
+    if(!result.success){
+
+        showLoginMessage(
+            result.message,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    window.location.href = "dashboard.html";
+
+
+}
+
+
+
+// Invio con Invio da tastiera
+
+document.addEventListener("keydown", function(e){
+
+    if(e.key === "Enter"){
+
+        handleLogin();
+
+    }
+
+});
+
+
+</script>
+
+</body>
+
+</html>

@@ -1,9 +1,11 @@
-const CACHE_NAME = "gym-tracker-v3";
+const CACHE_NAME = "gym-tracker-v4";
 
 
 const FILES = [
 
     "./",
+    "./login.html",
+    "./dashboard.html",
     "./index.html",
     "./workout.html",
     "./workout-manager.html",
@@ -15,6 +17,8 @@ const FILES = [
 
     "./js/config.js",
     "./js/storage.js",
+    "./js/supabase-config.js",
+    "./js/auth.js",
     "./js/app.js",
     "./js/workout.js",
     "./js/workout-manager.js",
