@@ -101,6 +101,7 @@ Deno.serve(async (req) => {
         id: invited.user.id,
         role: role,
         full_name: full_name,
+        email: email,
         is_approved: true
       })
 

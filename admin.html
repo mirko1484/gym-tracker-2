@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#121316">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Amministrazione — Gym Tracker</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <button
+    class="secondaryButton"
+    onclick="location.href='dashboard.html'">
+    ← Dashboard
+    </button>
+
+
+    <header class="header">
+
+        <div class="logo">
+            👑
+        </div>
+
+        <h1>Amministrazione</h1>
+
+        <p class="subtitle">
+        Gestisci trainer e clienti
+        </p>
+
+    </header>
+
+
+
+    <!-- ============================= -->
+    <!-- INVITA NUOVO UTENTE -->
+    <!-- ============================= -->
+
+    <section class="statsCard">
+
+        <h2>➕ Invita utente</h2>
+
+        <div id="inviteMessage" style="display:none;"></div>
+
+        <label class="formLabel">
+        Nome completo
+        </label>
+
+        <input
+        id="inviteName"
+        class="settingsInput"
+        type="text"
+        placeholder="Mario Rossi">
+
+        <label class="formLabel">
+        Email
+        </label>
+
+        <input
+        id="inviteEmail"
+        class="settingsInput"
+        type="email"
+        placeholder="mario@esempio.it">
+
+        <label class="formLabel">
+        Ruolo
+        </label>
+
+        <select id="inviteRole" class="settingsInput">
+            <option value="customer">Cliente</option>
+            <option value="trainer">Trainer</option>
+        </select>
+
+        <button
+        class="dayButton dayA"
+        style="margin-top:10px;"
+        id="inviteButton"
+        onclick="handleInvite()">
+        Invia invito
+        </button>
+
+    </section>
+
+
+
+    <!-- ============================= -->
+    <!-- TRAINER -->
+    <!-- ============================= -->
+
+    <section class="statsCard">
+
+        <h2>💪 Trainer</h2>
+
+        <div id="trainersList">
+            <p class="librarySubtitle">Caricamento...</p>
+        </div>
+
+    </section>
+
+
+
+    <!-- ============================= -->
+    <!-- CLIENTI -->
+    <!-- ============================= -->
+
+    <section class="statsCard">
+
+        <h2>🏋️ Clienti</h2>
+
+        <div id="customersList">
+            <p class="librarySubtitle">Caricamento...</p>
+        </div>
+
+    </section>
+
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+
+</html>

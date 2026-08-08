@@ -1,0 +1,338 @@
+// =======================================
+// PANNELLO AMMINISTRAZIONE
+// =======================================
+
+
+document.addEventListener("DOMContentLoaded", async function(){
+
+
+    const profile =
+        await requireAuth(["admin"]);
+
+    if(!profile){
+
+        return;
+
+    }
+
+
+    loadTrainers();
+
+    loadCustomers();
+
+
+});
+
+
+
+
+// =======================================
+// MESSAGGI DI STATO
+// =======================================
+
+function showInviteMessage(text, isError){
+
+
+    const box =
+        document.getElementById("inviteMessage");
+
+    if(!box){
+        return;
+    }
+
+    box.textContent = text;
+
+    box.style.display = "block";
+
+    box.style.padding = "12px 14px";
+
+    box.style.borderRadius = "10px";
+
+    box.style.marginBottom = "16px";
+
+    box.style.fontSize = "14px";
+
+    box.style.background =
+        isError ?
+            "rgba(255,68,35,.15)" :
+            "rgba(47,217,124,.15)";
+
+    box.style.color =
+        isError ? "#ff4423" : "#2fd97c";
+
+
+}
+
+
+
+
+// =======================================
+// INVITA UTENTE
+// =======================================
+
+async function handleInvite(){
+
+
+    const nameInput =
+        document.getElementById("inviteName");
+
+    const emailInput =
+        document.getElementById("inviteEmail");
+
+    const roleSelect =
+        document.getElementById("inviteRole");
+
+    const button =
+        document.getElementById("inviteButton");
+
+
+    const full_name =
+        nameInput.value.trim();
+
+    const email =
+        emailInput.value.trim();
+
+    const role =
+        roleSelect.value;
+
+
+    if(!full_name || !email){
+
+        showInviteMessage(
+            "Inserisci nome ed email",
+            true
+        );
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent = "Invio in corso...";
+
+
+    const { data, error } =
+        await supabaseClient.functions.invoke(
+            "invite-user",
+            {
+                body: {
+                    email: email,
+                    full_name: full_name,
+                    role: role
+                }
+            }
+        );
+
+
+    button.disabled = false;
+
+    button.textContent = "Invia invito";
+
+
+    if(error || (data && data.error)){
+
+        showInviteMessage(
+            (data && data.error) ||
+            "Errore durante l'invio dell'invito",
+            true
+        );
+
+        return;
+
+    }
+
+
+    showInviteMessage(
+        "Invito inviato a " + email + " ✅",
+        false
+    );
+
+    nameInput.value = "";
+
+    emailInput.value = "";
+
+
+    loadTrainers();
+
+    loadCustomers();
+
+
+}
+
+
+
+
+// =======================================
+// LISTA TRAINER
+// =======================================
+
+async function loadTrainers(){
+
+
+    const container =
+        document.getElementById("trainersList");
+
+    const { data, error } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("role", "trainer")
+            .order("created_at", { ascending: false });
+
+
+    if(error){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Errore nel caricamento</p>`;
+
+        return;
+
+    }
+
+
+    if(!data || data.length === 0){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Nessun trainer ancora invitato</p>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    data.forEach(trainer=>{
+
+
+        const row =
+            document.createElement("div");
+
+        row.className = "libraryCard";
+
+        row.innerHTML = `
+
+        <div class="libraryCardInfo">
+            <strong>${trainer.full_name}</strong>
+            <span>${trainer.email || ""} ${trainer.is_approved ? "· Attivo" : "· Sospeso"}</span>
+        </div>
+
+        <button
+        class="secondaryButton"
+        style="width:auto;padding:10px 14px;"
+        onclick="toggleApproval('${trainer.id}', ${trainer.is_approved})">
+        ${trainer.is_approved ? "Sospendi" : "Riattiva"}
+        </button>
+
+        `;
+
+        container.appendChild(row);
+
+
+    });
+
+
+}
+
+
+
+
+// =======================================
+// LISTA CLIENTI
+// =======================================
+
+async function loadCustomers(){
+
+
+    const container =
+        document.getElementById("customersList");
+
+    const { data, error } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("role", "customer")
+            .order("created_at", { ascending: false });
+
+
+    if(error){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Errore nel caricamento</p>`;
+
+        return;
+
+    }
+
+
+    if(!data || data.length === 0){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Nessun cliente ancora invitato</p>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    data.forEach(customer=>{
+
+
+        const row =
+            document.createElement("div");
+
+        row.className = "libraryCard";
+
+        row.innerHTML = `
+
+        <div class="libraryCardInfo">
+            <strong>${customer.full_name}</strong>
+            <span>${customer.email || ""}</span>
+        </div>
+
+        `;
+
+        container.appendChild(row);
+
+
+    });
+
+
+}
+
+
+
+
+// =======================================
+// SOSPENDI / RIATTIVA UN TRAINER
+// =======================================
+
+async function toggleApproval(id, currentState){
+
+
+    const { error } =
+        await supabaseClient
+            .from("profiles")
+            .update({ is_approved: !currentState })
+            .eq("id", id);
+
+
+    if(error){
+
+        alert("Errore durante l'aggiornamento");
+
+        return;
+
+    }
+
+
+    loadTrainers();
+
+
+}
