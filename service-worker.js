@@ -1,10 +1,11 @@
-const CACHE_NAME = "gym-tracker-v9";
+const CACHE_NAME = "gym-tracker-v10";
 
 
 const FILES = [
 
     "./",
     "./login.html",
+    "./set-password.html",
     "./dashboard.html",
     "./admin.html",
     "./index.html",

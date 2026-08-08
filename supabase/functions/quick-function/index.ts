@@ -83,7 +83,9 @@ Deno.serve(async (req) => {
     )
 
     const { data: invited, error: inviteError } =
-      await adminClient.auth.admin.inviteUserByEmail(email)
+      await adminClient.auth.admin.inviteUserByEmail(email, {
+        redirectTo: 'https://mirko1484.github.io/gym-tracker-2/set-password.html'
+      })
 
     if (inviteError) {
       return new Response(
