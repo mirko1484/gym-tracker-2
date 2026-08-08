@@ -1,4 +1,4 @@
-const CACHE_NAME = "gym-tracker-v6";
+const CACHE_NAME = "gym-tracker-v7";
 
 
 const FILES = [
@@ -125,6 +125,31 @@ self.addEventListener(
 self.addEventListener(
     "fetch",
     event => {
+
+
+        // La cache riguarda solo i file dell'app stessa.
+        // Le richieste verso altri domini (Supabase: login,
+        // dati, funzioni) devono passare dritte alla rete,
+        // senza che il service worker le intercetti.
+
+        if(
+            !event.request.url.startsWith(self.location.origin)
+        ){
+
+            return;
+
+        }
+
+
+        // Solo le richieste GET possono essere gestite dalla
+        // cache; POST/PUT/DELETE devono andare dritte in rete.
+
+        if(event.request.method !== "GET"){
+
+            return;
+
+        }
+
 
         event.respondWith(
 
