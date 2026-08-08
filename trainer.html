@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#121316">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>I miei clienti — Gym Tracker</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <button
+    class="secondaryButton"
+    onclick="location.href='dashboard.html'">
+    ← Dashboard
+    </button>
+
+
+    <header class="header">
+
+        <div class="logo">
+            💪
+        </div>
+
+        <h1>I miei clienti</h1>
+
+        <p class="subtitle" id="clientCount">
+        Caricamento...
+        </p>
+
+    </header>
+
+
+    <section class="statsCard">
+
+        <div id="clientsList">
+            <p class="librarySubtitle">Caricamento...</p>
+        </div>
+
+    </section>
+
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded", async function(){
+
+
+    const profile =
+        await requireAuth(["trainer", "admin"]);
+
+    if(!profile){
+
+        return;
+
+    }
+
+
+    loadClients();
+
+
+});
+
+
+
+async function loadClients(){
+
+
+    const container =
+        document.getElementById("clientsList");
+
+    const countLabel =
+        document.getElementById("clientCount");
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("role", "customer")
+            .order("full_name", { ascending: true });
+
+
+    if(error){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Errore nel caricamento</p>`;
+
+        return;
+
+    }
+
+
+    if(!data || data.length === 0){
+
+        countLabel.textContent =
+            "Nessun cliente ancora";
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Non hai ancora clienti assegnati. Chiedi a un amministratore di invitarne uno.</p>`;
+
+        return;
+
+    }
+
+
+    countLabel.textContent =
+        data.length +
+        (data.length === 1 ? " cliente" : " clienti");
+
+
+    container.innerHTML = "";
+
+
+    data.forEach(client=>{
+
+
+        const row =
+            document.createElement("div");
+
+        row.className = "libraryCard";
+
+        row.innerHTML = `
+
+        <div class="libraryCardInfo">
+            <strong>${client.full_name}</strong>
+            <span>${client.email || ""}</span>
+        </div>
+
+        <button
+        class="secondaryButton"
+        style="width:auto;padding:10px 14px;"
+        onclick="openClientSchedule('${client.id}', '${client.full_name.replace(/'/g, "\\'")}')">
+        Scheda
+        </button>
+
+        `;
+
+        container.appendChild(row);
+
+
+    });
+
+
+}
+
+
+
+function openClientSchedule(customerId, customerName){
+
+    window.location.href =
+        "workout-manager.html?customer=" +
+        encodeURIComponent(customerId) +
+        "&name=" +
+        encodeURIComponent(customerName);
+
+}
+
+
+</script>
+
+</body>
+
+</html>

@@ -101,6 +101,14 @@ Personalizza i tuoi allenamenti
 </header>
 
 
+<!-- ============================= -->
+<!-- BANNER CLIENTE (solo se il trainer -->
+<!-- arriva dalla lista clienti) -->
+<!-- ============================= -->
+
+<div id="clientBanner" style="display:none;"></div>
+
+
 
 
 
@@ -251,6 +259,54 @@ Chiudi
 
 
 <script src="js/workout-manager.js"></script>
+
+
+<script>
+
+// Mostra chi è il cliente quando il trainer arriva
+// dalla lista clienti (workout-manager.html?customer=...&name=...)
+// Nota: il salvataggio resta locale per ora — arriva nel prossimo passaggio.
+
+(function(){
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const customerId =
+        params.get("customer");
+
+    const customerName =
+        params.get("name");
+
+    if(customerId && customerName){
+
+        const banner =
+            document.getElementById("clientBanner");
+
+        if(banner){
+
+            banner.style.display = "block";
+
+            banner.style.background = "rgba(255,184,0,.15)";
+            banner.style.color = "#ffb800";
+            banner.style.padding = "12px 14px";
+            banner.style.borderRadius = "10px";
+            banner.style.marginBottom = "20px";
+            banner.style.fontSize = "14px";
+            banner.style.textAlign = "center";
+
+            banner.textContent =
+                "👤 Stai vedendo l'editor per: " +
+                customerName +
+                " (il salvataggio su questo cliente specifico arriva nel prossimo passaggio)";
+
+        }
+
+    }
+
+})();
+
+</script>
 
 
 
