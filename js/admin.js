@@ -133,9 +133,54 @@ async function handleInvite(){
 
     if(error || (data && data.error)){
 
+
+        let message =
+            "Errore durante l'invio dell'invito";
+
+
+        // Quando la funzione risponde con un errore HTTP
+        // (400/401/403/500), il messaggio vero sta dentro
+        // error.context (la risposta originale), non in data.
+
+        if(
+            error &&
+            error.context &&
+            typeof error.context.json === "function"
+        ){
+
+            try{
+
+                const body =
+                    await error.context.json();
+
+                if(body && body.error){
+
+                    message = body.error;
+
+                }
+
+            }
+            catch(parseError){
+
+                // risposta non in JSON: teniamo il messaggio generico
+
+            }
+
+        }
+        else if(data && data.error){
+
+            message = data.error;
+
+        }
+        else if(error && error.message){
+
+            message = error.message;
+
+        }
+
+
         showInviteMessage(
-            (data && data.error) ||
-            "Errore durante l'invio dell'invito",
+            message,
             true
         );
 
