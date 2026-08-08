@@ -115,7 +115,7 @@ async function handleInvite(){
 
     const { data, error } =
         await supabaseClient.functions.invoke(
-            "create-user",
+            "quick-function",
             {
                 body: {
                     email: email,
