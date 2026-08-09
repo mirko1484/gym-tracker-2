@@ -1066,7 +1066,12 @@ async function autoSave(){
             error
         );
 
+        return { success: false, message: error.message };
+
     }
+
+
+    return { success: true };
 
 
 }
@@ -1081,8 +1086,20 @@ async function saveWorkouts(){
 
 
 
-    await autoSave();
+    const result =
+        await autoSave();
 
+
+    if(!result.success){
+
+        alert(
+            "Errore nel salvataggio: " +
+            result.message
+        );
+
+        return;
+
+    }
 
 
     alert(
