@@ -152,19 +152,12 @@ document.addEventListener("DOMContentLoaded", async function(){
     }
     else{
 
-        content.innerHTML = `
+        // Il cliente non ha bisogno di una pagina intermedia:
+        // la sua vera home (con le schede vere) è index.html
 
-        <section class="statsCard">
+        window.location.href = "index.html";
 
-        <h2>🏋️ La tua area</h2>
-
-        <p class="librarySubtitle" style="text-align:left;padding:0 0 15px;">
-        Stiamo collegando le tue schede e il tuo storico al nuovo sistema — arrivano nel prossimo passaggio.
-        </p>
-
-        </section>
-
-        `;
+        return;
 
     }
 
