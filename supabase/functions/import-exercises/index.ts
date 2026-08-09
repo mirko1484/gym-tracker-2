@@ -76,8 +76,22 @@ Deno.serve(async (req) => {
     // (esiste un endpoint unico /v1/exercises con paginazione,
     // molto più efficiente dello scorrimento per categoria)
 
+    const adminClient = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    )
+
+    // Riparti da dove eravamo arrivati: contiamo quanti esercizi
+    // abbiamo già salvato, e usiamo quel numero come punto di partenza
+    // invece di ricominciare sempre da zero
+
+    const { count: alreadyImportedCount } = await adminClient
+      .from('exercise_catalog')
+      .select('*', { count: 'exact', head: true })
+
     let allExercises: any[] = []
-    let offset = 0
+    let offset = alreadyImportedCount ?? 0
+    const resumedFromOffset = offset
     let total: number | null = null
     let lastQuotaRemaining: string | null = null
     const attempts: any[] = []
@@ -183,11 +197,6 @@ Deno.serve(async (req) => {
 
     // --- 3. Mappa e salva nel nostro database (service_role, bypassa RLS) ---
 
-    const adminClient = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    )
-
     const rows = allExercises.map((ex: any) => ({
 
       id: String(ex.id ?? ex.exerciseId ?? ex.name),
@@ -237,10 +246,16 @@ Deno.serve(async (req) => {
       )
     }
 
+    const { count: totalNowInDb } = await adminClient
+      .from('exercise_catalog')
+      .select('*', { count: 'exact', head: true })
+
     return new Response(
       JSON.stringify({
         success: true,
         imported: rows.length,
+        resumed_from_offset: resumedFromOffset,
+        total_now_in_database: totalNowInDb,
         total_available: total,
         quota_remaining: lastQuotaRemaining,
         stopped_for_time_budget: stoppedForTimeBudget,

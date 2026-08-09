@@ -528,14 +528,27 @@ async function handleImportCatalog(){
 
 
     let successMessage =
-        "Catalogo importato ✅ " +
-        (data.imported || 0) +
-        " esercizi trovati in questo tentativo";
+        "Catalogo importato ✅ ";
 
-    if(data.total_available){
+    if(data.total_now_in_database){
 
         successMessage +=
-            " (su " + data.total_available + " totali disponibili)";
+            data.total_now_in_database +
+            " esercizi totali nel database";
+
+        if(data.total_available){
+
+            successMessage +=
+                " (su " + data.total_available + " disponibili)";
+
+        }
+
+    }
+    else{
+
+        successMessage +=
+            (data.imported || 0) +
+            " esercizi trovati in questo tentativo";
 
     }
 
