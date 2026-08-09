@@ -381,3 +381,118 @@ async function toggleApproval(id, currentState){
 
 
 }
+
+
+
+
+// =======================================
+// IMPORTA CATALOGO ESERCIZI (WorkoutX)
+// =======================================
+
+function showImportMessage(text, isError){
+
+    const box =
+        document.getElementById("importMessage");
+
+    if(!box){
+        return;
+    }
+
+    box.textContent = text;
+
+    box.style.display = "block";
+    box.style.padding = "12px 14px";
+    box.style.borderRadius = "10px";
+    box.style.marginBottom = "16px";
+    box.style.fontSize = "14px";
+
+    box.style.background =
+        isError ?
+            "rgba(255,68,35,.15)" :
+            "rgba(47,217,124,.15)";
+
+    box.style.color =
+        isError ? "#ff4423" : "#2fd97c";
+
+}
+
+
+async function handleImportCatalog(){
+
+
+    const button =
+        document.getElementById("importButton");
+
+    button.disabled = true;
+
+    button.textContent = "Importazione in corso... (può richiedere un minuto)";
+
+
+    const { data, error } =
+        await supabaseClient.functions.invoke(
+            "import-exercises",
+            { body: {} }
+        );
+
+
+    button.disabled = false;
+
+    button.textContent = "Importa catalogo da WorkoutX";
+
+
+    if(error){
+
+        let message =
+            "Errore durante l'importazione";
+
+        if(
+            error.context &&
+            typeof error.context.json === "function"
+        ){
+
+            try{
+
+                const body =
+                    await error.context.json();
+
+                if(body && body.error){
+
+                    message = body.error;
+
+                }
+
+            }
+            catch(parseError){}
+
+        }
+        else if(error.message){
+
+            message = error.message;
+
+        }
+
+        showImportMessage(message, true);
+
+        return;
+
+    }
+
+
+    if(data && data.error){
+
+        showImportMessage(data.error, true);
+
+        return;
+
+    }
+
+
+    showImportMessage(
+        "Catalogo importato ✅ " +
+        (data.imported || 0) +
+        " esercizi disponibili nella libreria.",
+        false
+    );
+
+
+}
