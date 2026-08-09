@@ -530,7 +530,23 @@ async function handleImportCatalog(){
     let successMessage =
         "Catalogo importato ✅ " +
         (data.imported || 0) +
-        " esercizi disponibili nella libreria.";
+        " esercizi trovati in questo tentativo";
+
+    if(data.total_available){
+
+        successMessage +=
+            " (su " + data.total_available + " totali disponibili)";
+
+    }
+
+    successMessage += ".";
+
+    if(data.stopped_for_time_budget){
+
+        successMessage +=
+            "\n\nSi è fermata per restare dentro i tempi di sicurezza — è normale, clicca di nuovo \"Importa\" per continuare da dove si è interrotta.";
+
+    }
 
     if(data.quota_remaining !== undefined && data.quota_remaining !== null){
 
@@ -540,19 +556,11 @@ async function handleImportCatalog(){
 
     }
 
-    if(data.page_log){
+    if(data.stopped_for_api_error){
 
         successMessage +=
-            "\n\nPagine scaricate:\n" +
-            JSON.stringify(data.page_log, null, 2).slice(0, 1000);
-
-    }
-
-    if(data.first_page_envelope){
-
-        successMessage +=
-            "\n\nRisposta API (senza esercizi):\n" +
-            JSON.stringify(data.first_page_envelope, null, 2).slice(0, 500);
+            "\n\nAttenzione, un tentativo è fallito:\n" +
+            JSON.stringify(data.stopped_for_api_error, null, 2).slice(0, 600);
 
     }
 

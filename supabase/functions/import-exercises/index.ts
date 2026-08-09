@@ -17,7 +17,7 @@ const corsHeaders = {
 }
 
 const WORKOUTX_BASE_URL = 'https://api.workoutxapp.com/v1/exercises'
-const PAGE_SIZE = 100
+const PAGE_SIZE = 10 // il piano gratuito di WorkoutX restituisce sempre 10 elementi per richiesta, qualunque "limit" si chieda
 
 Deno.serve(async (req) => {
 
@@ -84,7 +84,29 @@ Deno.serve(async (req) => {
     const pageLog: any[] = []
     let firstRawSample: any = null
 
+    const sleep = (ms: number) =>
+      new Promise(resolve => setTimeout(resolve, ms))
+
+    const startTime = Date.now()
+    const MAX_RUNTIME_MS = 100000 // 100 secondi, con margine di sicurezza
+    let stoppedForTimeBudget = false
+
     while (total === null || offset < total) {
+
+      if (Date.now() - startTime > MAX_RUNTIME_MS) {
+
+        stoppedForTimeBudget = true
+        break
+
+      }
+
+      // Il piano gratuito di WorkoutX permette 30 richieste al minuto:
+      // aspettiamo tra una richiesta e l'altra per restare sotto quel limite
+      // (saltiamo la pausa solo sulla primissima richiesta)
+
+      if (offset > 0) {
+        await sleep(2200)
+      }
 
       const url =
         `${WORKOUTX_BASE_URL}?limit=${PAGE_SIZE}&offset=${offset}`
@@ -151,7 +173,7 @@ Deno.serve(async (req) => {
 
       allExercises = allExercises.concat(items)
 
-      offset += PAGE_SIZE
+      offset += items.length
 
       if (items.length === 0) {
         break
@@ -219,9 +241,10 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         imported: rows.length,
+        total_available: total,
         quota_remaining: lastQuotaRemaining,
-        page_log: pageLog,
-        first_page_envelope: firstRawSample
+        stopped_for_time_budget: stoppedForTimeBudget,
+        stopped_for_api_error: attempts.length > 0 ? attempts : null
       }),
       { status: 200, headers: corsHeaders }
     )
