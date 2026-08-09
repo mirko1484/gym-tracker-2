@@ -17,7 +17,7 @@ const corsHeaders = {
 }
 
 const WORKOUTX_BASE_URL = 'https://api.workoutxapp.com/v1/exercises'
-const PAGE_SIZE = 50
+const PAGE_SIZE = 100
 
 Deno.serve(async (req) => {
 
@@ -72,76 +72,64 @@ Deno.serve(async (req) => {
       )
     }
 
-    // --- 2. Scarica il catalogo, un gruppo muscolare alla volta ---
-    // (WorkoutX non sembra avere un unico elenco "tutti gli esercizi":
-    // va interrogato per bodyPart, come nei suoi esempi ufficiali)
-
-    const BODY_PARTS = [
-      'back', 'cardio', 'chest', 'lower arms', 'lower legs',
-      'neck', 'shoulders', 'upper arms', 'upper legs', 'waist'
-    ]
+    // --- 2. Scarica il catalogo completo, in blocco ---
+    // (esiste un endpoint unico /v1/exercises con paginazione,
+    // molto più efficiente dello scorrimento per categoria)
 
     let allExercises: any[] = []
-    const perBodyPart: Record<string, number> = {}
-    const failedBodyParts: any[] = []
+    let offset = 0
+    let total: number | null = null
+    let lastQuotaRemaining: string | null = null
+    const attempts: any[] = []
 
-    for (const bodyPart of BODY_PARTS) {
+    while (total === null || offset < total) {
 
-      let offset = 0
-      let total: number | null = null
-      let countForThisPart = 0
+      const url =
+        `${WORKOUTX_BASE_URL}?limit=${PAGE_SIZE}&offset=${offset}`
 
-      while (total === null || offset < total) {
+      const response = await fetch(
+        url,
+        { headers: { 'X-WorkoutX-Key': workoutxKey } }
+      )
 
-        const url =
-          `${WORKOUTX_BASE_URL}/bodyPart/${encodeURIComponent(bodyPart)}?limit=${PAGE_SIZE}&offset=${offset}`
+      lastQuotaRemaining =
+        response.headers.get('X-Quota-Remaining')
 
-        const response = await fetch(
-          url,
-          { headers: { 'X-WorkoutX-Key': workoutxKey } }
-        )
+      const rawText = await response.text()
 
-        const rawText = await response.text()
+      if (!response.ok) {
 
-        if (!response.ok) {
+        attempts.push({
+          url, status: response.status, body: rawText.slice(0, 300)
+        })
 
-          failedBodyParts.push({
-            bodyPart, url, status: response.status, body: rawText.slice(0, 200)
-          })
-
-          break
-
-        }
-
-        let page: any
-
-        try {
-          page = JSON.parse(rawText)
-        }
-        catch {
-          failedBodyParts.push({
-            bodyPart, url, status: response.status, note: 'risposta non JSON', body: rawText.slice(0, 200)
-          })
-          break
-        }
-
-        const items = page.data || page.results || page.exercises || []
-
-        total = page.total ?? page.count ?? items.length
-
-        allExercises = allExercises.concat(items)
-
-        countForThisPart += items.length
-
-        offset += PAGE_SIZE
-
-        if (items.length === 0) {
-          break
-        }
+        break
 
       }
 
-      perBodyPart[bodyPart] = countForThisPart
+      let page: any
+
+      try {
+        page = JSON.parse(rawText)
+      }
+      catch {
+        attempts.push({
+          url, status: response.status, note: 'risposta non JSON', body: rawText.slice(0, 300)
+        })
+        break
+      }
+
+      const items = page.data || page.results || page.exercises || []
+
+      total = page.total ?? page.count ?? items.length
+
+      allExercises = allExercises.concat(items)
+
+      offset += PAGE_SIZE
+
+      if (items.length === 0) {
+        break
+      }
 
     }
 
@@ -175,8 +163,8 @@ Deno.serve(async (req) => {
       return new Response(
         JSON.stringify({
           error: 'Nessun esercizio ricevuto da WorkoutX',
-          per_body_part: perBodyPart,
-          failed: failedBodyParts
+          quota_remaining: lastQuotaRemaining,
+          attempts
         }),
         { status: 200, headers: corsHeaders }
       )
@@ -192,7 +180,7 @@ Deno.serve(async (req) => {
         JSON.stringify({
           error: insertError.message,
           fetched: rows.length,
-          per_body_part: perBodyPart
+          quota_remaining: lastQuotaRemaining
         }),
         { status: 500, headers: corsHeaders }
       )
@@ -202,8 +190,7 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         imported: rows.length,
-        per_body_part: perBodyPart,
-        failed: failedBodyParts
+        quota_remaining: lastQuotaRemaining
       }),
       { status: 200, headers: corsHeaders }
     )

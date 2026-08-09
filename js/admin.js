@@ -504,11 +504,19 @@ async function handleImportCatalog(){
 
         let message = data.error;
 
-        if(data.debug){
+        if(data.quota_remaining !== undefined && data.quota_remaining !== null){
+
+            message +=
+                "\n\nQuota WorkoutX rimanente: " +
+                data.quota_remaining;
+
+        }
+
+        if(data.attempts){
 
             message +=
                 "\n\nDettagli tecnici:\n" +
-                JSON.stringify(data.debug, null, 2).slice(0, 1500);
+                JSON.stringify(data.attempts, null, 2).slice(0, 1200);
 
         }
 
@@ -524,21 +532,11 @@ async function handleImportCatalog(){
         (data.imported || 0) +
         " esercizi disponibili nella libreria.";
 
-    if(data.per_body_part){
+    if(data.quota_remaining !== undefined && data.quota_remaining !== null){
 
         successMessage +=
-            "\n\nPer categoria:\n" +
-            Object.entries(data.per_body_part)
-                .map(([part, count]) => "- " + part + ": " + count)
-                .join("\n");
-
-    }
-
-    if(data.failed && data.failed.length > 0){
-
-        successMessage +=
-            "\n\nCategorie con errore:\n" +
-            JSON.stringify(data.failed, null, 2).slice(0, 800);
+            "\n\nQuota WorkoutX rimanente: " +
+            data.quota_remaining;
 
     }
 
