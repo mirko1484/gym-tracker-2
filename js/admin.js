@@ -540,6 +540,22 @@ async function handleImportCatalog(){
 
     }
 
+    if(data.page_log){
+
+        successMessage +=
+            "\n\nPagine scaricate:\n" +
+            JSON.stringify(data.page_log, null, 2).slice(0, 1000);
+
+    }
+
+    if(data.first_page_envelope){
+
+        successMessage +=
+            "\n\nRisposta API (senza esercizi):\n" +
+            JSON.stringify(data.first_page_envelope, null, 2).slice(0, 500);
+
+    }
+
     showImportMessage(successMessage, false);
 
 

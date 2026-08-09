@@ -81,6 +81,8 @@ Deno.serve(async (req) => {
     let total: number | null = null
     let lastQuotaRemaining: string | null = null
     const attempts: any[] = []
+    const pageLog: any[] = []
+    let firstRawSample: any = null
 
     while (total === null || offset < total) {
 
@@ -121,7 +123,31 @@ Deno.serve(async (req) => {
 
       const items = page.data || page.results || page.exercises || []
 
+      if (firstRawSample === null) {
+
+        // Prima pagina valida: teniamo una copia grezza
+        // (senza gli esercizi, solo la "busta") per capire
+        // esattamente come è fatta la risposta
+
+        firstRawSample = { ...page }
+        delete firstRawSample.data
+        delete firstRawSample.results
+        delete firstRawSample.exercises
+        firstRawSample.items_in_this_page = items.length
+        firstRawSample.first_item_id = items[0]?.id ?? null
+
+      }
+
+      const previousTotal = total
+
       total = page.total ?? page.count ?? items.length
+
+      pageLog.push({
+        offset,
+        items_received: items.length,
+        total_reported_by_api: total,
+        total_changed_from_previous_page: previousTotal !== null && previousTotal !== total
+      })
 
       allExercises = allExercises.concat(items)
 
@@ -164,7 +190,9 @@ Deno.serve(async (req) => {
         JSON.stringify({
           error: 'Nessun esercizio ricevuto da WorkoutX',
           quota_remaining: lastQuotaRemaining,
-          attempts
+          attempts,
+          page_log: pageLog,
+          first_page_envelope: firstRawSample
         }),
         { status: 200, headers: corsHeaders }
       )
@@ -180,7 +208,8 @@ Deno.serve(async (req) => {
         JSON.stringify({
           error: insertError.message,
           fetched: rows.length,
-          quota_remaining: lastQuotaRemaining
+          quota_remaining: lastQuotaRemaining,
+          page_log: pageLog
         }),
         { status: 500, headers: corsHeaders }
       )
@@ -190,7 +219,9 @@ Deno.serve(async (req) => {
       JSON.stringify({
         success: true,
         imported: rows.length,
-        quota_remaining: lastQuotaRemaining
+        quota_remaining: lastQuotaRemaining,
+        page_log: pageLog,
+        first_page_envelope: firstRawSample
       }),
       { status: 200, headers: corsHeaders }
     )
