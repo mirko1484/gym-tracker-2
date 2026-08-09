@@ -34,6 +34,13 @@ onclick="location.href='index.html'">
 
 </button>
 
+<button class="secondaryButton"
+onclick="logoutUser()">
+
+Esci
+
+</button>
+
 
 
 <header class="header">
@@ -174,30 +181,8 @@ Schede settimanali
 </h2>
 
 
-<label class="formLabel">
-
-Quante giornate di allenamento vuoi?
-
-</label>
-
-
-<select
-id="dayCountSelect"
-class="settingsInput"
-onchange="changeDayCount(this.value)">
-
-<option value="1">1 giornata</option>
-<option value="2">2 giornate</option>
-<option value="3">3 giornate</option>
-<option value="4">4 giornate</option>
-<option value="5">5 giornate</option>
-<option value="6">6 giornate</option>
-
-</select>
-
-
 <p class="librarySubtitle">
-Vai in "Gestisci schede" per compilarle
+Il numero di giornate si imposta ora direttamente in "Gestisci schede".
 </p>
 
 
@@ -255,6 +240,9 @@ onclick="resetHistory()">
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/config.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/settings.js"></script>

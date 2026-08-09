@@ -141,7 +141,7 @@ async function initializeWorkout(){
         title.textContent =
             "Giornata "
             +
-            currentWorkout;
+            (DAY_LETTERS_POOL.indexOf(currentWorkout) + 1);
 
     }
 

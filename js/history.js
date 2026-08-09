@@ -7,7 +7,17 @@
 
 document.addEventListener(
     "DOMContentLoaded",
-    function(){
+    async function(){
+
+
+        const profile =
+            await requireAuth(["customer"]);
+
+        if(!profile){
+
+            return;
+
+        }
 
 
         loadHistory();
@@ -174,7 +184,7 @@ function loadHistory(){
 
                 <h2>
 
-                    💪 Giornata ${session.day}
+                    💪 Giornata ${DAY_LETTERS_POOL.indexOf(session.day) + 1}
 
                 </h2>
 

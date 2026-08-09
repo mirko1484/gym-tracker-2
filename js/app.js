@@ -630,7 +630,7 @@ function renderWorkoutButtons(workouts, days){
         class="dayButton ${getDayColorClass(index)}"
         onclick="startWorkout('${day}')">
 
-        ${getDayIcon(index)} Giornata ${day}
+        ${getDayIcon(index)} Giornata ${index + 1}
 
         <small>
         ${summary}

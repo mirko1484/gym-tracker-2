@@ -73,6 +73,16 @@
 
         </button>
 
+
+        <button
+        class="secondaryButton"
+        style="margin-top:10px;"
+        onclick="handleForgotPassword()">
+
+        Password dimenticata?
+
+        </button>
+
     </section>
 
 
@@ -207,6 +217,72 @@ async function handleLogin(){
 
 
     window.location.href = "dashboard.html";
+
+
+}
+
+
+
+
+// =======================================
+// PASSWORD DIMENTICATA
+// =======================================
+
+async function handleForgotPassword(){
+
+
+    let email =
+        document.getElementById("loginEmail").value.trim();
+
+
+    if(!email){
+
+        email =
+            prompt(
+                "Inserisci la tua email per ricevere il link di reset:"
+            );
+
+        if(!email){
+
+            return;
+
+        }
+
+        email = email.trim();
+
+    }
+
+
+    const { error } =
+        await supabaseClient.auth.resetPasswordForEmail(
+            email,
+            {
+                redirectTo:
+                    window.location.origin +
+                    window.location.pathname.replace(
+                        "login.html",
+                        "set-password.html"
+                    )
+            }
+        );
+
+
+    if(error){
+
+        showLoginMessage(
+            "Errore: " + error.message,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    showLoginMessage(
+        "Se l'indirizzo è registrato, riceverai a breve un'email con il link per reimpostare la password.",
+        "warning"
+    );
 
 
 }

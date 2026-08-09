@@ -257,6 +257,16 @@ async function loadWorkouts(){
     convertOldFormatForDays(days);
 
 
+    const dayCountSelect =
+        document.getElementById("dayCountSelect");
+
+    if(dayCountSelect){
+
+        dayCountSelect.value =
+            activeDayCount;
+
+    }
+
 
     renderDaySections();
 
@@ -428,7 +438,7 @@ function renderDaySections(){
         <button
         class="dayTabBtn ${activeClass}"
         onclick="selectEditingDay('${day}')">
-        ${getDayIcon(index)} ${day}
+        ${getDayIcon(index)} ${index + 1}
         </button>
 
         `;
@@ -479,7 +489,7 @@ function renderDayEditor(){
     <section class="statsCard">
 
     <h2>
-    ${icon} Giornata ${currentEditingDay}
+    ${icon} Giornata ${index + 1}
     </h2>
 
     <p class="librarySubtitle" style="text-align:left;padding:0 0 12px;">
@@ -1030,6 +1040,67 @@ function removeExercise(
 // =======================================
 // SALVATAGGIO
 // =======================================
+
+
+// =======================================
+// CAMBIA NUMERO DI GIORNATE
+// =======================================
+
+
+async function changeTargetDayCount(value){
+
+
+    const newCount =
+        parseInt(value, 10);
+
+
+    // Garantisce che ogni nuova giornata abbia un array,
+    // senza mai cancellare giornate già compilate
+
+    DAY_LETTERS_POOL.slice(0, newCount).forEach(day=>{
+
+        if(!workouts[day]){
+
+            workouts[day] = [];
+
+        }
+
+    });
+
+
+    activeDayCount = newCount;
+
+
+    const { error } =
+        await supabaseClient
+            .from("customer_settings")
+            .upsert(
+                {
+                    customer_id: targetCustomerId,
+                    day_count: newCount
+                },
+                { onConflict: "customer_id" }
+            );
+
+
+    if(error){
+
+        alert(
+            "Errore nel salvataggio del numero di giornate: " +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    renderDaySections();
+
+
+}
+
+
 
 
 async function autoSave(){

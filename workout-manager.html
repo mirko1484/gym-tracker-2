@@ -35,6 +35,12 @@ href="css/style.css">
 
 <div class="container">
 
+    <button
+    class="secondaryButton"
+    onclick="logoutUser()">
+    Esci
+    </button>
+
 
 
 
@@ -119,6 +125,35 @@ Personalizza i tuoi allenamenti
 <!-- ============================= -->
 <!-- GIORNATE (generate dinamicamente) -->
 <!-- ============================= -->
+
+
+<!-- ============================= -->
+<!-- NUMERO DI GIORNATE -->
+<!-- ============================= -->
+
+
+<section class="statsCard" style="margin-bottom:15px;">
+
+<label class="formLabel">
+Quante giornate ha questa scheda?
+</label>
+
+<select
+id="dayCountSelect"
+class="settingsInput"
+onchange="changeTargetDayCount(this.value)">
+
+<option value="1">1 giornata</option>
+<option value="2">2 giornate</option>
+<option value="3">3 giornate</option>
+<option value="4">4 giornate</option>
+<option value="5">5 giornate</option>
+<option value="6">6 giornate</option>
+
+</select>
+
+</section>
+
 
 
 <!-- ============================= -->

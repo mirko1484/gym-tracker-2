@@ -7,7 +7,16 @@
 
 document.addEventListener(
     "DOMContentLoaded",
-    function(){
+    async function(){
+
+        const profile =
+            await requireAuth(["customer"]);
+
+        if(!profile){
+
+            return;
+
+        }
 
         loadSettings();
 
