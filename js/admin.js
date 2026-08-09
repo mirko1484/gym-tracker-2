@@ -432,11 +432,29 @@ async function handleImportCatalog(){
     button.textContent = "Importazione in corso... (può richiedere un minuto)";
 
 
-    const { data, error } =
+    const { data: rawData, error } =
         await supabaseClient.functions.invoke(
             "import-exercises",
             { body: {} }
         );
+
+
+    // Protezione: se per qualche motivo la risposta arriva
+    // come testo grezzo invece che oggetto già interpretato,
+    // proviamo a interpretarla comunque invece di ignorarla
+
+    let data = rawData;
+
+    if(typeof rawData === "string"){
+
+        try{
+            data = JSON.parse(rawData);
+        }
+        catch(parseError){
+            data = rawData;
+        }
+
+    }
 
 
     button.disabled = false;
