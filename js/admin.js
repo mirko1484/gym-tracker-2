@@ -519,12 +519,30 @@ async function handleImportCatalog(){
     }
 
 
-    showImportMessage(
+    let successMessage =
         "Catalogo importato ✅ " +
         (data.imported || 0) +
-        " esercizi disponibili nella libreria.",
-        false
-    );
+        " esercizi disponibili nella libreria.";
+
+    if(data.per_body_part){
+
+        successMessage +=
+            "\n\nPer categoria:\n" +
+            Object.entries(data.per_body_part)
+                .map(([part, count]) => "- " + part + ": " + count)
+                .join("\n");
+
+    }
+
+    if(data.failed && data.failed.length > 0){
+
+        successMessage +=
+            "\n\nCategorie con errore:\n" +
+            JSON.stringify(data.failed, null, 2).slice(0, 800);
+
+    }
+
+    showImportMessage(successMessage, false);
 
 
 }

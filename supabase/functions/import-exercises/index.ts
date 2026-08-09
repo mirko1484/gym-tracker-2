@@ -82,12 +82,14 @@ Deno.serve(async (req) => {
     ]
 
     let allExercises: any[] = []
-    const debugInfo: any = { attempts: [] }
+    const perBodyPart: Record<string, number> = {}
+    const failedBodyParts: any[] = []
 
     for (const bodyPart of BODY_PARTS) {
 
       let offset = 0
       let total: number | null = null
+      let countForThisPart = 0
 
       while (total === null || offset < total) {
 
@@ -103,8 +105,8 @@ Deno.serve(async (req) => {
 
         if (!response.ok) {
 
-          debugInfo.attempts.push({
-            url, status: response.status, body: rawText.slice(0, 300)
+          failedBodyParts.push({
+            bodyPart, url, status: response.status, body: rawText.slice(0, 200)
           })
 
           break
@@ -117,29 +119,19 @@ Deno.serve(async (req) => {
           page = JSON.parse(rawText)
         }
         catch {
-          debugInfo.attempts.push({
-            url, status: response.status, note: 'risposta non JSON', body: rawText.slice(0, 300)
+          failedBodyParts.push({
+            bodyPart, url, status: response.status, note: 'risposta non JSON', body: rawText.slice(0, 200)
           })
           break
         }
 
         const items = page.data || page.results || page.exercises || []
 
-        if (
-          debugInfo.attempts.length === 0 &&
-          allExercises.length === 0
-        ) {
-
-          // Salva un esempio grezzo della prima risposta valida,
-          // utile per capire la forma esatta dei dati
-
-          debugInfo.sample_response = page
-
-        }
-
         total = page.total ?? page.count ?? items.length
 
         allExercises = allExercises.concat(items)
+
+        countForThisPart += items.length
 
         offset += PAGE_SIZE
 
@@ -148,6 +140,8 @@ Deno.serve(async (req) => {
         }
 
       }
+
+      perBodyPart[bodyPart] = countForThisPart
 
     }
 
@@ -178,13 +172,11 @@ Deno.serve(async (req) => {
 
     if (rows.length === 0) {
 
-      // Nessun risultato: restituiamo le informazioni di diagnostica
-      // raccolte, così si capisce subito dove si è fermato
-
       return new Response(
         JSON.stringify({
           error: 'Nessun esercizio ricevuto da WorkoutX',
-          debug: debugInfo
+          per_body_part: perBodyPart,
+          failed: failedBodyParts
         }),
         { status: 200, headers: corsHeaders }
       )
@@ -197,13 +189,22 @@ Deno.serve(async (req) => {
 
     if (insertError) {
       return new Response(
-        JSON.stringify({ error: insertError.message, fetched: rows.length }),
+        JSON.stringify({
+          error: insertError.message,
+          fetched: rows.length,
+          per_body_part: perBodyPart
+        }),
         { status: 500, headers: corsHeaders }
       )
     }
 
     return new Response(
-      JSON.stringify({ success: true, imported: rows.length }),
+      JSON.stringify({
+        success: true,
+        imported: rows.length,
+        per_body_part: perBodyPart,
+        failed: failedBodyParts
+      }),
       { status: 200, headers: corsHeaders }
     )
 
