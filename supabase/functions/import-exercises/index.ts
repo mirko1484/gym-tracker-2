@@ -71,45 +71,81 @@ Deno.serve(async (req) => {
       )
     }
 
-    // --- 2. Scarica tutte le pagine dal catalogo WorkoutX ---
+    // --- 2. Scarica il catalogo, un gruppo muscolare alla volta ---
+    // (WorkoutX non sembra avere un unico elenco "tutti gli esercizi":
+    // va interrogato per bodyPart, come nei suoi esempi ufficiali)
 
-    let offset = 0
-    let total = null
+    const BODY_PARTS = [
+      'back', 'cardio', 'chest', 'lower arms', 'lower legs',
+      'neck', 'shoulders', 'upper arms', 'upper legs', 'waist'
+    ]
+
     let allExercises: any[] = []
+    const debugInfo: any = { attempts: [] }
 
-    while (total === null || offset < total) {
+    for (const bodyPart of BODY_PARTS) {
 
-      const response = await fetch(
-        `${WORKOUTX_BASE_URL}?limit=${PAGE_SIZE}&offset=${offset}`,
-        { headers: { 'X-WorkoutX-Key': workoutxKey } }
-      )
+      let offset = 0
+      let total: number | null = null
 
-      if (!response.ok) {
+      while (total === null || offset < total) {
 
-        const errorBody = await response.text()
+        const url =
+          `${WORKOUTX_BASE_URL}/bodyPart/${encodeURIComponent(bodyPart)}?limit=${PAGE_SIZE}&offset=${offset}`
 
-        return new Response(
-          JSON.stringify({
-            error: `Errore da WorkoutX (${response.status}): ${errorBody}`,
-            imported_so_far: allExercises.length
-          }),
-          { status: 502, headers: corsHeaders }
+        const response = await fetch(
+          url,
+          { headers: { 'X-WorkoutX-Key': workoutxKey } }
         )
 
-      }
+        const rawText = await response.text()
 
-      const page = await response.json()
+        if (!response.ok) {
 
-      const items = page.data || page.results || []
+          debugInfo.attempts.push({
+            url, status: response.status, body: rawText.slice(0, 300)
+          })
 
-      total = page.total ?? items.length
+          break
 
-      allExercises = allExercises.concat(items)
+        }
 
-      offset += PAGE_SIZE
+        let page: any
 
-      if (items.length === 0) {
-        break
+        try {
+          page = JSON.parse(rawText)
+        }
+        catch {
+          debugInfo.attempts.push({
+            url, status: response.status, note: 'risposta non JSON', body: rawText.slice(0, 300)
+          })
+          break
+        }
+
+        const items = page.data || page.results || page.exercises || []
+
+        if (
+          debugInfo.attempts.length === 0 &&
+          allExercises.length === 0
+        ) {
+
+          // Salva un esempio grezzo della prima risposta valida,
+          // utile per capire la forma esatta dei dati
+
+          debugInfo.sample_response = page
+
+        }
+
+        total = page.total ?? page.count ?? items.length
+
+        allExercises = allExercises.concat(items)
+
+        offset += PAGE_SIZE
+
+        if (items.length === 0) {
+          break
+        }
+
       }
 
     }
@@ -138,6 +174,21 @@ Deno.serve(async (req) => {
       instructions: ex.instructions ?? null
 
     }))
+
+    if (rows.length === 0) {
+
+      // Nessun risultato: restituiamo le informazioni di diagnostica
+      // raccolte, così si capisce subito dove si è fermato
+
+      return new Response(
+        JSON.stringify({
+          error: 'Nessun esercizio ricevuto da WorkoutX',
+          debug: debugInfo
+        }),
+        { status: 200, headers: corsHeaders }
+      )
+
+    }
 
     const { error: insertError } = await adminClient
       .from('exercise_catalog')

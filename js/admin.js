@@ -405,6 +405,10 @@ function showImportMessage(text, isError){
     box.style.borderRadius = "10px";
     box.style.marginBottom = "16px";
     box.style.fontSize = "14px";
+    box.style.whiteSpace = "pre-wrap";
+    box.style.wordBreak = "break-word";
+    box.style.maxHeight = "300px";
+    box.style.overflowY = "auto";
 
     box.style.background =
         isError ?
@@ -480,7 +484,17 @@ async function handleImportCatalog(){
 
     if(data && data.error){
 
-        showImportMessage(data.error, true);
+        let message = data.error;
+
+        if(data.debug){
+
+            message +=
+                "\n\nDettagli tecnici:\n" +
+                JSON.stringify(data.debug, null, 2).slice(0, 1500);
+
+        }
+
+        showImportMessage(message, true);
 
         return;
 
