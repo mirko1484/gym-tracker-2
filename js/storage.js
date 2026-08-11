@@ -288,3 +288,61 @@ function getDayColorClass(index){
 }
 
 
+
+
+// =======================================
+// IMMAGINE A SCHERMO INTERO (condivisa tra le pagine)
+// =======================================
+// Richiede questo markup in pagina:
+// <div id="fullscreenImageOverlay" class="fullscreenImageOverlay" onclick="closeImageFullscreen()" style="display:none;">
+//     <img id="fullscreenImage" src="" alt="">
+// </div>
+
+function showImageFullscreen(url){
+
+    if(!url){
+
+        return;
+
+    }
+
+    const overlay =
+        document.getElementById(
+            "fullscreenImageOverlay"
+        );
+
+    const fullscreenImage =
+        document.getElementById(
+            "fullscreenImage"
+        );
+
+    if(!overlay || !fullscreenImage){
+
+        return;
+
+    }
+
+    fullscreenImage.src =
+        url;
+
+    overlay.style.display =
+        "flex";
+
+}
+
+
+function closeImageFullscreen(){
+
+    const overlay =
+        document.getElementById(
+            "fullscreenImageOverlay"
+        );
+
+    if(overlay){
+
+        overlay.style.display =
+            "none";
+
+    }
+
+}
