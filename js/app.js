@@ -5,6 +5,9 @@
 
 let loggedInCustomerId = null;
 
+// Cache in memoria dello storico, caricato una sola volta
+let cachedHistory = [];
+
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -24,19 +27,17 @@ document.addEventListener(
             profile.id;
 
 
-        if(typeof getHistory === "function"){
+        cachedHistory =
+            await fetchHistory();
 
 
-            loadProfile();
+        loadProfile(profile);
 
-            loadStatistics();
+        loadStatistics();
 
-            loadLastWorkout();
+        loadLastWorkout();
 
-            loadAchievements();
-
-
-        }
+        loadAchievements();
 
 
         loadWorkoutButtons();
@@ -47,88 +48,140 @@ document.addEventListener(
 
 
 
+
+// =======================================
+// CARICA STORICO DA SUPABASE (una volta sola)
+// =======================================
+
+async function fetchHistory(){
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("history")
+            .select("*")
+            .eq("customer_id", loggedInCustomerId)
+            .order("created_at", { ascending: false });
+
+
+    if(error){
+
+        console.error(
+            "Errore caricamento storico:",
+            error
+        );
+
+        return [];
+
+    }
+
+
+    return data || [];
+
+
+}
+
+
+
+
 // =======================================
 // PROFILO
 // =======================================
 
-function loadProfile(){
+function loadProfile(profile){
 
-    const saved =
-        localStorage.getItem(
-            CONFIG.STORAGE_KEYS.SETTINGS
-        );
-
-    if(!saved){
-
-        return;
-
-    }
-
-    const settings =
-        JSON.parse(saved);
 
     const welcome =
         document.getElementById(
             "welcomeName"
         );
 
-    const goal =
+    const goalElement =
         document.getElementById(
             "profileGoal"
         );
+
+    const avatar =
+        document.querySelector(
+            ".profileAvatar"
+        );
+
 
     if(welcome){
 
         welcome.textContent =
             "Benvenuto " +
-            (settings.name || "Atleta");
+            (profile.full_name || "Atleta");
 
     }
 
-    if(goal){
 
-        let goalText = "";
+    if(avatar && profile.avatar_url){
 
-        switch(settings.goal){
+        avatar.innerHTML =
+            `<img src="${profile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
 
-            case "massa":
-                goalText = "🎯 Massa Muscolare";
-                break;
+    }
 
-            case "definizione":
-                goalText = "🎯 Definizione";
-                break;
 
-            case "forza":
-                goalText = "🎯 Forza";
-                break;
+    if(goalElement){
 
-            default:
-                goalText = "";
-                break;
+        // Obiettivo/peso/altezza vivono in customer_settings:
+        // li recuperiamo qui, senza bloccare il resto della pagina
 
-        }
+        supabaseClient
+            .from("customer_settings")
+            .select("weight, height, goal")
+            .eq("customer_id", loggedInCustomerId)
+            .maybeSingle()
+            .then(({ data: settings })=>{
 
-        if(settings.weight){
+                if(!settings){
 
-            goalText +=
-                " • " +
-                settings.weight +
-                " kg";
+                    return;
 
-        }
+                }
 
-        if(settings.height){
+                let goalText = "";
 
-            goalText +=
-                " • " +
-                settings.height +
-                " cm";
+                switch(settings.goal){
 
-        }
+                    case "massa":
+                        goalText = "🎯 Massa Muscolare";
+                        break;
 
-        goal.textContent =
-            goalText;
+                    case "definizione":
+                        goalText = "🎯 Definizione";
+                        break;
+
+                    case "forza":
+                        goalText = "🎯 Forza";
+                        break;
+
+                    default:
+                        goalText = "";
+                        break;
+
+                }
+
+                if(settings.weight){
+
+                    goalText +=
+                        " • " + settings.weight + " kg";
+
+                }
+
+                if(settings.height){
+
+                    goalText +=
+                        " • " + settings.height + " cm";
+
+                }
+
+                goalElement.textContent =
+                    goalText;
+
+            });
 
     }
 
@@ -138,30 +191,32 @@ function loadProfile(){
 
 
 // =======================================
-// STATISTICHE HOME
+// STATISTICHE
 // =======================================
 
 function loadStatistics(){
 
+
     const history =
-        getHistory();
+        cachedHistory;
 
     const totalWorkouts =
         history.length;
 
-    let totalMinutes = 0;
+    let totalSeconds = 0;
 
     history.forEach(function(workout){
 
-        totalMinutes +=
-            Number(workout.duration) || 0;
+        totalSeconds +=
+            Number(workout.duration_seconds) || 0;
 
     });
 
+    const totalMinutes =
+        Math.floor(totalSeconds / 60);
+
     const totalHours =
-        Math.floor(
-            totalMinutes / 60
-        );
+        Math.floor(totalMinutes / 60);
 
     let averageTime = 0;
 
@@ -169,8 +224,7 @@ function loadStatistics(){
 
         averageTime =
             Math.round(
-                totalMinutes /
-                totalWorkouts
+                totalMinutes / totalWorkouts
             );
 
     }
@@ -180,7 +234,8 @@ function loadStatistics(){
     if(history.length > 0){
 
         lastWorkout =
-            history[0].date;
+            new Date(history[0].created_at)
+                .toLocaleDateString("it-IT");
 
     }
 
@@ -268,7 +323,7 @@ function loadLastWorkout(){
 
 
     const history =
-        getHistory();
+        cachedHistory;
 
 
 
@@ -310,7 +365,7 @@ function loadLastWorkout(){
 
 
 
-    workout.exercises.forEach(
+    (workout.exercises || []).forEach(
 
         exercise => {
 
@@ -325,6 +380,17 @@ function loadLastWorkout(){
         }
 
     );
+
+
+    const dayNumber =
+        DAY_LETTERS_POOL.indexOf(workout.day_letter) + 1;
+
+    const dateLabel =
+        new Date(workout.created_at)
+            .toLocaleDateString("it-IT");
+
+    const durationMinutes =
+        Math.round((workout.duration_seconds || 0) / 60);
 
 
 
@@ -343,7 +409,7 @@ function loadLastWorkout(){
 
             <span>
 
-                ${workout.day}
+                ${dayNumber}
 
             </span>
 
@@ -363,7 +429,7 @@ function loadLastWorkout(){
 
             <span>
 
-                ${workout.date}
+                ${dateLabel}
 
             </span>
 
@@ -383,7 +449,7 @@ function loadLastWorkout(){
 
             <span>
 
-                ${workout.duration} min
+                ${durationMinutes} min
 
             </span>
 
@@ -407,7 +473,7 @@ function loadLastWorkout(){
 
                 /
 
-                ${workout.exercises.length}
+                ${(workout.exercises || []).length}
 
             </span>
 
@@ -423,8 +489,6 @@ function loadLastWorkout(){
 
 
 
-
-
 // =======================================
 // BADGE ATLETA
 // =======================================
@@ -433,7 +497,7 @@ function loadAchievements(){
 
 
     const history =
-        getHistory();
+        cachedHistory;
 
 
 

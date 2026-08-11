@@ -73,6 +73,29 @@ Profilo
 </h2>
 
 
+<div style="display:flex; justify-content:center; margin-bottom:15px;">
+
+    <div class="profileAvatar" id="avatarPreview" style="width:90px; height:90px; font-size:36px; overflow:hidden;">
+        👤
+    </div>
+
+</div>
+
+
+<label class="formLabel" style="text-align:center; display:block;">
+Foto profilo
+</label>
+
+<input
+id="avatarFileInput"
+type="file"
+accept="image/*"
+class="settingsInput"
+onchange="handleAvatarUpload(event)">
+
+<p id="avatarUploadStatus" class="librarySubtitle" style="display:none;"></p>
+
+
 
 <label class="formLabel">
 
@@ -197,28 +220,6 @@ Il numero di giornate si imposta ora direttamente in "Gestisci schede".
 <h2>
 Gestione dati
 </h2>
-
-
-
-<button
-class="dayButton dayB"
-onclick="exportBackup()">
-
-⬇️ Esporta backup
-
-</button>
-
-
-<label class="formLabel">
-Ripristina da backup
-</label>
-
-<input
-id="importFileInput"
-type="file"
-accept="application/json"
-class="settingsInput"
-onchange="importBackup(event)">
 
 
 <button

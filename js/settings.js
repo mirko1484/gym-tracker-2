@@ -4,6 +4,8 @@
 // =======================================
 
 
+let loggedInCustomerId = null;
+
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -18,7 +20,10 @@ document.addEventListener(
 
         }
 
-        loadSettings();
+        loggedInCustomerId =
+            profile.id;
+
+        loadSettings(profile);
 
     }
 );
@@ -26,117 +31,78 @@ document.addEventListener(
 
 
 
-
-
 // =======================================
-// CARICAMENTO IMPOSTAZIONI
+// CARICAMENTO IMPOSTAZIONI (da Supabase)
 // =======================================
 
 
-function loadSettings(){
-
-
-    const saved =
-
-        localStorage.getItem(
-            CONFIG.STORAGE_KEYS.SETTINGS
-        );
-
-
-
-    if(!saved){
-
-        return;
-
-    }
-
-
-
-
-    const settings =
-
-        JSON.parse(saved);
-
-
-
+async function loadSettings(profile){
 
 
     const nameInput =
-
-        document.getElementById(
-            "userName"
-        );
-
-
+        document.getElementById("userName");
 
     const weightInput =
-
-        document.getElementById(
-            "userWeight"
-        );
-
-
+        document.getElementById("userWeight");
 
     const heightInput =
-
-        document.getElementById(
-            "userHeight"
-        );
-
-
+        document.getElementById("userHeight");
 
     const goalInput =
+        document.getElementById("userGoal");
 
-        document.getElementById(
-            "userGoal"
-        );
-
-
-
-
-
+    const avatarPreview =
+        document.getElementById("avatarPreview");
 
 
     if(nameInput){
 
         nameInput.value =
-            settings.name || "";
+            profile.full_name || "";
 
     }
 
 
+    if(avatarPreview && profile.avatar_url){
 
-
-
-    if(weightInput){
-
-        weightInput.value =
-            settings.weight || "";
+        avatarPreview.innerHTML =
+            `<img src="${profile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
 
     }
 
 
+    const { data: customerSettings } =
+        await supabaseClient
+            .from("customer_settings")
+            .select("weight, height, goal")
+            .eq("customer_id", loggedInCustomerId)
+            .maybeSingle();
 
 
+    if(customerSettings){
 
-    if(heightInput){
+        if(weightInput){
 
-        heightInput.value =
-            settings.height || "";
+            weightInput.value =
+                customerSettings.weight || "";
+
+        }
+
+        if(heightInput){
+
+            heightInput.value =
+                customerSettings.height || "";
+
+        }
+
+        if(goalInput && customerSettings.goal){
+
+            goalInput.value =
+                customerSettings.goal;
+
+        }
 
     }
-
-
-
-
-
-    if(goalInput){
-
-        goalInput.value =
-            settings.goal || "massa";
-
-    }
-
 
 
 }
@@ -144,78 +110,57 @@ function loadSettings(){
 
 
 
-
-
-
-
-
 // =======================================
-// SALVATAGGIO IMPOSTAZIONI
+// SALVATAGGIO IMPOSTAZIONI (su Supabase)
 // =======================================
 
 
-function saveSettings(){
+async function saveSettings(){
 
 
+    const fullName =
+        document.getElementById("userName").value.trim();
 
-    const settings = {
+    const weight =
+        document.getElementById("userWeight").value;
 
+    const height =
+        document.getElementById("userHeight").value;
 
-        name:
-
-            document.getElementById(
-                "userName"
-            ).value,
-
-
-
-        weight:
-
-            document.getElementById(
-                "userWeight"
-            ).value,
+    const goal =
+        document.getElementById("userGoal").value;
 
 
-
-        height:
-
-            document.getElementById(
-                "userHeight"
-            ).value,
-
+    const { error: profileError } =
+        await supabaseClient
+            .from("profiles")
+            .update({ full_name: fullName || "Atleta" })
+            .eq("id", loggedInCustomerId);
 
 
-        goal:
-
-            document.getElementById(
-                "userGoal"
-            ).value
-
-
-
-    };
-
-
-
-
-
+    const { error: settingsError } =
+        await supabaseClient
+            .from("customer_settings")
+            .upsert(
+                {
+                    customer_id: loggedInCustomerId,
+                    weight: weight ? Number(weight) : null,
+                    height: height ? Number(height) : null,
+                    goal: goal
+                },
+                { onConflict: "customer_id" }
+            );
 
 
-    localStorage.setItem(
+    if(profileError || settingsError){
 
+        alert(
+            "Errore durante il salvataggio. Riprova."
+        );
 
-        CONFIG.STORAGE_KEYS.SETTINGS,
+        return;
 
-
-        JSON.stringify(settings)
-
-
-    );
-
-
-
-
-
+    }
 
 
     alert(
@@ -225,151 +170,17 @@ function saveSettings(){
     );
 
 
-
-}
-
-
-
-
-
-
-
-
-
-// =======================================
-// CANCELLA STORICO
-// =======================================
-
-
-function resetHistory(){
-
-
-
-    const confirmDelete =
-
-
-        confirm(
-
-            "Vuoi davvero cancellare tutti gli allenamenti?"
-
-        );
-
-
-
-
-
-
-
-    if(!confirmDelete){
-
-        return;
-
-    }
-
-
-
-
-
-
-
-    clearHistory();
-
-
-
-
-
-
-
-    alert(
-
-        "Storico cancellato ✅"
-
-    );
-
-
-
-}
-
-
-// =======================================
-// ESPORTA BACKUP
-// =======================================
-
-
-function exportBackup(){
-
-
-    const backup = {
-
-        version: CONFIG.VERSION,
-
-        exportedAt: new Date().toISOString(),
-
-        history:
-            JSON.parse(
-                localStorage.getItem(
-                    CONFIG.STORAGE_KEYS.HISTORY
-                ) || "[]"
-            ),
-
-        settings:
-            JSON.parse(
-                localStorage.getItem(
-                    CONFIG.STORAGE_KEYS.SETTINGS
-                ) || "{}"
-            ),
-
-        customWorkouts:
-            JSON.parse(
-                localStorage.getItem(
-                    "customWorkouts"
-                ) || "null"
-            )
-
-    };
-
-
-    const blob =
-        new Blob(
-            [JSON.stringify(backup, null, 2)],
-            { type: "application/json" }
-        );
-
-    const url =
-        URL.createObjectURL(blob);
-
-    const link =
-        document.createElement("a");
-
-    const today =
-        new Date().toISOString().slice(0, 10);
-
-    link.href = url;
-    link.download = `gym-tracker-backup-${today}.json`;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    URL.revokeObjectURL(url);
-
-
-    alert(
-        "Backup esportato ✅"
-    );
-
-
 }
 
 
 
 
 // =======================================
-// RIPRISTINA BACKUP
+// FOTO PROFILO
 // =======================================
 
 
-function importBackup(event){
+async function handleAvatarUpload(event){
 
 
     const file =
@@ -382,158 +193,278 @@ function importBackup(event){
     }
 
 
-    const reader =
-        new FileReader();
-
-
-    reader.onload = function(e){
-
-
-        let backup;
-
-        try{
-
-            backup =
-                JSON.parse(e.target.result);
-
-        }
-        catch(error){
-
-            alert(
-                "File di backup non valido ❌"
-            );
-
-            return;
-
-        }
-
-
-        const confirmRestore =
-            confirm(
-                "Il ripristino sovrascriverà i dati attuali (storico, schede, impostazioni). Continuare?"
-            );
-
-        if(!confirmRestore){
-
-            event.target.value = "";
-
-            return;
-
-        }
-
-
-        if(Array.isArray(backup.history)){
-
-            localStorage.setItem(
-                CONFIG.STORAGE_KEYS.HISTORY,
-                JSON.stringify(backup.history)
-            );
-
-        }
-
-
-        if(backup.settings){
-
-            localStorage.setItem(
-                CONFIG.STORAGE_KEYS.SETTINGS,
-                JSON.stringify(backup.settings)
-            );
-
-        }
-
-
-        if(backup.customWorkouts){
-
-            localStorage.setItem(
-                "customWorkouts",
-                JSON.stringify(backup.customWorkouts)
-            );
-
-        }
-
-
-        alert(
-            "Backup ripristinato ✅ Ricarico la pagina..."
+    const status =
+        document.getElementById(
+            "avatarUploadStatus"
         );
 
-        event.target.value = "";
+    if(status){
 
-        window.location.reload();
+        status.style.display = "block";
+        status.textContent = "Caricamento in corso...";
+        status.style.color = "#8b8d92";
 
-
-    };
-
-
-    reader.readAsText(file);
+    }
 
 
-}
+    try{
+
+        const resizedBlob =
+            await resizeImageFile(file, 400, 400, 0.85);
 
 
-
-// =======================================
-// CAMBIA NUMERO DI GIORNATE SETTIMANALI
-// =======================================
+        const filePath =
+            loggedInCustomerId + "/avatar.jpg";
 
 
-function changeDayCount(value){
+        const { error: uploadError } =
+            await supabaseClient.storage
+                .from("avatars")
+                .upload(
+                    filePath,
+                    resizedBlob,
+                    {
+                        upsert: true,
+                        contentType: "image/jpeg"
+                    }
+                );
 
 
-    const count =
-        parseInt(value, 10);
+        if(uploadError){
 
-    setDayCount(count);
-
-
-    // Garantisce che ogni giornata attiva abbia
-    // un array (anche vuoto) nei dati salvati,
-    // senza mai cancellare giornate già compilate
-
-    const saved =
-        localStorage.getItem(
-            "customWorkouts"
-        );
-
-    const workouts =
-        saved ? JSON.parse(saved) : {};
-
-    getActiveDayLetters().forEach(day=>{
-
-        if(!workouts[day]){
-
-            workouts[day] = [];
+            throw uploadError;
 
         }
 
-    });
 
-    localStorage.setItem(
-        "customWorkouts",
-        JSON.stringify(workouts)
-    );
+        const { data: urlData } =
+            supabaseClient.storage
+                .from("avatars")
+                .getPublicUrl(filePath);
+
+        // Aggiunge un parametro casuale per evitare che il browser
+        // mostri ancora la vecchia foto in cache dopo la sostituzione
+
+        const freshUrl =
+            urlData.publicUrl + "?t=" + Date.now();
 
 
-}
+        const { error: profileError } =
+            await supabaseClient
+                .from("profiles")
+                .update({ avatar_url: freshUrl })
+                .eq("id", loggedInCustomerId);
 
 
+        if(profileError){
 
-// Precompila il selettore con il valore salvato
+            throw profileError;
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
+        }
 
-        const select =
+
+        const avatarPreview =
             document.getElementById(
-                "dayCountSelect"
+                "avatarPreview"
             );
 
-        if(select){
+        if(avatarPreview){
 
-            select.value =
-                getDayCount();
+            avatarPreview.innerHTML =
+                `<img src="${freshUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+
+        }
+
+
+        if(status){
+
+            status.textContent = "Foto aggiornata ✅";
+            status.style.color = "#2fd97c";
+
+        }
+
+
+    }
+    catch(err){
+
+        if(status){
+
+            status.textContent =
+                "Errore nel caricamento della foto";
+
+            status.style.color = "#ff4423";
 
         }
 
     }
-);
+
+
+}
+
+
+
+
+// Ridimensiona l'immagine sul dispositivo prima di caricarla
+// (le foto degli smartphone sono spesso enormi, non serve
+// caricarle a piena risoluzione per un'icona profilo)
+
+function resizeImageFile(file, maxWidth, maxHeight, quality){
+
+
+    return new Promise((resolve, reject)=>{
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload = function(e){
+
+
+            const img =
+                new Image();
+
+
+            img.onload = function(){
+
+
+                let width = img.width;
+
+                let height = img.height;
+
+
+                if(width > height){
+
+                    if(width > maxWidth){
+
+                        height =
+                            height * (maxWidth / width);
+
+                        width = maxWidth;
+
+                    }
+
+                }
+                else{
+
+                    if(height > maxHeight){
+
+                        width =
+                            width * (maxHeight / height);
+
+                        height = maxHeight;
+
+                    }
+
+                }
+
+
+                const canvas =
+                    document.createElement("canvas");
+
+                canvas.width = width;
+
+                canvas.height = height;
+
+
+                canvas.getContext("2d")
+                    .drawImage(img, 0, 0, width, height);
+
+
+                canvas.toBlob(
+
+                    blob=>{
+
+                        if(blob){
+
+                            resolve(blob);
+
+                        }
+                        else{
+
+                            reject(
+                                new Error("Impossibile elaborare l'immagine")
+                            );
+
+                        }
+
+                    },
+                    "image/jpeg",
+                    quality
+
+                );
+
+
+            };
+
+
+            img.onerror =
+                () => reject(new Error("Immagine non valida"));
+
+
+            img.src =
+                e.target.result;
+
+
+        };
+
+
+        reader.onerror =
+            () => reject(new Error("Impossibile leggere il file"));
+
+
+        reader.readAsDataURL(file);
+
+
+    });
+
+
+}
+
+
+
+
+// =======================================
+// CANCELLA STORICO (da Supabase)
+// =======================================
+
+
+async function resetHistory(){
+
+
+    const confirmDelete =
+        confirm(
+            "Vuoi davvero cancellare tutti gli allenamenti? L'operazione non è reversibile."
+        );
+
+    if(!confirmDelete){
+
+        return;
+
+    }
+
+
+    const { error } =
+        await supabaseClient
+            .from("history")
+            .delete()
+            .eq("customer_id", loggedInCustomerId);
+
+
+    if(error){
+
+        alert(
+            "Errore durante la cancellazione. Riprova."
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "Storico cancellato ✅"
+    );
+
+
+}
