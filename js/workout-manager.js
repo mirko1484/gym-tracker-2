@@ -14,9 +14,6 @@ let workouts = {
 };
 
 
-// Catalogo esercizi caricato da data/exercise-library.json
-let exerciseLibrary = [];
-
 // Giornata attualmente aperta nel modale libreria
 let libraryTargetDay = null;
 
@@ -599,6 +596,8 @@ function renderDay(day){
                 <img
                 class="exerciseThumb"
                 src="${exercise.image}"
+                onclick="showImageFullscreen('${(exercise.image || '').replace(/'/g, "\\'")}')"
+                style="cursor:zoom-in;"
                 onerror="this.style.visibility='hidden'"
                 alt="">
 
@@ -1411,58 +1410,54 @@ function createDurationOptions(selected){
 
 // =======================================
 // LIBRERIA ESERCIZI
+// Fonte unica: foto reali (free-exercise-db, dominio pubblico)
 // =======================================
 
 
-// "local" = icone offline (sempre disponibili)
-// "online" = foto/GIF reali dal catalogo importato nel nostro database
-let libraryMode = "local";
+// Cache in memoria della libreria (caricata una sola volta a sessione)
+let exerciseLibrary = null;
 
-// Cache in memoria della libreria online (caricata una sola volta)
-let onlineLibrary = null;
+const LIBRARY_URL =
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json";
 
-// Traduzione dei nomi muscolo (WorkoutX, Title Case) -> italiano (solo etichetta)
-const ONLINE_MUSCLE_LABELS = {
+const LIBRARY_IMAGE_BASE =
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/";
 
-    "Back": "Schiena",
-    "Cardio": "Cardio",
-    "Chest": "Petto",
-    "Lower Arms": "Avambracci",
-    "Lower Legs": "Polpacci",
-    "Neck": "Collo",
-    "Shoulders": "Spalle",
-    "Upper Arms": "Braccia",
-    "Upper Legs": "Gambe",
-    "Waist": "Addome"
+// Traduzione dei nomi muscolo (inglese) -> italiano, solo per l'etichetta
+const LIBRARY_MUSCLE_LABELS = {
+
+    "abdominals": "Addominali",
+    "abductors": "Abduttori",
+    "adductors": "Adduttori",
+    "biceps": "Bicipiti",
+    "calves": "Polpacci",
+    "chest": "Petto",
+    "forearms": "Avambracci",
+    "glutes": "Glutei",
+    "hamstrings": "Femorali",
+    "lats": "Dorso (Lat)",
+    "lower back": "Lombari",
+    "middle back": "Dorso",
+    "neck": "Collo",
+    "quadriceps": "Quadricipiti",
+    "shoulders": "Spalle",
+    "traps": "Trapezio",
+    "triceps": "Tricipiti"
 
 };
 
-// Mappatura attrezzatura (WorkoutX) -> le nostre 3 categorie
-function mapOnlineEquipment(equipment){
+// Mappatura attrezzatura -> le nostre 3 categorie
+function mapLibraryEquipment(equipment){
 
-    if(!equipment){
-
-        return "";
-
-    }
-
-    const eq = equipment.toLowerCase();
-
-    if(
-        eq.includes("body weight") ||
-        eq.includes("body only") ||
-        eq.includes("assisted")
-    ){
+    if(equipment === "body only"){
 
         return "Corpo libero";
 
     }
 
     if(
-        eq.includes("cable") ||
-        eq.includes("machine") ||
-        eq.includes("leverage") ||
-        eq.includes("smith")
+        equipment === "cable" ||
+        equipment === "machine"
     ){
 
         return "Macchine/Cavi";
@@ -1470,13 +1465,13 @@ function mapOnlineEquipment(equipment){
     }
 
     if(
-        eq.includes("dumbbell") ||
-        eq.includes("barbell") ||
-        eq.includes("kettlebell") ||
-        eq.includes("band") ||
-        eq.includes("ball") ||
-        eq.includes("bar") ||
-        eq.includes("rope")
+        equipment === "dumbbell" ||
+        equipment === "barbell" ||
+        equipment === "kettlebells" ||
+        equipment === "bands" ||
+        equipment === "exercise ball" ||
+        equipment === "medicine ball" ||
+        equipment === "e-z curl bar"
     ){
 
         return "Pesi liberi";
@@ -1488,37 +1483,12 @@ function mapOnlineEquipment(equipment){
 }
 
 
+// Carica (una sola volta a sessione) la libreria con foto reali
 async function loadExerciseLibrary(){
 
-    try{
+    if(exerciseLibrary){
 
-        const response =
-            await fetch(
-                "data/exercise-library.json"
-            );
-
-        exerciseLibrary =
-            await response.json();
-
-    }
-    catch(err){
-
-        exerciseLibrary = [];
-
-    }
-
-    populateLibraryMuscleFilter();
-
-}
-
-
-// Carica (una sola volta) la libreria online con foto/GIF reali,
-// dal catalogo già importato nella nostra tabella Supabase
-async function loadOnlineLibrary(){
-
-    if(onlineLibrary){
-
-        return onlineLibrary;
+        return exerciseLibrary;
 
     }
 
@@ -1530,115 +1500,66 @@ async function loadOnlineLibrary(){
     if(container){
 
         container.innerHTML =
-            `<p class="librarySubtitle">Caricamento libreria online...</p>`;
+            `<p class="librarySubtitle">Caricamento libreria...</p>`;
 
     }
 
     try{
 
-        const { data, error } =
-            await supabaseClient
-                .from("exercise_catalog")
-                .select("id, name, body_part, target_muscle, equipment, gif_url")
-                .order("name", { ascending: true });
+        const response =
+            await fetch(LIBRARY_URL);
 
-        if(error){
+        const data =
+            await response.json();
 
-            throw error;
+        exerciseLibrary =
+            data.map(ex=>{
 
-        }
+                return {
 
-        onlineLibrary =
-            (data || [])
-                .map(ex=>{
+                    id: ex.id,
 
-                    return {
+                    title: ex.name,
 
-                        id: ex.id,
+                    muscle:
+                        ex.primaryMuscles &&
+                        ex.primaryMuscles[0] ?
+                            ex.primaryMuscles[0] :
+                            "",
 
-                        title: ex.name,
+                    equipment:
+                        mapLibraryEquipment(ex.equipment),
 
-                        muscle: ex.body_part || "",
+                    image:
+                        ex.images &&
+                        ex.images[0] ?
+                            LIBRARY_IMAGE_BASE + ex.images[0] :
+                            ""
 
-                        equipment:
-                            mapOnlineEquipment(ex.equipment),
+                };
 
-                        image: ex.gif_url || ""
+            })
+            .filter(ex => ex.image);
 
-                    };
+        populateLibraryMuscleFilter();
 
-                })
-                .filter(ex => ex.image);
+        renderLibraryList();
 
     }
     catch(err){
 
-        onlineLibrary = [];
+        exerciseLibrary = [];
 
         if(container){
 
             container.innerHTML =
-                `<p class="librarySubtitle">Impossibile caricare la libreria online. Controlla la connessione.</p>`;
+                `<p class="librarySubtitle">Impossibile caricare la libreria. Controlla la connessione.</p>`;
 
         }
 
     }
 
-    return onlineLibrary;
-
-}
-
-
-// Cambia tra libreria locale (icone) e online (foto reali)
-async function switchLibraryMode(mode){
-
-    libraryMode = mode;
-
-    const localTab =
-        document.getElementById(
-            "libraryTabLocal"
-        );
-
-    const onlineTab =
-        document.getElementById(
-            "libraryTabOnline"
-        );
-
-    if(localTab && onlineTab){
-
-        localTab.classList.toggle(
-            "libraryTabActive",
-            mode === "local"
-        );
-
-        onlineTab.classList.toggle(
-            "libraryTabActive",
-            mode === "online"
-        );
-
-    }
-
-    const equipmentFilter =
-        document.getElementById(
-            "libraryEquipmentFilter"
-        );
-
-    if(equipmentFilter){
-
-        equipmentFilter.style.display =
-            "block";
-
-    }
-
-    if(mode === "online"){
-
-        await loadOnlineLibrary();
-
-    }
-
-    populateLibraryMuscleFilter();
-
-    renderLibraryList();
+    return exerciseLibrary;
 
 }
 
@@ -1657,8 +1578,6 @@ function openLibrary(day){
         search.value = "";
     }
 
-    switchLibraryMode("local");
-
     const modal =
         document.getElementById(
             "libraryModal"
@@ -1670,6 +1589,8 @@ function openLibrary(day){
             "flex";
 
     }
+
+    loadExerciseLibrary();
 
 }
 
@@ -1693,7 +1614,7 @@ function closeLibrary(){
 }
 
 
-// Ridisegna la lista filtrata della libreria (locale o online)
+// Ridisegna la lista filtrata della libreria
 function renderLibraryList(){
 
     const container =
@@ -1706,9 +1627,7 @@ function renderLibraryList(){
     }
 
     const sourceList =
-        libraryMode === "online" ?
-            (onlineLibrary || []) :
-            exerciseLibrary;
+        exerciseLibrary || [];
 
     const search =
         document.getElementById(
@@ -1758,11 +1677,11 @@ function renderLibraryList(){
             return matchesQuery && matchesMuscle && matchesEquipment;
 
         })
-        .slice(0, 120);
+        .slice(0, 150);
 
     container.innerHTML = "";
 
-    if(libraryMode === "online" && !onlineLibrary){
+    if(!exerciseLibrary){
 
         return;
 
@@ -1783,14 +1702,7 @@ function renderLibraryList(){
             sourceList.indexOf(ex);
 
         const muscleLabel =
-            libraryMode === "online" ?
-                (ONLINE_MUSCLE_LABELS[ex.muscle] || ex.muscle) :
-                ex.muscle;
-
-        const imgSrc =
-            libraryMode === "online" ?
-                ex.image :
-                `img/patterns/${ex.pattern}.svg`;
+            LIBRARY_MUSCLE_LABELS[ex.muscle] || ex.muscle;
 
         const card =
             document.createElement("div");
@@ -1801,9 +1713,10 @@ function renderLibraryList(){
         card.innerHTML = `
 
             <img
-            class="libraryCardImg ${libraryMode === "online" ? "libraryCardImgPhoto" : ""}"
-            src="${imgSrc}"
+            class="libraryCardImg libraryCardImgPhoto"
+            src="${ex.image}"
             loading="lazy"
+            onclick="event.stopPropagation(); showImageFullscreen('${ex.image.replace(/'/g, "\\'")}');"
             onerror="this.style.visibility='hidden'"
             alt="">
 
@@ -1840,9 +1753,7 @@ function populateLibraryMuscleFilter(){
     }
 
     const sourceList =
-        libraryMode === "online" ?
-            (onlineLibrary || []) :
-            exerciseLibrary;
+        exerciseLibrary || [];
 
     const uniqueMuscles =
         [...new Set(
@@ -1856,9 +1767,7 @@ function populateLibraryMuscleFilter(){
     uniqueMuscles.forEach(m=>{
 
         const label =
-            libraryMode === "online" ?
-                (ONLINE_MUSCLE_LABELS[m] || m) :
-                m;
+            LIBRARY_MUSCLE_LABELS[m] || m;
 
         html +=
             `<option value="${m}">${label}</option>`;
@@ -1870,8 +1779,7 @@ function populateLibraryMuscleFilter(){
 }
 
 
-// Aggiunge un esercizio scelto dalla libreria (locale o online)
-// alla giornata selezionata
+// Aggiunge un esercizio scelto dalla libreria alla giornata selezionata
 function addFromLibrary(sourceIndex){
 
     if(!libraryTargetDay){
@@ -1879,9 +1787,7 @@ function addFromLibrary(sourceIndex){
     }
 
     const sourceList =
-        libraryMode === "online" ?
-            (onlineLibrary || []) :
-            exerciseLibrary;
+        exerciseLibrary || [];
 
     const source =
         sourceList[sourceIndex];
@@ -1890,67 +1796,35 @@ function addFromLibrary(sourceIndex){
         return;
     }
 
-    if(libraryMode === "online"){
+    const muscleLabel =
+        LIBRARY_MUSCLE_LABELS[source.muscle] ||
+        source.muscle ||
+        "Generale";
 
-        const muscleLabel =
-            ONLINE_MUSCLE_LABELS[source.muscle] ||
-            source.muscle ||
-            "Generale";
+    const isCardio =
+        muscleLabel === "Cardio";
 
-        const isCardio =
-            muscleLabel === "Cardio";
+    workouts[libraryTargetDay].push({
 
-        workouts[libraryTargetDay].push({
+        id: Date.now(),
 
-            id: Date.now(),
+        title: source.title,
 
-            title: source.title,
+        muscle: muscleLabel,
 
-            muscle: muscleLabel,
+        sets: isCardio ? undefined : 3,
 
-            sets: isCardio ? undefined : 3,
+        reps: isCardio ? undefined : 12,
 
-            reps: isCardio ? undefined : 12,
+        rest: isCardio ? undefined : 60,
 
-            rest: isCardio ? undefined : 60,
+        duration: isCardio ? 20 : undefined,
 
-            duration: isCardio ? 20 : undefined,
+        pattern: "generale",
 
-            pattern: "generale",
+        image: source.image
 
-            image: source.image
-
-        });
-
-    }
-    else{
-
-        const isCardio =
-            source.muscle === "Cardio";
-
-        workouts[libraryTargetDay].push({
-
-            id: Date.now(),
-
-            title: source.title,
-
-            muscle: source.muscle,
-
-            sets: isCardio ? undefined : (source.sets || 3),
-
-            reps: isCardio ? undefined : (source.reps || 10),
-
-            rest: isCardio ? undefined : (source.rest || 60),
-
-            duration: isCardio ? (source.duration || 20) : undefined,
-
-            pattern: source.pattern,
-
-            image: `img/patterns/${source.pattern}.svg`
-
-        });
-
-    }
+    });
 
     renderDayEditor();
 

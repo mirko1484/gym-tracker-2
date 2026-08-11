@@ -148,7 +148,20 @@ class="exerciseImage"
 
 src=""
 
-alt="Esercizio">
+alt="Esercizio"
+
+onclick="openImageFullscreen()"
+
+style="cursor:zoom-in;">
+
+
+<!-- ============================= -->
+<!-- IMMAGINE A SCHERMO INTERO -->
+<!-- ============================= -->
+
+<div id="fullscreenImageOverlay" class="fullscreenImageOverlay" onclick="closeImageFullscreen()" style="display:none;">
+    <img id="fullscreenImage" src="" alt="Esercizio">
+</div>
 
 
 
@@ -316,6 +329,27 @@ Durata
         </button>
 
     </div>
+
+</div>
+
+
+
+<!-- ============================= -->
+<!-- NOTE PERSONALI -->
+<!-- ============================= -->
+
+<div class="statsCard" style="margin-top:15px;">
+
+<label class="formLabel">
+📝 Le tue note su questo esercizio
+</label>
+
+<textarea
+id="exerciseNotes"
+class="settingsInput"
+rows="3"
+placeholder="Es: peso usato, sensazioni, cosa migliorare la prossima volta..."
+onblur="saveExerciseNotes()"></textarea>
 
 </div>
 

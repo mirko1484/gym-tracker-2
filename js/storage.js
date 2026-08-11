@@ -286,3 +286,5 @@ function getDayColorClass(index){
     return DAY_COLOR_CLASSES[index % DAY_COLOR_CLASSES.length];
 
 }
+
+

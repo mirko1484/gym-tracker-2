@@ -199,7 +199,13 @@ onclick="saveWorkouts()">
 
 
 
+<!-- ============================= -->
+<!-- IMMAGINE A SCHERMO INTERO -->
+<!-- ============================= -->
 
+<div id="fullscreenImageOverlay" class="fullscreenImageOverlay" onclick="closeImageFullscreen()" style="display:none;">
+    <img id="fullscreenImage" src="" alt="">
+</div>
 
 
 
@@ -223,24 +229,6 @@ onclick="saveWorkouts()">
 <div class="modalContent libraryModalContent">
 
 <h2>📚 Libreria esercizi</h2>
-
-<div class="libraryTabRow">
-
-<button
-id="libraryTabLocal"
-class="libraryTabBtn libraryTabActive"
-onclick="switchLibraryMode('local')">
-🎨 Icone
-</button>
-
-<button
-id="libraryTabOnline"
-class="libraryTabBtn"
-onclick="switchLibraryMode('online')">
-📷 Foto online
-</button>
-
-</div>
 
 <input
 id="librarySearch"

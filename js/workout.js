@@ -507,6 +507,19 @@ function loadExercise(){
     }
 
 
+    const notesField =
+        document.getElementById(
+            "exerciseNotes"
+        );
+
+    if(notesField){
+
+        notesField.value =
+            exercise.notes || "";
+
+    }
+
+
 
 
 
@@ -2425,6 +2438,94 @@ function resetCardioTimer(){
     updateCardioDisplay();
 
     saveProgress();
+
+
+}
+
+
+
+// =======================================
+// IMMAGINE A SCHERMO INTERO
+// (funzioni condivise showImageFullscreen/closeImageFullscreen in storage.js)
+// =======================================
+
+function openImageFullscreen(){
+
+    const sourceImage =
+        document.getElementById(
+            "exerciseImage"
+        );
+
+    if(!sourceImage || !sourceImage.src){
+
+        return;
+
+    }
+
+    showImageFullscreen(sourceImage.src);
+
+}
+
+
+
+// =======================================
+// NOTE PERSONALI SULL'ESERCIZIO
+// =======================================
+
+async function saveExerciseNotes(){
+
+
+    const notesField =
+        document.getElementById(
+            "exerciseNotes"
+        );
+
+    if(
+        !notesField ||
+        !exercises[currentExercise]
+    ){
+
+        return;
+
+    }
+
+
+    const newValue =
+        notesField.value;
+
+
+    // Non salvare se non è cambiato nulla
+
+    if(
+        (exercises[currentExercise].notes || "") ===
+        newValue
+    ){
+
+        return;
+
+    }
+
+
+    exercises[currentExercise].notes =
+        newValue;
+
+
+    const { error } =
+        await supabaseClient
+            .from("schedules")
+            .update({ exercises: exercises })
+            .eq("customer_id", loggedInCustomerId)
+            .eq("day_letter", currentWorkout);
+
+
+    if(error){
+
+        console.error(
+            "Errore salvataggio nota:",
+            error
+        );
+
+    }
 
 
 }
