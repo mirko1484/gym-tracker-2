@@ -1993,10 +1993,10 @@ function closeSummary(){
 // =======================================
 
 
-function confirmFinish(){
+async function confirmFinish(){
 
 
-    finishWorkout();
+    await finishWorkout();
 
 
 }
@@ -2016,111 +2016,57 @@ function confirmFinish(){
 // =======================================
 
 
-function finishWorkout(){
+async function finishWorkout(){
 
 
 
-    const session = {
+    const durationMinutes =
+        getWorkoutDuration();
 
 
-
-        id:
-
-            Date.now(),
-
-
+    const exercisesArray =
+        Object.keys(workoutData)
+            .sort((a, b) => Number(a) - Number(b))
+            .map(key => workoutData[key]);
 
 
+    const { error } =
+        await supabaseClient
+            .from("history")
+            .insert({
 
-        day:
+                customer_id:
+                    loggedInCustomerId,
 
-            currentWorkout,
+                day_letter:
+                    currentWorkout,
 
+                workout_date:
+                    new Date().toISOString().slice(0, 10),
 
+                duration_seconds:
+                    durationMinutes * 60,
 
+                exercises:
+                    exercisesArray
 
-
-        date:
-
-            new Date()
-            .toLocaleDateString(
-                "it-IT"
-            ),
-
-
-
-
-
-        time:
-
-            new Date()
-            .toLocaleTimeString(
-                "it-IT"
-            ),
+            });
 
 
-
-
-
-        duration:
-
-            getWorkoutDuration(),
-
-
-
-
-
-        completed:
-
-            true,
-
-
-
-
-
-        exercises:
-
-            workoutData
-
-
-
-    };
-
-
-
-
-
-
-
-
-
-    if(
-        typeof addWorkout === "function"
-    ){
-
-
-        addWorkout(
-            session
-        );
-
-
-    }
-
-    else{
-
+    if(error){
 
         console.error(
-
-            "addWorkout non disponibile"
-
+            "Errore salvataggio storico:",
+            error
         );
 
+        alert(
+            "Errore nel salvataggio dell'allenamento. Riprova."
+        );
+
+        return;
 
     }
-
-
-
-
 
 
 
@@ -2130,15 +2076,9 @@ function finishWorkout(){
     );
 
 
-
-
-
     localStorage.removeItem(
         "workoutStartTime"
     );
-
-
-
 
 
     localStorage.removeItem(
@@ -2147,16 +2087,9 @@ function finishWorkout(){
 
 
 
-
-
-
     clearInterval(
         timerInterval
     );
-
-
-
-
 
 
 
@@ -2169,16 +2102,12 @@ function finishWorkout(){
 
 
 
-
-
-
     location.href =
         "index.html";
 
 
 
 }
-
 
 // =======================================
 // TIMER CARDIO (per esercizio)

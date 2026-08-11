@@ -1511,3 +1511,14 @@ button:hover{
     border-radius:12px;
 
 }
+
+/* =======================================
+   GRAFICO PROGRESSI PER ESERCIZIO
+======================================= */
+
+#exerciseProgressChart {
+
+    max-height:280px;
+    margin-top:15px;
+
+}

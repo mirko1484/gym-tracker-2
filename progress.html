@@ -156,13 +156,26 @@ Nessun dato disponibile
 
 <h2>
 
-Andamento Allenamenti
+Progressi per esercizio
 
 </h2>
 
+<p class="librarySubtitle" style="text-align:left;padding:0 0 15px;">
+Scegli un esercizio per vedere come è cresciuto il peso nel tempo.
+</p>
 
-<canvas id="volumeChart"></canvas>
+<select
+id="exerciseProgressSelect"
+class="settingsInput"
+onchange="loadExerciseProgressChart(this.value)">
+<option value="">Seleziona un esercizio...</option>
+</select>
 
+<canvas id="exerciseProgressChart"></canvas>
+
+<p id="exerciseProgressEmpty" class="librarySubtitle" style="display:none;">
+Non ci sono ancora dati sufficienti per questo esercizio.
+</p>
 
 </section>
 

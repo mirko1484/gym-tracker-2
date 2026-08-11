@@ -1,9 +1,13 @@
 // =======================================
 // GYM TRACKER
 // PROGRESS PAGE
-// VERSIONE PULITA
 // =======================================
 
+
+let loggedInCustomerId = null;
+
+// Cache in memoria dello storico, caricato una sola volta
+let cachedHistory = null;
 
 
 document.addEventListener(
@@ -20,26 +24,12 @@ document.addEventListener(
 
         }
 
-
-        console.log(
-            "Progress.js caricato"
-        );
+        loggedInCustomerId =
+            profile.id;
 
 
-
-        if(typeof getHistory !== "function"){
-
-
-            console.error(
-                "getHistory non disponibile"
-            );
-
-
-            return;
-
-
-        }
-
+        cachedHistory =
+            await fetchHistory();
 
 
         loadGeneralStats();
@@ -48,13 +38,47 @@ document.addEventListener(
 
         loadMuscleStats();
 
-        loadVolumeChart();
+        populateExerciseProgressSelect();
 
 
     }
 );
 
 
+
+
+// =======================================
+// CARICA STORICO DA SUPABASE (una volta sola)
+// =======================================
+
+
+async function fetchHistory(){
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("history")
+            .select("*")
+            .eq("customer_id", loggedInCustomerId)
+            .order("created_at", { ascending: true });
+
+
+    if(error){
+
+        console.error(
+            "Errore caricamento storico:",
+            error
+        );
+
+        return [];
+
+    }
+
+
+    return data || [];
+
+
+}
 
 
 
@@ -67,13 +91,10 @@ document.addEventListener(
 function loadGeneralStats(){
 
 
-
     const container =
         document.getElementById(
             "generalStats"
         );
-
-
 
     if(!container){
 
@@ -82,121 +103,47 @@ function loadGeneralStats(){
     }
 
 
-
     const history =
-        getHistory();
+        cachedHistory || [];
 
 
-
-    let totalMinutes = 0;
-
-    let totalVolume = 0;
+    let totalSeconds = 0;
 
 
+    history.forEach(session=>{
+
+        totalSeconds +=
+            session.duration_seconds || 0;
+
+    });
 
 
-    history.forEach(
-        workout => {
-
-
-            totalMinutes +=
-                Number(workout.duration) || 0;
-
-
-
-            totalVolume +=
-                calculateVolume(
-                    workout.exercises
-                );
-
-
-        }
-    );
-
-
-
+    const totalMinutes =
+        Math.round(totalSeconds / 60);
 
 
     const average =
-
-        history.length > 0
-
-        ?
-
-        Math.round(
-            totalMinutes / history.length
-        )
-
-        :
-
-        0;
-
-
-
+        history.length > 0 ?
+            Math.round(totalMinutes / history.length) :
+            0;
 
 
     container.innerHTML = `
 
-
-
         <div class="statRow">
-
-            <span>
-            Allenamenti
-            </span>
-
-            <span>
-            ${history.length}
-            </span>
-
+            <span>Allenamenti</span>
+            <span>${history.length}</span>
         </div>
 
-
-
-
         <div class="statRow">
-
-            <span>
-            Minuti totali
-            </span>
-
-            <span>
-            ${totalMinutes} min
-            </span>
-
+            <span>Minuti totali</span>
+            <span>${totalMinutes} min</span>
         </div>
 
-
-
-
         <div class="statRow">
-
-            <span>
-            Volume totale
-            </span>
-
-            <span>
-            ${totalVolume} kg
-            </span>
-
+            <span>Durata media</span>
+            <span>${average} min</span>
         </div>
-
-
-
-
-        <div class="statRow">
-
-            <span>
-            Durata media
-            </span>
-
-            <span>
-            ${average} min
-            </span>
-
-        </div>
-
-
 
     `;
 
@@ -206,26 +153,19 @@ function loadGeneralStats(){
 
 
 
-
-
-
-
-
 // =======================================
 // RECORD PERSONALI
+// (peso massimo sollevato per ciascun esercizio)
 // =======================================
 
 
 function loadRecords(){
 
 
-
     const container =
         document.getElementById(
             "records"
         );
-
-
 
     if(!container){
 
@@ -234,126 +174,74 @@ function loadRecords(){
     }
 
 
-
     const history =
-        getHistory();
-
+        cachedHistory || [];
 
 
     let records = {};
 
 
+    history.forEach(session=>{
 
+        (session.exercises || []).forEach(exercise=>{
 
-    history.forEach(
-        workout=>{
+            if(exercise.cardio || !exercise.sets){
 
+                return;
 
-            workout.exercises.forEach(
-                exercise=>{
+            }
 
+            exercise.sets.forEach(set=>{
 
-                    exercise.sets.forEach(
-                        set=>{
+                const weight =
+                    Number(set.weight) || 0;
 
+                if(weight > 0){
 
-                            const weight =
-                                Number(set.weight) || 0;
+                    if(
+                        !records[exercise.title] ||
+                        weight > records[exercise.title]
+                    ){
 
+                        records[exercise.title] =
+                            weight;
 
-
-                            if(weight > 0){
-
-
-
-                                if(
-                                    !records[exercise.title]
-                                    ||
-                                    weight >
-                                    records[exercise.title]
-                                ){
-
-
-                                    records[exercise.title] =
-                                        weight;
-
-
-                                }
-
-
-                            }
-
-
-                        }
-                    );
-
+                    }
 
                 }
-            );
+
+            });
+
+        });
+
+    });
 
 
-        }
-    );
-
-
-
-
-
-
-    if(
-        Object.keys(records).length === 0
-    ){
-
+    if(Object.keys(records).length === 0){
 
         container.innerHTML =
             "Nessun record disponibile";
-
 
         return;
 
     }
 
 
-
-
-
-
     let html = "";
 
 
+    Object.keys(records).forEach(exercise=>{
 
-    Object.keys(records).forEach(
-        exercise=>{
-
-
-            html += `
-
+        html += `
 
             <div class="statRow">
-
-                <span>
-
-                ${exercise}
-
-                </span>
-
-
-                <span>
-
-                ${records[exercise]} kg
-
-                </span>
-
-
+                <span>${exercise}</span>
+                <span>${records[exercise]} kg</span>
             </div>
 
+        `;
 
-            `;
-
-
-        }
-    );
-
+    });
 
 
     container.innerHTML =
@@ -361,11 +249,6 @@ function loadRecords(){
 
 
 }
-
-
-
-
-
 
 
 
@@ -378,13 +261,10 @@ function loadRecords(){
 function loadMuscleStats(){
 
 
-
     const container =
         document.getElementById(
             "muscleStats"
         );
-
-
 
     if(!container){
 
@@ -393,216 +273,160 @@ function loadMuscleStats(){
     }
 
 
-
-
     const history =
-        getHistory();
-
+        cachedHistory || [];
 
 
     let muscles = {};
 
 
+    history.forEach(session=>{
+
+        (session.exercises || []).forEach(exercise=>{
+
+            const muscle =
+                exercise.muscle || "Generale";
+
+            if(!muscles[muscle]){
+
+                muscles[muscle] = 0;
+
+            }
+
+            muscles[muscle]++;
+
+        });
+
+    });
 
 
-
-    history.forEach(
-        workout=>{
-
-
-            workout.exercises.forEach(
-                exercise=>{
-
-
-                    const muscle =
-                        exercise.muscle ||
-                        "Generale";
-
-
-
-                    if(!muscles[muscle]){
-
-                        muscles[muscle] = 0;
-
-                    }
-
-
-
-                    muscles[muscle]++;
-
-
-                }
-            );
-
-
-        }
-    );
-
-
-
-
-
-
-
-    if(
-        Object.keys(muscles).length === 0
-    ){
-
+    if(Object.keys(muscles).length === 0){
 
         container.innerHTML =
             "Nessun dato disponibile";
 
-
         return;
 
-
     }
-
-
-
-
 
 
     let html = "";
 
 
+    Object.keys(muscles).forEach(muscle=>{
 
-    Object.keys(muscles).forEach(
-        muscle=>{
-
-
-            html += `
-
+        html += `
 
             <div class="statRow">
-
-
-                <span>
-
-                💪 ${muscle}
-
-                </span>
-
-
-
-                <span>
-
-                ${muscles[muscle]}
-                volte
-
-                </span>
-
-
+                <span>💪 ${muscle}</span>
+                <span>${muscles[muscle]} volte</span>
             </div>
 
+        `;
 
-            `;
-
-
-        }
-    );
-
+    });
 
 
     container.innerHTML =
         html;
 
 
-
 }
 
 
 
 
-
-
-
-
-
 // =======================================
-// CALCOLO VOLUME
+// PROGRESSI PER ESERCIZIO
 // =======================================
 
 
-function calculateVolume(exercises){
+function populateExerciseProgressSelect(){
 
 
+    const select =
+        document.getElementById(
+            "exerciseProgressSelect"
+        );
 
-    let volume = 0;
+    if(!select){
 
-
-
-    if(!exercises){
-
-        return 0;
+        return;
 
     }
 
 
+    const history =
+        cachedHistory || [];
 
 
-    exercises.forEach(
-        exercise=>{
+    const titles =
+        new Set();
 
 
-            exercise.sets.forEach(
-                set=>{
+    history.forEach(session=>{
+
+        (session.exercises || []).forEach(exercise=>{
+
+            if(
+                !exercise.cardio &&
+                exercise.sets &&
+                exercise.sets.some(set => Number(set.weight) > 0)
+            ){
+
+                titles.add(exercise.title);
+
+            }
+
+        });
+
+    });
 
 
-                    volume +=
+    if(titles.size === 0){
 
-                    (
-                        Number(set.weight)
-                        ||
-                        0
-                    )
+        select.innerHTML =
+            `<option value="">Nessun esercizio con pesi registrato</option>`;
 
-                    *
+        return;
 
-                    (
-                        Number(set.reps)
-                        ||
-                        0
-                    );
+    }
 
 
-                }
-            );
+    let html =
+        `<option value="">Seleziona un esercizio...</option>`;
 
 
-        }
-    );
+    [...titles].sort().forEach(title=>{
+
+        html +=
+            `<option value="${title}">${title}</option>`;
+
+    });
 
 
-
-    return volume;
+    select.innerHTML =
+        html;
 
 
 }
 
 
+let progressChartInstance = null;
 
 
-
-
-
-
-
-// =======================================
-// GRAFICO VOLUME
-// =======================================
-
-
-function loadVolumeChart(){
-
+function loadExerciseProgressChart(exerciseTitle){
 
 
     const canvas =
         document.getElementById(
-            "volumeChart"
+            "exerciseProgressChart"
         );
 
-
+    const emptyMessage =
+        document.getElementById(
+            "exerciseProgressEmpty"
+        );
 
     if(!canvas){
 
@@ -611,184 +435,180 @@ function loadVolumeChart(){
     }
 
 
+    if(progressChartInstance){
 
-    if(typeof Chart === "undefined"){
+        progressChartInstance.destroy();
+
+        progressChartInstance = null;
+
+    }
 
 
-        console.error(
-            "Chart.js non caricato"
-        );
+    if(!exerciseTitle){
 
+        canvas.style.display = "none";
+
+        if(emptyMessage){
+            emptyMessage.style.display = "none";
+        }
 
         return;
 
     }
 
 
-
-
-
     const history =
-        [...getHistory()].reverse();
+        cachedHistory || [];
 
 
+    const labels = [];
+
+    const values = [];
 
 
+    history.forEach(session=>{
 
-    const labels =
-        [];
-
-
-
-    const values =
-        [];
-
-
-
-
-
-    history.forEach(
-        workout=>{
-
-
-            labels.push(
-                workout.date
+        const exercise =
+            (session.exercises || []).find(
+                ex => ex.title === exerciseTitle
             );
 
+        if(!exercise || !exercise.sets){
 
-
-            values.push(
-
-                calculateVolume(
-                    workout.exercises
-                )
-
-            );
-
+            return;
 
         }
-    );
 
 
+        const maxWeight =
+            Math.max(
+                0,
+                ...exercise.sets.map(set => Number(set.weight) || 0)
+            );
 
 
+        if(maxWeight > 0){
+
+            labels.push(
+
+                new Date(session.created_at)
+                    .toLocaleDateString("it-IT", {
+                        day: "2-digit",
+                        month: "2-digit"
+                    })
+
+            );
+
+            values.push(maxWeight);
+
+        }
+
+    });
 
 
-    new Chart(
+    if(values.length === 0){
+
+        canvas.style.display = "none";
+
+        if(emptyMessage){
+            emptyMessage.style.display = "block";
+        }
+
+        return;
+
+    }
+
+
+    canvas.style.display = "block";
+
+    if(emptyMessage){
+        emptyMessage.style.display = "none";
+    }
+
+
+    if(typeof Chart === "undefined"){
+
+        console.error(
+            "Chart.js non caricato"
+        );
+
+        return;
+
+    }
+
+
+    progressChartInstance = new Chart(
         canvas,
         {
 
+            type: "line",
 
-            type:"line",
-
-
-
-            data:{
-
+            data: {
 
                 labels,
 
-
-                datasets:[{
-
+                datasets: [{
 
                     label:
-                    "Volume kg",
+                        exerciseTitle + " (kg)",
 
-
-
-                    data:values,
-
-
+                    data: values,
 
                     borderColor:
-                    "#28a745",
-
-
+                        "#ffb800",
 
                     backgroundColor:
-                    "rgba(40,167,69,0.2)",
+                        "rgba(255,184,0,0.15)",
 
-
-
-                    tension:
-                    0.3
-
+                    tension: 0.3
 
                 }]
 
-
             },
 
+            options: {
 
+                responsive: true,
 
-            options:{
+                plugins: {
 
+                    legend: {
 
-                responsive:true,
+                        labels: {
 
-
-                plugins:{
-
-
-                    legend:{
-
-
-                        labels:{
-
-
-                            color:"white"
-
+                            color: "white"
 
                         }
 
-
                     }
-
 
                 },
 
+                scales: {
 
+                    x: {
 
-                scales:{
+                        ticks: {
 
-
-                    x:{
-
-
-                        ticks:{
-
-
-                            color:"white"
-
+                            color: "white"
 
                         }
-
 
                     },
 
+                    y: {
 
+                        ticks: {
 
-                    y:{
-
-
-                        ticks:{
-
-
-                            color:"white"
-
+                            color: "white"
 
                         }
 
-
                     }
-
 
                 }
 
-
             }
-
 
         }
     );

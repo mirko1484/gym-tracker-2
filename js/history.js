@@ -4,6 +4,8 @@
 // =======================================
 
 
+let loggedInCustomerId = null;
+
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -19,6 +21,9 @@ document.addEventListener(
 
         }
 
+        loggedInCustomerId =
+            profile.id;
+
 
         loadHistory();
 
@@ -29,36 +34,12 @@ document.addEventListener(
 
 
 
-
-
-
 // =======================================
-// CARICA STORICO
+// CARICA STORICO (da Supabase)
 // =======================================
 
 
-function loadHistory(){
-
-
-
-    if(typeof getHistory !== "function"){
-
-        console.error(
-            "getHistory non disponibile"
-        );
-
-        return;
-
-    }
-
-
-
-
-    const history =
-        getHistory();
-
-
-
+async function loadHistory(){
 
 
     const container =
@@ -66,16 +47,10 @@ function loadHistory(){
             "historyContainer"
         );
 
-
-
     const count =
         document.getElementById(
             "historyCount"
         );
-
-
-
-
 
     if(!container){
 
@@ -84,8 +59,22 @@ function loadHistory(){
     }
 
 
+    const { data: history, error } =
+        await supabaseClient
+            .from("history")
+            .select("*")
+            .eq("customer_id", loggedInCustomerId)
+            .order("created_at", { ascending: false });
 
 
+    if(error){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Errore nel caricamento dello storico.</p>`;
+
+        return;
+
+    }
 
 
     if(count){
@@ -96,240 +85,101 @@ function loadHistory(){
     }
 
 
-
-
-
-
-
     container.innerHTML = "";
-
-
-
-
-
 
 
     if(history.length === 0){
 
-
-
         container.innerHTML = `
-
 
             <section class="statsCard">
 
-
                 <h2>
-
                     Nessun allenamento salvato
-
                 </h2>
 
-
-
                 <p>
-
                     Completa il tuo primo allenamento
                     per iniziare lo storico.
-
                 </p>
-
 
             </section>
 
-
-
         `;
 
-
-
         return;
-
 
     }
 
 
+    history.forEach(session=>{
 
 
+        const card =
+            document.createElement("section");
 
+        card.className =
+            "statsCard";
 
 
+        const sessionDate =
+            new Date(session.created_at);
 
-    history.forEach(
+        const dateLabel =
+            sessionDate.toLocaleDateString("it-IT");
 
-        session => {
+        const timeLabel =
+            sessionDate.toLocaleTimeString("it-IT", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
 
+        const durationMinutes =
+            Math.round((session.duration_seconds || 0) / 60);
 
+        const dayNumber =
+            DAY_LETTERS_POOL.indexOf(session.day_letter) + 1;
 
-            const card =
-                document.createElement(
-                    "section"
-                );
 
+        card.innerHTML = `
 
+            <h2>
+                💪 Giornata ${dayNumber}
+            </h2>
 
+            <div class="statRow">
+                <span>📅 Data</span>
+                <span>${dateLabel}</span>
+            </div>
 
-            card.className =
-                "statsCard";
+            <div class="statRow">
+                <span>⏰ Ora</span>
+                <span>${timeLabel}</span>
+            </div>
 
+            <div class="statRow">
+                <span>⏱ Durata</span>
+                <span>${durationMinutes} min</span>
+            </div>
 
+            <hr>
 
+            <h3>
+                Esercizi
+            </h3>
 
+            ${createExerciseList(session.exercises || [])}
 
+        `;
 
 
-            card.innerHTML = `
+        container.appendChild(card);
 
 
-
-                <h2>
-
-                    💪 Giornata ${DAY_LETTERS_POOL.indexOf(session.day) + 1}
-
-                </h2>
-
-
-
-
-
-                <div class="statRow">
-
-
-                    <span>
-
-                        📅 Data
-
-                    </span>
-
-
-                    <span>
-
-                        ${session.date}
-
-                    </span>
-
-
-                </div>
-
-
-
-
-
-                <div class="statRow">
-
-
-                    <span>
-
-                        ⏰ Ora
-
-                    </span>
-
-
-                    <span>
-
-                        ${session.time}
-
-                    </span>
-
-
-                </div>
-
-
-
-
-
-                <div class="statRow">
-
-
-                    <span>
-
-                        ⏱ Durata
-
-                    </span>
-
-
-                    <span>
-
-                        ${session.duration || 0}
-                        min
-
-                    </span>
-
-
-                </div>
-
-
-
-
-
-                <div class="statRow">
-
-
-                    <span>
-
-                        🏋 Volume
-
-                    </span>
-
-
-                    <span>
-
-                        ${calculateVolume(session.exercises)}
-                        kg
-
-                    </span>
-
-
-                </div>
-
-
-
-
-
-                <hr>
-
-
-
-
-                <h3>
-
-                    Esercizi
-
-                </h3>
-
-
-
-
-
-                ${createExerciseList(
-                    session.exercises
-                )}
-
-
-
-            `;
-
-
-
-
-
-
-            container.appendChild(card);
-
-
-
-        }
-
-    );
-
+    });
 
 
 }
-
-
-
-
-
 
 
 
@@ -342,238 +192,79 @@ function loadHistory(){
 function createExerciseList(exercises){
 
 
-
     let html = "";
 
 
+    exercises.forEach(exercise=>{
 
 
-
-    exercises.forEach(
-
-        exercise => {
-
-
-
-
-            html += `
-
-
+        html += `
 
             <div class="exerciseHistory">
 
-
-
-
-
                 <span class="historyMuscle">
-
-
-                    🏋 
-                    ${exercise.muscle || "Generale"}
-
-
+                    🏋 ${exercise.muscle || "Generale"}
                 </span>
 
-
-
-
-
                 <h3>
-
-
                     ${exercise.title}
-
-
                 </h3>
 
+        `;
 
 
+        if(exercise.cardio){
 
-
-
-
-            `;
-
-
-
-
-
-
-
-
-            exercise.sets.forEach(
-
-                (set,index)=>{
-
-
-
-
-
-
-                    if(
-                        set.weight ||
-                        set.reps
-                    ){
-
-
-
-                        html += `
-
-
-
-                        <p>
-
-
-                        Serie ${index + 1}:
-
-                        <strong>
-
-                        ${set.weight || 0}
-                        kg
-
-                        </strong>
-
-
-                        x
-
-
-                        <strong>
-
-                        ${set.reps || 0}
-
-                        </strong>
-
-
-                        </p>
-
-
-
-                        `;
-
-
-
-                    }
-
-
-
-
-                }
-
-            );
-
-
-
-
-
+            const minutes =
+                Math.round((exercise.elapsedSeconds || 0) / 60);
 
             html += `
 
-
-            </div>
-
-
-
-            <hr>
-
-
+                <p>
+                Durata: <strong>${minutes} min</strong>
+                ${exercise.completed ? "✅" : ""}
+                </p>
 
             `;
 
-
-
-
-
         }
+        else if(exercise.sets){
 
-    );
+            exercise.sets.forEach((set, index)=>{
 
+                if(set.weight || set.reps){
 
+                    html += `
 
+                        <p>
+                        Serie ${index + 1}:
+                        <strong>${set.weight || 0} kg</strong>
+                        x
+                        <strong>${set.reps || 0}</strong>
+                        </p>
 
-
-
-    return html;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// =======================================
-// CALCOLO VOLUME TOTALE
-// =======================================
-
-
-function calculateVolume(exercises){
-
-
-
-    let volume = 0;
-
-
-
-
-
-
-    exercises.forEach(
-
-        exercise => {
-
-
-
-            exercise.sets.forEach(
-
-                set => {
-
-
-
-
-
-                    const weight =
-                        Number(set.weight) || 0;
-
-
-
-
-                    const reps =
-                        Number(set.reps) || 0;
-
-
-
-
-
-
-                    volume +=
-                        weight * reps;
-
-
-
+                    `;
 
                 }
 
-            );
-
-
+            });
 
         }
 
-    );
+
+        html += `
+
+            </div>
+
+            <hr>
+
+        `;
 
 
+    });
 
 
-
-
-    return volume;
-
+    return html;
 
 
 }
