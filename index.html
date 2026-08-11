@@ -20,11 +20,16 @@
 
 <div class="container">
 
-    <button
-    class="secondaryButton"
-    onclick="logoutUser()">
-    Esci
-    </button>
+    <div class="topBar">
+
+        <button
+        class="iconButton"
+        onclick="location.href='menu.html'"
+        aria-label="Menu">
+        ☰
+        </button>
+
+    </div>
 
     <!-- ========================= -->
     <!-- HEADER -->
@@ -132,63 +137,15 @@
 
     <section class="workouts">
 
-    <h2>Inizia Allenamento</h2>
+    <button
+    class="dayButton dayA"
+    onclick="location.href='start-workout.html'">
 
+    🏋️ Inizia Allenamento
 
-    <div id="workoutButtonsContainer">
-        <!-- generato dinamicamente da app.js -->
-    </div>
-
+    </button>
 
 </section>
-
-
-    <!-- ========================= -->
-    <!-- MENU -->
-    <!-- ========================= -->
-
-    <section class="homeMenu">
-
-        <button
-            class="secondaryButton"
-            onclick="location.href='history.html'">
-
-            📅
-            <br>
-            Cronologia
-
-        </button>
-		
-		<button
-			class="secondaryButton"
-			onclick="location.href='workout-manager.html'">
-
-			🏋️ Gestisci schede
-
-		</button>
-
-        <button
-            class="secondaryButton"
-            onclick="location.href='progress.html'">
-
-            📈
-            <br>
-            Progressi
-
-        </button>
-
-        <button
-            class="secondaryButton"
-            onclick="location.href='settings.html'">
-
-            ⚙️
-            <br>
-            Profilo
-
-        </button>
-
-    </section>
-
 
 
     <!-- ========================= -->

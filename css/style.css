@@ -1522,3 +1522,30 @@ button:hover{
     margin-top:15px;
 
 }
+
+/* =======================================
+   BARRA SUPERIORE / ICONA MENU
+======================================= */
+
+.topBar {
+
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:10px;
+
+}
+
+.iconButton {
+
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    width:44px;
+    height:44px;
+    font-size:20px;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+}
