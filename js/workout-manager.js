@@ -1431,6 +1431,7 @@ const LIBRARY_MUSCLE_LABELS = {
     "adductors": "Adduttori",
     "biceps": "Bicipiti",
     "calves": "Polpacci",
+    "cardio": "Cardio",
     "chest": "Petto",
     "forearms": "Avambracci",
     "glutes": "Glutei",
@@ -1521,11 +1522,19 @@ async function loadExerciseLibrary(){
 
                     title: ex.name,
 
+                    // La loro categoria "cardio" vince sul muscolo primario:
+                    // altrimenti esercizi come "Bicycling" (muscolo: quadricipiti,
+                    // categoria: cardio) sparivano dal filtro Cardio
+
                     muscle:
-                        ex.primaryMuscles &&
-                        ex.primaryMuscles[0] ?
-                            ex.primaryMuscles[0] :
-                            "",
+                        ex.category === "cardio" ?
+                            "cardio" :
+                            (
+                                ex.primaryMuscles &&
+                                ex.primaryMuscles[0] ?
+                                    ex.primaryMuscles[0] :
+                                    ""
+                            ),
 
                     equipment:
                         mapLibraryEquipment(ex.equipment),
