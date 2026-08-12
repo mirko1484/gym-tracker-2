@@ -78,25 +78,6 @@ Esercizio 1 di 10
 
 
 
-
-
-
-<div class="timerBox">
-
-
-⏱
-
-<span id="workoutTimer">
-
-00:00:00
-
-</span>
-
-
-</div>
-
-
-
 </header>
 
 
@@ -287,6 +268,34 @@ Ripetizioni
 
 </table>
 
+
+<div class="restTimerBox">
+
+    <div id="restTimerDisplay" class="restTimerDisplay">
+        00:00
+    </div>
+
+    <div class="cardioTimerButtons">
+
+        <button
+        type="button"
+        class="secondaryButton"
+        id="restStartPauseBtn"
+        onclick="toggleRestTimer()">
+        ▶️ Avvia recupero
+        </button>
+
+        <button
+        type="button"
+        class="secondaryButton"
+        onclick="resetRestTimer()">
+        ↺ Azzera
+        </button>
+
+    </div>
+
+</div>
+
 </div>
 
 
@@ -371,23 +380,16 @@ onblur="saveExerciseNotes()"></textarea>
 <!-- ============================= -->
 
 
-<label class="checkBox">
+<button
+type="button"
+id="exerciseDoneBtn"
+class="exerciseDoneToggle"
+onclick="toggleExerciseDone()">
 
+<span id="exerciseDoneIcon">☐</span>
+Segna come completato
 
-
-<input
-
-type="checkbox"
-
-id="exerciseDone">
-
-
-
-Esercizio completato
-
-
-
-</label>
+</button>
 
 
 
@@ -447,27 +449,68 @@ onclick="nextExercise()">
 
 
 <!-- ============================= -->
-<!-- COMPLETAMENTO SESSIONE -->
+<!-- SCHEDA COMPLETATA: CONTINUA O FERMATI -->
 <!-- ============================= -->
 
 
-<label class="checkBox sessionCheck">
+<div id="workoutCompleteScreen" class="statsCard" style="display:none; text-align:center;">
+
+    <h2>🎉 Scheda completata!</h2>
+
+    <p class="librarySubtitle">
+    Vuoi fermarti qui o aggiungere un altro esercizio a questa sessione?
+    </p>
+
+    <button
+    class="dayButton dayA"
+    onclick="showSummary()">
+    🏁 Termina l'allenamento
+    </button>
+
+    <button
+    class="secondaryButton"
+    style="margin-top:10px;"
+    onclick="openExtraExerciseModal()">
+    ➕ Aggiungi un esercizio
+    </button>
+
+</div>
 
 
+
+<!-- ============================= -->
+<!-- MODALE: AGGIUNGI ESERCIZIO EXTRA -->
+<!-- (solo per questa sessione, non salvato in scheda) -->
+<!-- ============================= -->
+
+<div id="extraExerciseModal" class="modal">
+
+<div class="modalContent libraryModalContent">
+
+<h2>➕ Aggiungi un esercizio</h2>
+
+<p class="librarySubtitle">
+Solo per l'allenamento di oggi — non verrà salvato nella scheda.
+</p>
 
 <input
+id="extraExerciseSearch"
+class="settingsInput"
+type="text"
+placeholder="Cerca esercizio..."
+oninput="renderExtraExerciseList()">
 
-type="checkbox"
+<div id="extraExerciseList" class="libraryList"></div>
 
-id="sessionDone">
+<button
+class="secondaryButton"
+onclick="closeExtraExerciseModal()">
+Chiudi
+</button>
 
+</div>
 
-
-Allenamento completato
-
-
-
-</label>
+</div>
 
 
 
@@ -541,15 +584,6 @@ Riepilogo allenamento
 
 
 
-
-
-
-
-<p id="summaryVolume">
-
-🏋 Volume totale:
-
-</p>
 
 
 

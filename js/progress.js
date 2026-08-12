@@ -107,42 +107,11 @@ function loadGeneralStats(){
         cachedHistory || [];
 
 
-    let totalSeconds = 0;
-
-
-    history.forEach(session=>{
-
-        totalSeconds +=
-            session.duration_seconds || 0;
-
-    });
-
-
-    const totalMinutes =
-        Math.round(totalSeconds / 60);
-
-
-    const average =
-        history.length > 0 ?
-            Math.round(totalMinutes / history.length) :
-            0;
-
-
     container.innerHTML = `
 
         <div class="statRow">
             <span>Allenamenti</span>
             <span>${history.length}</span>
-        </div>
-
-        <div class="statRow">
-            <span>Minuti totali</span>
-            <span>${totalMinutes} min</span>
-        </div>
-
-        <div class="statRow">
-            <span>Durata media</span>
-            <span>${average} min</span>
         </div>
 
     `;
@@ -368,11 +337,16 @@ function populateExerciseProgressSelect(){
 
         (session.exercises || []).forEach(exercise=>{
 
-            if(
+            const hasWeightData =
                 !exercise.cardio &&
                 exercise.sets &&
-                exercise.sets.some(set => Number(set.weight) > 0)
-            ){
+                exercise.sets.some(set => Number(set.weight) > 0);
+
+            const hasCardioData =
+                exercise.cardio &&
+                Number(exercise.elapsedSeconds) > 0;
+
+            if(hasWeightData || hasCardioData){
 
                 titles.add(exercise.title);
 
@@ -465,6 +439,8 @@ function loadExerciseProgressChart(exerciseTitle){
 
     const values = [];
 
+    let isCardioExercise = false;
+
 
     history.forEach(session=>{
 
@@ -473,7 +449,42 @@ function loadExerciseProgressChart(exerciseTitle){
                 ex => ex.title === exerciseTitle
             );
 
-        if(!exercise || !exercise.sets){
+        if(!exercise){
+
+            return;
+
+        }
+
+
+        if(exercise.cardio){
+
+            isCardioExercise = true;
+
+            const minutes =
+                Math.round((Number(exercise.elapsedSeconds) || 0) / 60);
+
+            if(minutes > 0){
+
+                labels.push(
+
+                    new Date(session.created_at)
+                        .toLocaleDateString("it-IT", {
+                            day: "2-digit",
+                            month: "2-digit"
+                        })
+
+                );
+
+                values.push(minutes);
+
+            }
+
+            return;
+
+        }
+
+
+        if(!exercise.sets){
 
             return;
 
@@ -550,7 +561,8 @@ function loadExerciseProgressChart(exerciseTitle){
                 datasets: [{
 
                     label:
-                        exerciseTitle + " (kg)",
+                        exerciseTitle +
+                        (isCardioExercise ? " (min)" : " (kg)"),
 
                     data: values,
 

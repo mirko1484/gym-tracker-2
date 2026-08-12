@@ -53,36 +53,6 @@ document.addEventListener(
         initializeWorkout();
 
 
-
-        const sessionDone =
-            document.getElementById(
-                "sessionDone"
-            );
-
-
-
-        if(sessionDone){
-
-
-            sessionDone.addEventListener(
-                "change",
-                function(){
-
-
-                    if(this.checked){
-
-                        showSummary();
-
-                    }
-
-
-                }
-            );
-
-
-        }
-
-
     }
 
 );
@@ -577,6 +547,8 @@ function loadExercise(){
 
     pauseCardioTimer();
 
+    pauseRestTimer();
+
 
 
 
@@ -870,25 +842,20 @@ function loadExercise(){
 
 
 
-    const checkbox =
+    const doneBtn =
         document.getElementById(
-            "exerciseDone"
+            "exerciseDoneBtn"
         );
 
 
 
-    if(checkbox){
+    if(doneBtn){
 
-
-        checkbox.checked =
-
-            workoutData[currentExercise]
-            .completed;
-
+        updateExerciseDoneButton(
+            workoutData[currentExercise].completed
+        );
 
     }
-
-
 
 
 
@@ -922,6 +889,8 @@ function loadExercise(){
     else{
 
         createSetsTable();
+
+        initRestTimer(exercise.rest);
 
     }
 
@@ -1180,41 +1149,61 @@ function addInputListeners(){
 // =======================================
 
 
-document.addEventListener(
-
-    "change",
-
-    function(e){
+function toggleExerciseDone(){
 
 
+    if(!workoutData[currentExercise]){
 
-        if(
-
-            e.target.id ===
-            "exerciseDone"
-
-        ){
-
-
-
-            workoutData[currentExercise]
-            .completed =
-
-                e.target.checked;
-
-
-
-            saveProgress();
-
-
-
-        }
-
-
+        return;
 
     }
 
-);
+
+    workoutData[currentExercise].completed =
+        !workoutData[currentExercise].completed;
+
+
+    updateExerciseDoneButton(
+        workoutData[currentExercise].completed
+    );
+
+
+    saveProgress();
+
+
+}
+
+
+function updateExerciseDoneButton(isDone){
+
+
+    const btn =
+        document.getElementById(
+            "exerciseDoneBtn"
+        );
+
+    const icon =
+        document.getElementById(
+            "exerciseDoneIcon"
+        );
+
+    if(!btn || !icon){
+
+        return;
+
+    }
+
+
+    btn.classList.toggle(
+        "isDone",
+        isDone
+    );
+
+    icon.textContent =
+        isDone ? "✅" : "☐";
+
+
+}
 
 
 
@@ -1314,6 +1303,94 @@ function nextExercise(){
 
 
     }
+    else{
+
+        showWorkoutCompleteScreen();
+
+    }
+
+
+}
+
+
+
+
+function showWorkoutCompleteScreen(){
+
+
+    pauseCardioTimer();
+
+    pauseRestTimer();
+
+
+    const exerciseCard =
+        document.querySelector(".exerciseCard");
+
+    const navigation =
+        document.querySelector(".navigation");
+
+    const completeScreen =
+        document.getElementById(
+            "workoutCompleteScreen"
+        );
+
+
+    if(exerciseCard){
+
+        exerciseCard.style.display = "none";
+
+    }
+
+    if(navigation){
+
+        navigation.style.display = "none";
+
+    }
+
+    if(completeScreen){
+
+        completeScreen.style.display = "block";
+
+    }
+
+
+}
+
+
+
+
+function hideWorkoutCompleteScreen(){
+
+
+    const exerciseCard =
+        document.querySelector(".exerciseCard");
+
+    const navigation =
+        document.querySelector(".navigation");
+
+    const completeScreen =
+        document.getElementById(
+            "workoutCompleteScreen"
+        );
+
+
+    if(exerciseCard){
+
+        exerciseCard.style.display = "block";
+
+    }
+
+    if(navigation){
+
+        navigation.style.display = "flex";
+
+    }
+
+    if(completeScreen){
+
+        completeScreen.style.display = "none";
+
+    }
 
 
 }
@@ -1396,37 +1473,10 @@ function startTimer(){
     }
 
 
-
-
-
-    updateTimer();
-
-
-
-
-
-    if(timerInterval){
-
-
-        clearInterval(
-            timerInterval
-        );
-
-
-    }
-
-
-
-
-    timerInterval =
-
-        setInterval(
-
-            updateTimer,
-
-            1000
-
-        );
+    // Nota: non mostriamo più un cronometro che scorre in
+    // continuazione durante l'allenamento — startTime resta
+    // comunque salvato, serve solo per calcolare la durata
+    // totale alla fine (riepilogo e cronologia).
 
 
 }
@@ -1742,80 +1792,20 @@ function showSummary(){
 
     let completed = 0;
 
-    let volume = 0;
-
-
-
-
 
     workoutData.forEach(
 
         exercise=>{
 
-
-
             if(exercise.completed){
-
 
                 completed++;
 
-
             }
-
-
-
-
-
-
-            exercise.sets.forEach(
-
-                set=>{
-
-
-
-                    const weight =
-
-                        Number(
-                            set.weight
-                        )
-                        ||
-                        0;
-
-
-
-
-                    const reps =
-
-                        Number(
-                            set.reps
-                        )
-                        ||
-                        0;
-
-
-
-
-                    volume +=
-
-                        weight * reps;
-
-
-
-                }
-
-
-            );
-
-
 
         }
 
-
     );
-
-
-
-
 
 
 
@@ -1833,17 +1823,6 @@ function showSummary(){
 
 
 
-    const volumeText =
-        document.getElementById(
-            "summaryVolume"
-        );
-
-
-
-
-
-
-
     if(duration){
 
 
@@ -1858,10 +1837,6 @@ function showSummary(){
 
 
     }
-
-
-
-
 
 
 
@@ -1884,31 +1859,6 @@ function showSummary(){
             +
 
             exercises.length;
-
-
-    }
-
-
-
-
-
-
-
-    if(volumeText){
-
-
-        volumeText.textContent =
-
-
-            "🏋 Volume totale: "
-
-            +
-
-            volume
-
-            +
-
-            " kg";
 
 
     }
@@ -2219,16 +2169,7 @@ function updateCardioDisplay(){
 
         data.completed = true;
 
-        const checkbox =
-            document.getElementById(
-                "exerciseDone"
-            );
-
-        if(checkbox){
-
-            checkbox.checked = true;
-
-        }
+        updateExerciseDoneButton(true);
 
     }
 
@@ -2352,16 +2293,7 @@ function resetCardioTimer(){
     }
 
 
-    const checkbox =
-        document.getElementById(
-            "exerciseDone"
-        );
-
-    if(checkbox){
-
-        checkbox.checked = false;
-
-    }
+    updateExerciseDoneButton(false);
 
 
     updateCardioDisplay();
@@ -2455,6 +2387,526 @@ async function saveExerciseNotes(){
         );
 
     }
+
+
+}
+
+
+
+// =======================================
+// TIMER DI RECUPERO (per esercizio)
+// =======================================
+
+let restInterval = null;
+
+let restRemainingSeconds = 60;
+
+let restTargetSeconds = 60;
+
+
+function initRestTimer(restSeconds){
+
+
+    restTargetSeconds =
+        restSeconds || 60;
+
+    restRemainingSeconds =
+        restTargetSeconds;
+
+
+    updateRestDisplay();
+
+
+    const btn =
+        document.getElementById(
+            "restStartPauseBtn"
+        );
+
+    if(btn){
+
+        btn.innerHTML =
+            "▶️ Avvia recupero";
+
+    }
+
+
+}
+
+
+function updateRestDisplay(){
+
+
+    const display =
+        document.getElementById(
+            "restTimerDisplay"
+        );
+
+    if(!display){
+
+        return;
+
+    }
+
+
+    const minutes =
+        Math.floor(restRemainingSeconds / 60);
+
+    const seconds =
+        restRemainingSeconds % 60;
+
+
+    display.textContent =
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0");
+
+
+}
+
+
+function toggleRestTimer(){
+
+
+    if(restInterval){
+
+        pauseRestTimer();
+
+    }
+    else{
+
+        startRestTimer();
+
+    }
+
+
+}
+
+
+function startRestTimer(){
+
+
+    if(restInterval){
+
+        return;
+
+    }
+
+    if(restRemainingSeconds <= 0){
+
+        return;
+
+    }
+
+
+    restInterval =
+        setInterval(
+            function(){
+
+                restRemainingSeconds--;
+
+                updateRestDisplay();
+
+                if(restRemainingSeconds <= 0){
+
+                    pauseRestTimer();
+
+                    const display =
+                        document.getElementById(
+                            "restTimerDisplay"
+                        );
+
+                    if(display){
+
+                        display.style.color =
+                            "#2fd97c";
+
+                    }
+
+                }
+
+            },
+            1000
+        );
+
+
+    const btn =
+        document.getElementById(
+            "restStartPauseBtn"
+        );
+
+    if(btn){
+
+        btn.innerHTML =
+            "⏸️ Pausa";
+
+    }
+
+
+}
+
+
+function pauseRestTimer(){
+
+
+    if(restInterval){
+
+        clearInterval(restInterval);
+
+        restInterval = null;
+
+    }
+
+
+    const btn =
+        document.getElementById(
+            "restStartPauseBtn"
+        );
+
+    if(btn){
+
+        btn.innerHTML =
+            "▶️ Avvia recupero";
+
+    }
+
+
+}
+
+
+function resetRestTimer(){
+
+
+    pauseRestTimer();
+
+
+    restRemainingSeconds =
+        restTargetSeconds;
+
+
+    const display =
+        document.getElementById(
+            "restTimerDisplay"
+        );
+
+    if(display){
+
+        display.style.color = "";
+
+    }
+
+
+    updateRestDisplay();
+
+
+}
+
+
+
+// =======================================
+// AGGIUNGI ESERCIZIO EXTRA (solo per oggi)
+// =======================================
+
+let extraExerciseLibrary = null;
+
+const EXTRA_LIBRARY_URL =
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json";
+
+const EXTRA_LIBRARY_IMAGE_BASE =
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/";
+
+
+async function openExtraExerciseModal(){
+
+
+    const completeScreen =
+        document.getElementById(
+            "workoutCompleteScreen"
+        );
+
+    if(completeScreen){
+
+        completeScreen.style.display = "none";
+
+    }
+
+
+    const modal =
+        document.getElementById(
+            "extraExerciseModal"
+        );
+
+    if(modal){
+
+        modal.style.display = "flex";
+
+    }
+
+
+    const search =
+        document.getElementById(
+            "extraExerciseSearch"
+        );
+
+    if(search){
+
+        search.value = "";
+
+    }
+
+
+    if(!extraExerciseLibrary){
+
+        await loadExtraExerciseLibrary();
+
+    }
+    else{
+
+        renderExtraExerciseList();
+
+    }
+
+
+}
+
+
+function closeExtraExerciseModal(){
+
+
+    const modal =
+        document.getElementById(
+            "extraExerciseModal"
+        );
+
+    if(modal){
+
+        modal.style.display = "none";
+
+    }
+
+
+    showWorkoutCompleteScreen();
+
+
+}
+
+
+async function loadExtraExerciseLibrary(){
+
+
+    const container =
+        document.getElementById(
+            "extraExerciseList"
+        );
+
+    if(container){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Caricamento libreria...</p>`;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(EXTRA_LIBRARY_URL);
+
+        const data =
+            await response.json();
+
+        extraExerciseLibrary =
+            data.map(ex=>{
+
+                return {
+
+                    title: ex.name,
+
+                    muscle:
+                        ex.category === "cardio" ?
+                            "Cardio" :
+                            (
+                                ex.primaryMuscles &&
+                                ex.primaryMuscles[0] ?
+                                    ex.primaryMuscles[0] :
+                                    "Generale"
+                            ),
+
+                    image:
+                        ex.images && ex.images[0] ?
+                            EXTRA_LIBRARY_IMAGE_BASE + ex.images[0] :
+                            ""
+
+                };
+
+            })
+            .filter(ex => ex.image);
+
+
+        renderExtraExerciseList();
+
+
+    }
+    catch(err){
+
+        extraExerciseLibrary = [];
+
+        if(container){
+
+            container.innerHTML =
+                `<p class="librarySubtitle">Impossibile caricare la libreria.</p>`;
+
+        }
+
+    }
+
+
+}
+
+
+function renderExtraExerciseList(){
+
+
+    const container =
+        document.getElementById(
+            "extraExerciseList"
+        );
+
+    if(!container || !extraExerciseLibrary){
+
+        return;
+
+    }
+
+
+    const search =
+        document.getElementById(
+            "extraExerciseSearch"
+        );
+
+    const query =
+        search ? search.value.trim().toLowerCase() : "";
+
+
+    const filtered =
+        extraExerciseLibrary
+            .filter(ex =>
+                !query ||
+                ex.title.toLowerCase().includes(query)
+            )
+            .slice(0, 60);
+
+
+    container.innerHTML = "";
+
+
+    if(filtered.length === 0){
+
+        container.innerHTML =
+            `<p class="librarySubtitle">Nessun esercizio trovato</p>`;
+
+        return;
+
+    }
+
+
+    filtered.forEach(ex=>{
+
+
+        const sourceIndex =
+            extraExerciseLibrary.indexOf(ex);
+
+        const card =
+            document.createElement("div");
+
+        card.className = "libraryCard";
+
+        card.innerHTML = `
+
+            <img
+            class="libraryCardImg libraryCardImgPhoto"
+            src="${ex.image}"
+            loading="lazy"
+            onerror="this.style.visibility='hidden'"
+            alt="">
+
+            <div class="libraryCardInfo">
+                <strong>${ex.title}</strong>
+                <span>${ex.muscle}</span>
+            </div>
+
+            <button
+            class="libraryAddBtn"
+            onclick="addExtraExercise(${sourceIndex})">
+            ➕
+            </button>
+
+        `;
+
+        container.appendChild(card);
+
+
+    });
+
+
+}
+
+
+function addExtraExercise(sourceIndex){
+
+
+    const source =
+        extraExerciseLibrary[sourceIndex];
+
+    if(!source){
+
+        return;
+
+    }
+
+
+    const isCardio =
+        source.muscle === "Cardio";
+
+
+    exercises.push({
+
+        title: source.title,
+
+        muscle: source.muscle,
+
+        sets: isCardio ? undefined : 3,
+
+        reps: isCardio ? undefined : 12,
+
+        rest: isCardio ? undefined : 60,
+
+        duration: isCardio ? 20 : undefined,
+
+        image: source.image
+
+    });
+
+
+    currentExercise =
+        exercises.length - 1;
+
+
+    const modal =
+        document.getElementById(
+            "extraExerciseModal"
+        );
+
+    if(modal){
+
+        modal.style.display = "none";
+
+    }
+
+
+    hideWorkoutCompleteScreen();
+
+
+    loadExercise();
 
 
 }

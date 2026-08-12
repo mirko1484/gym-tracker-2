@@ -1549,3 +1549,64 @@ button:hover{
     justify-content:center;
 
 }
+
+/* =======================================
+   TIMER DI RECUPERO
+======================================= */
+
+.restTimerBox {
+
+    text-align:center;
+    background:var(--surface-raised);
+    border-left:4px solid var(--accent);
+    border-radius:10px;
+    padding:20px 16px;
+    margin-top:15px;
+
+}
+
+.restTimerDisplay {
+
+    font-family:var(--font-mono);
+    font-size:38px;
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:2px;
+
+}
+
+/* =======================================
+   SPUNTA ESERCIZIO COMPLETATO (stile bottone)
+======================================= */
+
+.exerciseDoneToggle {
+
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top:20px;
+    padding:14px;
+    font-size:16px;
+    font-weight:bold;
+    background:var(--surface-raised);
+    border:1px solid var(--line);
+    border-radius:12px;
+    color:var(--text-muted);
+
+}
+
+.exerciseDoneToggle.isDone {
+
+    background:rgba(47,217,124,.15);
+    border-color:#2fd97c;
+    color:#2fd97c;
+
+}
+
+#exerciseDoneIcon {
+
+    font-size:20px;
+
+}

@@ -200,31 +200,6 @@ function loadStatistics(){
     const totalWorkouts =
         history.length;
 
-    let totalSeconds = 0;
-
-    history.forEach(function(workout){
-
-        totalSeconds +=
-            Number(workout.duration_seconds) || 0;
-
-    });
-
-    const totalMinutes =
-        Math.floor(totalSeconds / 60);
-
-    const totalHours =
-        Math.floor(totalMinutes / 60);
-
-    let averageTime = 0;
-
-    if(totalWorkouts > 0){
-
-        averageTime =
-            Math.round(
-                totalMinutes / totalWorkouts
-            );
-
-    }
 
     let lastWorkout = "--";
 
@@ -246,16 +221,6 @@ function loadStatistics(){
             "lastWorkout"
         );
 
-    const hoursElement =
-        document.getElementById(
-            "totalHours"
-        );
-
-    const averageElement =
-        document.getElementById(
-            "averageTime"
-        );
-
     if(totalElement){
 
         totalElement.textContent =
@@ -267,20 +232,6 @@ function loadStatistics(){
 
         lastElement.textContent =
             lastWorkout;
-
-    }
-
-    if(hoursElement){
-
-        hoursElement.textContent =
-            totalHours;
-
-    }
-
-    if(averageElement){
-
-        averageElement.textContent =
-            averageTime + " min";
 
     }
 
