@@ -477,6 +477,12 @@ function loadExercise(){
     }
 
 
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+
     const notesField =
         document.getElementById(
             "exerciseNotes"
@@ -2954,3 +2960,105 @@ function closeNotesModal(){
 
 
 }
+
+
+
+// =======================================
+// SWIPE PER CAMBIARE ESERCIZIO
+// =======================================
+
+(function(){
+
+
+    let touchStartX = 0;
+
+    let touchStartY = 0;
+
+
+    const SWIPE_MIN_DISTANCE = 60;
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function(){
+
+
+            const card =
+                document.querySelector(
+                    ".exerciseCard"
+                );
+
+            if(!card){
+
+                return;
+
+            }
+
+
+            card.addEventListener(
+                "touchstart",
+                function(e){
+
+                    touchStartX =
+                        e.changedTouches[0].screenX;
+
+                    touchStartY =
+                        e.changedTouches[0].screenY;
+
+                },
+                { passive: true }
+            );
+
+
+            card.addEventListener(
+                "touchend",
+                function(e){
+
+
+                    const touchEndX =
+                        e.changedTouches[0].screenX;
+
+                    const touchEndY =
+                        e.changedTouches[0].screenY;
+
+
+                    const deltaX =
+                        touchEndX - touchStartX;
+
+                    const deltaY =
+                        touchEndY - touchStartY;
+
+
+                    // Solo se il movimento è chiaramente
+                    // orizzontale (non uno scroll verticale)
+                    // e supera una soglia minima
+
+                    if(
+                        Math.abs(deltaX) > SWIPE_MIN_DISTANCE &&
+                        Math.abs(deltaX) > Math.abs(deltaY) * 1.5
+                    ){
+
+                        if(deltaX < 0){
+
+                            nextExercise();
+
+                        }
+                        else{
+
+                            previousExercise();
+
+                        }
+
+                    }
+
+
+                },
+                { passive: true }
+            );
+
+
+        }
+    );
+
+
+})();
