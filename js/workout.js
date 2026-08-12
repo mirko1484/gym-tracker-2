@@ -2910,3 +2910,47 @@ function addExtraExercise(sourceIndex){
 
 
 }
+
+
+
+// =======================================
+// POPUP NOTE PERSONALI
+// =======================================
+
+function openNotesModal(){
+
+
+    const modal =
+        document.getElementById(
+            "notesModal"
+        );
+
+    if(modal){
+
+        modal.style.display = "flex";
+
+    }
+
+
+}
+
+
+function closeNotesModal(){
+
+
+    saveExerciseNotes();
+
+
+    const modal =
+        document.getElementById(
+            "notesModal"
+        );
+
+    if(modal){
+
+        modal.style.display = "none";
+
+    }
+
+
+}

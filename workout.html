@@ -344,21 +344,41 @@ Durata
 
 
 <!-- ============================= -->
-<!-- NOTE PERSONALI -->
+<!-- NOTE PERSONALI (pulsante che apre il popup) -->
 <!-- ============================= -->
 
-<div class="statsCard" style="margin-top:15px;">
+<button
+type="button"
+class="secondaryButton"
+style="margin-top:15px;"
+onclick="openNotesModal()">
+📝 Note
+</button>
 
-<label class="formLabel">
-📝 Le tue note su questo esercizio
-</label>
+</div>
+
+
+<!-- ============================= -->
+<!-- POPUP NOTE PERSONALI -->
+<!-- ============================= -->
+
+<div id="notesModal" class="modal">
+
+<div class="modalContent">
+
+<h2>📝 Le tue note</h2>
 
 <textarea
 id="exerciseNotes"
 class="settingsInput"
-rows="3"
-placeholder="Es: peso usato, sensazioni, cosa migliorare la prossima volta..."
-onblur="saveExerciseNotes()"></textarea>
+rows="5"
+placeholder="Es: peso usato, sensazioni, cosa migliorare la prossima volta..."></textarea>
+
+<button
+class="dayButton dayA"
+onclick="closeNotesModal()">
+Fatto
+</button>
 
 </div>
 
