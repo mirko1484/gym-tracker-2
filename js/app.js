@@ -314,9 +314,6 @@ function loadLastWorkout(){
         new Date(workout.created_at)
             .toLocaleDateString("it-IT");
 
-    const durationMinutes =
-        Math.round((workout.duration_seconds || 0) / 60);
-
 
 
 
@@ -355,26 +352,6 @@ function loadLastWorkout(){
             <span>
 
                 ${dateLabel}
-
-            </span>
-
-
-        </div>
-
-
-
-        <div class="statRow">
-
-            <span>
-
-                Durata
-
-            </span>
-
-
-            <span>
-
-                ${durationMinutes} min
 
             </span>
 
